@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Member Registration - Multi-Step</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        :root {
+            --primary-color: #3B82F6;--text-primary-form: #1F2937;--text-secondary-form: #4B5563;--text-muted-form: #9CA3AF;--border-color-form: #D1D5DB;--input-bg-form: #F3F4F6;--bg-page: #E5E7EB;--bg-main-box: #FFFFFF;--completed-step-bg: #4CAF50;--success-color: #10B981;--error-color: #EF4444;
+            --inga-bg-screen-fallback: #E0E5EC; 
+            --inga-text-primary: #1C1E21;--inga-text-secondary: #65676B;--inga-text-link: #3B82F6;--inga-border-light: #CED0D4;--inga-status-bar-text: #050505;--inga-button-action-bg: #E4E6EB;--inga-button-action-text: #050505;--inga-button-action-hover-bg: #D8DADF;}
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-padding-top: 20px; }
+        body {font-family: 'Inter', sans-serif;background-color: var(--bg-page);color: var(--text-secondary-form);min-height: 100vh;padding: 20px 10px;display: flex;justify-content: center;align-items: flex-start;transition: padding 0.3s ease-out;}
+        .main-content-box {display: flex;flex-direction: column;align-items: center;gap: 30px;width: 100%;max-width: 600px;background-color: var(--bg-main-box);padding: 25px;border-radius: 16px;}
+        .form-column, .info-panel-column {width: 100%;max-width: none;flex: none;}
+        .form-column { order: 1; } .info-panel-column { order: 2; }
+        .info-panel-column {position: static;max-height: none;display: flex;flex-direction: column;align-items: center;justify-content: center;padding-bottom: 15px;}
+        .phone-preview-title {font-size: 16px;font-weight: 600;color: var(--text-primary-form);margin-bottom: 15px;text-align: center;width: 100%;}
+        .phone-image-wrapper {width: 100%;max-width: 262px;position: relative;border-radius: 35px;}
+        .phone-image-wrapper::after {content: '';position: absolute;bottom: -15px;left: 10%;width: 80%;height: 1px;background: transparent;border-radius: 50%;box-shadow: 0 3px 6px 0px rgba(3, 102, 214, 0.3);z-index: -1;}
+        .phone-frame-img { display: block; width: 100%; height: auto; user-select: none; border-radius: inherit; }
+
+        /* START: Phone Preview Style Fixes V6 */
+        .phone-screen {
+            position: absolute; top: 2%; left: 6%; width: 90%; height: 97%;
+            border-radius: 1.9em; overflow: hidden; display: flex; flex-direction: column;
+            background-color: var(--inga-bg-screen-fallback);
+        }
+        .inga-status-bar {
+            display: flex;justify-content: space-between;align-items: center;
+            padding: 0.4em 0.9em;height: 2.3em;
+            background-color: transparent !important; 
+            color: var(--inga-status-bar-text);font-size: 10px;font-weight: 500;
+            position: absolute; 
+            top: 0;            
+            left: 0;           
+            width: 100%;       
+            z-index: 50; 
+        }
+        .inga-status-time {font-size: 1.1em;}
+        .inga-status-icons {display: flex;align-items: center;gap: 0.5em;}
+        .inga-status-icon {height: 1.1em;width: auto;fill: var(--inga-status-bar-text);}
+        .inga-status-icon.signal-icon { width: 1.6em; } .inga-status-icon.wifi-icon { width: 1.5em; } .inga-status-icon.battery-icon { width: 2.2em; }
+
+        .inga-profile-content {
+            flex-grow: 1;overflow-y: auto;font-family: 'Inter', sans-serif;
+            color: var(--inga-text-primary);font-size: 10px;text-align: center;
+            scrollbar-width: none;-ms-overflow-style: none;
+            position: relative;
+            background-color: transparent; 
+        }
+        .inga-profile-content::-webkit-scrollbar {display: none;}
+
+        .inga-profile-header {
+            position: relative; 
+            z-index: 1; 
+            background-image: linear-gradient(to bottom, #a1c4fd, #c2e9fb); 
+            min-height: 7em; 
+            padding-bottom: 3em; 
+            padding-top: 2.3em; 
+        }
+         .inga-profile-header::before { 
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.05);
+            z-index: 2; 
+        }
+
+        .inga-screen-top-bar {
+            display: flex;justify-content: space-between;align-items: center;
+            padding: 0.8em 1em;width: 100%;box-sizing: border-box;height: 3.5em;
+            background-color: transparent; 
+            position: relative; 
+            z-index: 3; 
+        }
+        .inga-screen-top-bar-icons-right {
+             display: flex;
+             align-items: center;
+             gap: 0.8em;
+        }
+        .inga-screen-top-bar svg {
+            width: 1.8em; height: 1.8em;
+            fill: var(--inga-status-bar-text);
+            cursor: pointer;
+        }
+        .inga-screen-top-bar svg.inga-icon-back {
+             width: 2.2em;height: 2.2em;
+        }
+
+        .inga-avatar-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative; 
+            z-index: 15; 
+            margin-top: -5.5em; 
+        }
+        .inga-avatar {
+            width: 8.8em !important; height: 8.8em !important;
+            border-radius: 50% !important;object-fit: cover !important;
+            display: block !important;
+            border: 3px solid var(--bg-main-box) !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+        }
+
+        .inga-profile-body-card {
+            background-color: var(--bg-main-box);
+            border-radius: 20px 20px 0 0;
+            padding: 1em 1em 0 1em;
+            margin-top: -3.5em; 
+            position: relative;
+            z-index: 5; 
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 15em; 
+        }
+        .inga-name {
+            margin-top: 2.5em !important; 
+            font-size: 2em !important;
+            font-weight: 800 !important; 
+            color: var(--inga-text-primary) !important;
+            margin-bottom: 0.4em !important;
+            display: flex;align-items: center;justify-content: center;gap: 0.3em;
+        }
+        #previewProfileBioText {
+            font-size: 1.15em;
+            color: var(--inga-text-secondary);margin-bottom: 0.8em;padding: 0 1.5em;
+            line-height: 1.4;min-height: 1.2em;word-break: break-word;
+        }
+        .inga-user-details-line {
+            display: flex;align-items: center;justify-content: center;gap: 0.6em;
+            margin-bottom: 1em;
+            flex-wrap: wrap;
+        }
+        #previewJoinedSince, #previewUsernameDisplay {
+            font-size: 1em;
+            color: var(--inga-text-secondary);
+        }
+        #previewJoinedSince { display: flex;align-items: center;gap: 0.3em; }
+        #previewJoinedSince svg {width: 1em;height: 1em;fill: currentColor;}
+        #previewUsernameDisplay {font-weight: 500;min-height: 1.1em;}
+        #previewUsernameDisplay::before {content: "•";margin-right: 0.6em;color: var(--inga-text-secondary);}
+
+        .inga-action-buttons {
+            display: flex;justify-content: center;gap: 0.6em;
+            margin-bottom: 1.5em;
+            padding: 0 1em;
+        }
+        .inga-action-btn {
+            width: 3.5em;height: 3.5em;padding: 0;
+            font-size: 1.15em;
+            font-weight: 600;color: var(--inga-text-primary);
+            background-color: var(--inga-button-action-bg);
+            border: none;border-radius: 8px;cursor: pointer;
+            display: flex;align-items: center;justify-content: center;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .inga-action-btn img { 
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+        }
+        .inga-action-btn:not(.inga-action-btn-primary):hover {
+            background-color: var(--inga-button-action-hover-bg);transform: translateY(-2px);box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .inga-action-btn.inga-action-btn-primary {
+            flex-grow: 1;
+            max-width: none;
+            background-color: var(--inga-text-primary);
+            color: var(--bg-main-box);
+            gap: 0.5em;
+            padding: 0.7em 1em;
+        }
+        .inga-action-btn.inga-action-btn-primary svg {
+            width: 1.2em; height: 1.2em; fill: var(--bg-main-box);
+        }
+        .inga-action-btn.inga-action-btn-primary:hover {
+            background-color: #333333;
+            transform: translateY(-2px);box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .inga-action-btn:active {transform: translateY(0px);box-shadow: 0 1px 2px rgba(0,0,0,0.05);}
+
+        #previewLocationLine, #previewOccupationLine {
+            font-size: 1.3em;color: var(--inga-text-secondary);margin-bottom: 0.6em;
+            padding: 0 0.5em;line-height: 1.4;min-height: 1.4em;word-break: break-word;text-align: left;
+        }
+        #previewLocationLine {display: flex;align-items: center;gap: 0.4em;}
+
+        .inga-stats {
+            display: flex;justify-content: space-around;
+            padding: 0 1em 1em 1em;
+            text-align: center;background-color: transparent;border-bottom: none;
+        }
+        .inga-stat-item {display: flex;flex-direction: column;align-items: center;}
+        .inga-stat-icon { display: none !important; }
+        .inga-stat-item .inga-stat-count {
+            display: block;font-size: 1.6em;
+            font-weight: 600;color: var(--inga-text-primary);
+            line-height: 1.1;
+        }
+        .inga-stat-item .inga-stat-label {
+            font-size: 1.1em;
+            color: var(--inga-text-secondary);text-transform: none;margin-top: 0.1em;
+        }
+        .inga-profile-tabs {display: flex;justify-content: space-around;border-bottom: 1px solid var(--inga-border-light);}
+        .inga-tab-button {
+            flex-grow: 1;padding: 0.8em 0.5em;
+            font-size: 1.25em;
+            font-weight: 600;color: var(--inga-text-secondary);background-color: transparent;
+            border: none;border-bottom: 3px solid transparent;cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;outline: none;
+        }
+        .inga-tab-button:hover {color: var(--inga-text-primary);}
+        .inga-tab-button.inga-active-tab {color: var(--inga-text-link);border-bottom-color: var(--inga-text-link);}
+
+        .inga-tab-content-area {
+            min-height: 8em;
+            background-color: var(--bg-main-box);
+            padding: 1em 0.5em;
+            flex-grow: 1;
+        }
+        .inga-tab-content-area > div, .inga-tab-content-area > p#tabContentText { padding: 1em;}
+        .inga-tab-content-area p#tabContentText {color: var(--inga-text-secondary);font-size: 1.2em;}
+        #aboutTabContent p {margin-bottom: 0.8em;}
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1em;
+            padding-bottom: 1em;
+        }
+        .achievement-card {
+            background-color: var(--bg-main-box);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center children horizontally */
+            padding: 1em; 
+            text-align: center; 
+        }
+        .achievement-card:hover {
+            transform: translateY(-4px); 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+        }
+        .achievement-card img {
+            width: 5em; 
+            height: 5em; 
+            object-fit: cover;
+            display: block;
+            border-radius: 8px; 
+            margin-bottom: 0.8em; 
+        }
+        .achievement-card .achievement-info {
+            padding: 0; 
+            text-align: center; 
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center text if needed, or remove if natural flow is enough */
+        }
+        .achievement-card .achievement-info h3 {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--text-primary-form);
+            margin-bottom: 0.2em;
+            line-height: 1.2;
+        }
+        .achievement-card .achievement-info p {
+            font-size: 0.85em;
+            color: var(--text-secondary-form);
+            line-height: 1.3;
+        }
+        /* END: Phone Preview Style Fixes V6 */
+
+        /* Rest of the form styles */
+        .file-input-wrapper {position: relative;width: 100%;}
+        .form-group input[type="file"] {background-color: var(--input-bg-form);border: 1px solid var(--border-color-form);border-radius: 8px;padding: 12px 45px 12px 14px;font-size: 14px;color: var(--text-primary-form);width: 100%;box-sizing: border-box;cursor: pointer;}
+        .form-group input[type="file"]::-webkit-file-upload-button {background-color: var(--primary-color);color: white;border: none;padding: 8px 12px;border-radius: 4px;cursor: pointer;margin-right: 10px;font-weight: 500;transition: background-color 0.2s;}
+        .form-group input[type="file"]::-webkit-file-upload-button:hover {background-color: #2563EB;}
+        .form-group input[type="file"]::file-selector-button {background-color: var(--primary-color);color: white;border: none;padding: 8px 12px;border-radius: 4px;cursor: pointer;margin-right: 10px;font-weight: 500;transition: background-color 0.2s;}
+        .form-group input[type="file"]::file-selector-button:hover {background-color: #2563EB;}
+        .form-group input[type="file"]:focus {outline: none; border-color: var(--primary-color);box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);background-color: #FFFFFF;}
+        .adjust-picture-button {position: absolute;top: 50%;right: 8px;transform: translateY(-50%);padding: 6px;cursor: pointer;border-radius: 50%;display: inline-flex;align-items: center;justify-content: center;z-index: 2;background-color: transparent;border: none;color: var(--text-secondary-form);transition: background-color 0.2s;}
+        .adjust-picture-button:hover {background-color: rgba(0, 0, 0, 0.05);color: var(--text-primary-form);}
+        .adjust-picture-icon {width: 16px;height: 16px;fill: currentColor;}
+        .form-steps-wrapper {position: relative; width: 100%; overflow: hidden;transition: min-height 0.5s ease-in-out;}
+        .form-step {width: 100%;transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.5s ease-out;opacity: 0; position: absolute; top: 0; left: 0;pointer-events: none; visibility: hidden;}
+        .form-step.active-step-content {transform: translateY(0); opacity: 1; position: relative;pointer-events: auto; visibility: visible;}
+        .form-step.next-step-position { transform: translateY(100%); opacity: 0; }
+        .form-step.prev-step-position { transform: translateY(-100%); opacity: 0; }
+        .registration-form-container { width: 100%; }
+        .registration-form-container header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        .registration-form-container .header-main h1 {font-size: 24px; color: var(--text-primary-form); margin-bottom: 6px;}
+        .registration-form-container .step-info {font-size: 14px; color: var(--text-secondary-form); margin-bottom: 15px;}
+        .registration-form-container .steps-indicator-container {display: flex; gap: 10px;}
+        .registration-form-container .step-indicator-number {width: 40px; height: 40px; border-radius: 8px; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: 600; transition: background-color 0.3s, color 0.3s;}
+        .registration-form-container .step-indicator-number.active-step {background-color: var(--primary-color); color: #FFFFFF;}
+        .registration-form-container .step-indicator-number.inactive-step {background-color: var(--input-bg-form); color: var(--text-muted-form);}
+        .registration-form-container .step-indicator-number.completed-step {background-color: var(--completed-step-bg); color: #FFFFFF;}
+        form#registrationForm, form#step2Form {display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 35px;}
+        .form-group { display: flex; flex-direction: column; position: relative; }
+        .form-group label { font-size: 14px; font-weight: 600; color: var(--text-primary-form); margin-bottom: 8px; display: flex; align-items: center; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="date"], .form-group input[type="password"], .form-group select:not(#occupation) {background-color: var(--input-bg-form); border: 1px solid var(--border-color-form); border-radius: 8px; padding: 12px 45px 12px 14px; font-size: 14px; color: var(--text-primary-form); width: 100%; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; -moz-appearance: none; appearance: none;}
+        .form-group select:not(#occupation) { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 0.9em; padding-right: 65px; }
+        .form-group input::placeholder { color: var(--text-muted-form); opacity: 0.8; }
+        .form-group input:focus:not([type="file"]), .form-group select:not(#occupation):focus {outline: none; border-color: var(--primary-color);box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); background-color: #FFFFFF;}
+        
+        /* Styles for Invitation Code Field */
+        .input-with-internal-button {
+            position: relative;
+            width: 100%;
+        }
+        .input-with-internal-button input[type="text"] {
+            padding-right: 100px; /* Make space for the button */
+        }
+        .input-with-internal-button .verify-inline-btn {
+            position: absolute;
+            top: 50%;
+            right: 8px; 
+            transform: translateY(-50%);
+            padding: 6px 12px; 
+            font-size: 13px;
+            font-weight: 500;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px; 
+            cursor: pointer;
+            transition: background-color 0.2s, opacity 0.2s;
+            line-height: 1.2; 
+            min-width: 80px; /* To accommodate text changes */
+            text-align: center;
+        }
+        .input-with-internal-button .verify-inline-btn:hover:not(:disabled) {
+            background-color: #2563EB; 
+        }
+        .input-with-internal-button .verify-inline-btn:disabled {
+            opacity: 0.7;
+            cursor: default;
+        }
+        .input-with-internal-button .verify-inline-btn.verifying {
+            background-color: var(--text-muted-form);
+        }
+        .input-with-internal-button .verify-inline-btn.verified {
+            background-color: var(--success-color);
+        }
+        .input-with-internal-button .verify-inline-btn.invalid {
+            background-color: var(--error-color);
+        }
+        .input-with-internal-button input[type="text"]:focus { /* Ensure focus style is consistent */
+            outline: none; 
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); 
+            background-color: #FFFFFF;
+        }
+        /* End Styles for Invitation Code Field */
+
+        .phone-input-wrapper { display: flex; align-items: center; background-color: var(--input-bg-form); border: 1px solid var(--border-color-form); border-radius: 8px; transition: border-color 0.2s, box-shadow 0.2s; padding: 0; position: relative; }
+        .flag-bd { display: inline-block; width: 20px; height: 12px; background-color: #006A4E; border-radius: 2px; position: relative; margin-right: 8px; margin-left: 12px; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+        .flag-bd-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; background-color: #F42A41; border-radius: 50%; }
+        .phone-prefix { padding: 12px 0; font-size: 14px; font-weight: 500; color: var(--text-secondary-form); background-color: transparent; border-right: 1px solid var(--border-color-form); padding-right: 10px; margin-right: 10px; white-space: nowrap; }
+        .phone-input-wrapper input[type="tel"] { border: none; background: transparent; border-radius: 0; padding: 12px 45px 12px 0; flex-grow: 1; min-width: 0; box-shadow: none !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 14px; color: var(--text-primary-form); }
+        .phone-input-wrapper input[type="tel"]:focus { outline: none; }
+        .phone-input-wrapper:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); background-color: #FFFFFF; }
+        .form-group small { font-size: 12px; color: var(--text-secondary-form); margin-top: 6px; display: block; }
+        .validation-error-lottie { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px !important; height: 24px !important; z-index: 2; pointer-events: none; }
+        .form-group label + input:not([type="file"]):not(#invitationCode) + .validation-error-lottie, 
+        .form-group label + .input-with-internal-button + .validation-error-lottie, 
+        .form-group label + .file-input-wrapper + .validation-error-lottie, 
+        .form-group label + select:not(#occupation) + .validation-error-lottie, 
+        .form-group label + .custom-select-wrapper + .validation-error-lottie, 
+        .form-group label + input[type="date"] + .validation-error-lottie {
+            top: calc(50% + 8px); 
+        }
+
+        .phone-input-wrapper .validation-lottie-icon {position: absolute;right: 10px;top: 50%;transform: translateY(-50%);width: 24px !important;height: 24px !important;z-index: 3;}
+        .form-group input#username ~ .validation-error-lottie {right: 35px;}
+        .availability-icon-container {position: absolute;right: 10px;top: calc(50% + 8px);transform: translateY(-50%);width: 24px;height: 24px;z-index: 2;display: flex;align-items: center;justify-content: center;}
+        .availability-icon-container dotlottie-player {width: 100% !important;height: 100% !important;}
+        .availability-message {font-size: 12px;margin-top: 4px;display: block;min-height: 1.2em;}
+        .availability-message.success { color: var(--success-color); } .availability-message.error { color: var(--error-color); } .availability-message.checking { color: var(--text-muted-form); }
+        .form-group.has-error input:not([type="tel"]), .form-group.has-error select:not(#occupation), .phone-input-wrapper.has-error {border-color: var(--error-color) !important;}
+        .form-group.has-error input:focus:not([type="file"]):not([type="tel"]), .form-group.has-error select:not(#occupation):focus, .phone-input-wrapper.has-error:focus-within {border-color: var(--error-color) !important;box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;}
+        .custom-select-wrapper { position: relative; width: 100%; }
+        .custom-select-display {background-color: var(--input-bg-form); border: 1px solid var(--border-color-form);border-radius: 8px; padding: 12px 45px 12px 14px; font-size: 14px;color: var(--text-primary-form); width: 100%; box-sizing: border-box; cursor: pointer;display: flex; justify-content: space-between; align-items: center; user-select: none;transition: border-color 0.2s, box-shadow 0.2s;}
+        .custom-select-display:focus, .custom-select-display.open {outline: none; border-color: var(--primary-color);box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); background-color: #FFFFFF;}
+        .custom-select-display #occupationDisplayText.placeholder { color: var(--text-muted-form); opacity: 0.8; }
+        .custom-select-arrow { stroke: #6B7280; transition: transform 0.2s ease-in-out; }
+        .custom-select-display.open .custom-select-arrow { transform: rotate(180deg); }
+        .floating-card {display: none; position: absolute; top: calc(100% + 5px); left: 0; width: 100%;background-color: var(--bg-main-box); border: 1px solid var(--border-color-form);border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); z-index: 100;max-height: 200px; overflow-y: auto;}
+        .floating-card.show { display: block; }
+        .floating-card ul { list-style: none; margin: 0; padding: 0; }
+        .floating-card ul li {padding: 10px 14px; font-size: 14px; color: var(--text-primary-form);cursor: pointer; transition: background-color 0.2s;}
+        .floating-card ul li:hover, .floating-card ul li.selected { background-color: var(--input-bg-form); }
+        .floating-card ul li.selected { font-weight: 600; color: var(--primary-color); }
+        #specifyOccupationContainer input[type="text"] { background-color: var(--input-bg-form); }
+        .form-group.has-error .custom-select-display, .form-group.has-error input#occupationAt { border-color: var(--error-color) !important; }
+        .form-group.has-error .custom-select-display:focus, .form-group.has-error .custom-select-display.open, .form-group.has-error input#occupationAt:focus {border-color: var(--error-color) !important;box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important;}
+        .phone-input-wrapper.verified {border-color: var(--success-color) !important;}
+        .phone-input-wrapper.verified:focus-within {box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3) !important;}
+        .form-footer {display: flex; flex-direction: column; align-items: stretch; gap: 20px;margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color-form);}
+        .footer-contact {font-size: 13px; color: var(--text-secondary-form); display: flex;align-items: flex-start;justify-content: flex-start;flex-direction: column;text-align: left;gap: 5px;width: 100%;}
+        .footer-contact a {color: var(--primary-color);text-decoration: none;font-weight: 500;}
+        .footer-contact a:hover {text-decoration: underline;}
+        .footer-actions { display: flex; width: 100%; gap: 10px; }
+        .footer-actions button {flex-grow: 1;cursor: pointer;border: none;transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s, opacity 0.2s;}
+        .footer-actions button:active { transform: translateY(1px); }
+        .footer-actions .action-button { background-color: var(--primary-color); color: white; padding: 10px 15px; border-radius: 8px; font-size: 14px; font-weight: 600;}
+        .footer-actions .action-button:hover:not(:disabled) { background-color: #2563EB; }
+        .footer-actions .action-button:disabled {background-color: var(--input-bg-form); color: var(--text-muted-form);box-shadow: none; cursor: not-allowed; opacity: 0.8;}
+        .uiverse-back-btn {background-color: var(--input-bg-form); border: 1px solid var(--border-color-form);border-radius: 8px; font-size: 14px;font-weight: 600; position: relative; overflow: hidden; display: inline-flex; align-items: center;cursor: pointer;height: 42px; padding: 0; color: var(--text-secondary-form); transition: color 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);-webkit-appearance: none;-moz-appearance: none;appearance: none;}
+        .uiverse-back-btn-bg {background-color: var(--success-color); height: 100%;width: 42px; position: absolute;left: 0;top: 0;display: flex;align-items: center;justify-content: center;z-index: 0; transition: width 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);border-radius: 7px 0 0 7px;}
+        .uiverse-back-btn:hover .uiverse-back-btn-bg {width: 100%;border-radius: 7px;}
+        .uiverse-back-btn-bg svg {width: 18px;height: 18px;fill: currentColor;}
+        .uiverse-back-btn:hover {color: white;}
+        .uiverse-back-btn-text {position: relative; z-index: 1;padding-left: calc(42px + 10px);padding-right: 15px; white-space: nowrap;line-height: 42px;transition: padding-left 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);}
+        .uiverse-back-btn:hover .uiverse-back-btn-text {padding-left: 15px;}
+        button#continueToStep2Button {position: relative;padding: 15px 40px;background: #f0e644;font-size: 17px;font-weight: 500;color: #181818;border: 1px solid #fec195;border-radius: 50px;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));flex-shrink: 0;-webkit-appearance: none;-moz-appearance: none;appearance: none;line-height: normal;text-align: center;text-decoration: none;display: inline-flex;align-items: center;justify-content: center;}
+        button#continueToStep2Button:not(:disabled) {border: 1px solid #f3b182;background: linear-gradient(85deg, #fec195, #fcc196, #fabd92, #fac097, #fac39c);background-size: 200% 100%;animation: wind-c2sb 2s linear infinite;}
+        @keyframes wind-c2sb {0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; }}
+        button#continueToStep2Button .icon-1 {position: absolute;top: 0;right: 0;width: 25px;height: auto;transform-origin: 0 0;transform: rotate(10deg);transition: all 0.5s ease-in-out;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));}
+        button#continueToStep2Button:not(:disabled) .icon-1 {animation: slay-1-c2sb 3s cubic-bezier(0.52, 0, 0.58, 1) infinite;}
+        @keyframes slay-1-c2sb {0% { transform: rotate(10deg); } 50% { transform: rotate(-5deg); } 100% { transform: rotate(10deg); }}
+        button#continueToStep2Button .icon-2 {position: absolute;top: 0;left: 25px;width: 12px;height: auto;transform-origin: 50% 0;transform: rotate(10deg);transition: all 1s ease-in-out;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));}
+        button#continueToStep2Button:not(:disabled) .icon-2 {animation: slay-2-c2sb 3s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;}
+        @keyframes slay-2-c2sb {0% { transform: rotate(0deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(0); }}
+        button#continueToStep2Button .icon-3 {position: absolute;top: 0;left: 0;width: 18px;height: auto;transform-origin: 50% 0;transform: rotate(-5deg);transition: all 1s ease-in-out;filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));}
+        button#continueToStep2Button:not(:disabled) .icon-3 {animation: slay-3-c2sb 2s cubic-bezier(0.52, 0, 0.58, 1) 1s infinite;}
+        @keyframes slay-3-c2sb {0% { transform: rotate(0deg); } 50% { transform: rotate(-5deg); } 100% { transform: rotate(0); }}
+        button#continueToStep2Button .fil0 {fill: #28282B;transition: fill 0.3s ease;}
+        button#continueToStep2Button:not(:disabled) .fil0 {fill: #181818;}
+        button#continueToStep2Button:disabled {background: var(--input-bg-form);color: var(--text-muted-form);border-color: var(--border-color-form);cursor: not-allowed;filter: none;opacity: 0.7;animation: none !important;}
+        button#continueToStep2Button:disabled .fil0 {fill: var(--text-muted-form);}
+        button#continueToStep2Button:disabled .icon-1, button#continueToStep2Button:disabled .icon-2, button#continueToStep2Button:disabled .icon-3 {display: none;}
+        .popup-overlay {position: fixed;top: 0; left: 0; width: 100%; height: 100%;background-color: rgba(0, 0, 0, 0.6);display: none;align-items: center;justify-content: center;z-index: 1000;opacity: 0;transition: opacity 0.3s ease;}
+        .popup-overlay.show {display: flex;opacity: 1;}
+        .popup-container {background-color: var(--bg-main-box);padding: 25px;border-radius: 12px;box-shadow: 0 5px 25px rgba(0,0,0,0.2);max-width: 450px;width: 90%;transform: scale(0.95);opacity: 0;transition: transform 0.3s ease, opacity 0.3s ease;}
+        .popup-overlay.show .popup-container {transform: scale(1);opacity: 1;}
+        .popup-header {display: flex;justify-content: space-between;align-items: center;padding-bottom: 15px;margin-bottom: 20px;border-bottom: 1px solid var(--border-color-form);}
+        .popup-title {font-size: 18px;font-weight: 600;color: var(--text-primary-form);}
+        .popup-close-btn {background: none;border: none;font-size: 24px;font-weight: 300;color: var(--text-muted-form);cursor: pointer;line-height: 1;padding: 5px;}
+        .popup-close-btn:hover {color: var(--text-secondary-form);}
+        #popupImagePreview {display: block;max-width: 100%;max-height: 250px;margin: 0 auto 20px auto;border: 1px solid var(--border-color-form);border-radius: 4px;object-fit: contain;}
+        .popup-controls {display: grid;grid-template-columns: auto 1fr;gap: 12px 8px;align-items: center;margin-bottom: 20px;font-size: 13px;}
+        .popup-controls label {font-weight: 500;color: var(--text-secondary-form);text-align: right;}
+        .popup-controls input[type="range"] {width: 100%;cursor: not-allowed;}
+        .popup-controls .placeholder-buttons {grid-column: 1 / -1;display: flex;justify-content: center;gap: 10px;margin-top: 10px;}
+        .popup-controls .placeholder-buttons button {padding: 6px 12px;font-size: 13px;border-radius: 6px;background-color: var(--input-bg-form);color: var(--text-secondary-form);border: 1px solid var(--border-color-form);cursor: not-allowed;}
+        .popup-footer {display: flex;justify-content: flex-end;gap: 10px;padding-top: 20px;margin-top: 20px;border-top: 1px solid var(--border-color-form);}
+        .popup-footer button {flex-grow: 0;padding: 10px 20px;border-radius: 8px;font-size: 14px;font-weight: 600;cursor: pointer;border: none;transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;}
+        .popup-footer .popup-cancel-btn, .popup-footer .popup-skip-btn {background-color: var(--input-bg-form);color: var(--text-secondary-form);border: 1px solid var(--border-color-form);}
+        .popup-footer .popup-cancel-btn:hover, .popup-footer .popup-skip-btn:hover { background-color: #E5E7EB; }
+        .popup-footer .popup-apply-btn {background-color: var(--primary-color); color: white;}
+        .popup-footer .popup-apply-btn:hover {background-color: #2563EB;}
+        #phoneVerificationPopup .popup-content {padding-bottom: 10px;}
+        #phoneVerificationPopup .popup-footer {justify-content: space-between;}
+        .verification-code-input {width: 35px;height: 40px;text-align: center;font-size: 18px;border: 1px solid var(--border-color-form);border-radius: 6px;background-color: var(--input-bg-form);color: var(--text-primary-form);caret-color: var(--primary-color);}
+        .verification-code-input:focus {outline: none;border-color: var(--primary-color);box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);}
+        @media (min-width: 480px) {body { padding: 20px; } .main-content-box { padding: 30px; border-radius: 20px; } .phone-image-wrapper { max-width: 262px; border-radius: 35px; } .registration-form-container .header-main h1 {font-size: 26px;}}
+        @media (min-width: 768px) {body { padding: 30px 20px; } .form-footer { flex-direction: row; justify-content: space-between; align-items: center; } .footer-contact {width: auto;} .footer-actions { width: auto; } .footer-actions button, .footer-actions .uiverse-back-btn {flex-grow: 0;} form#registrationForm, form#step2Form { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; } .form-group { margin-bottom: 0; } .phone-image-wrapper { max-width: 283px; border-radius: 38px;} .info-panel-column { align-items: flex-start; }
+            .achievements-grid {grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {body { padding: 40px 20px; } .main-content-box {flex-direction: row;align-items: flex-start;gap: 40px; padding: 40px;width: 70vw; max-width: 1200px; border-radius: 24px;} .form-column { flex: 2; order: 1; } .info-panel-column {flex: 1; order: 2; position: sticky; top: 40px; align-self: flex-start;max-height: calc(100vh - 80px);display: flex;flex-direction: column;align-items: center;justify-content: flex-start;padding-top: 20px;padding-bottom: 20px;}}
+        @media (max-width: 1023px) {.info-panel-column {justify-content: center;}}
+        @media (max-width: 767px) and (min-height: 360px) and (max-height: 500px) and (orientation: landscape) {form#registrationForm, form#step2Form { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }}
+        @media (max-width: 767px) {.footer-actions { flex-direction: column; } .footer-actions button, .footer-actions .uiverse-back-btn {width: 100%;}
+            .achievements-grid {grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+        }
+        @media (max-width: 480px) {.info-panel-column { display: none; } body { padding: 0; } .main-content-box {padding: 20px 15px; border-radius: 0; width: 100vw;max-width: 100vw; min-height: 100vh;} .form-column { padding: 0; } .registration-form-container .header-main h1 { font-size: 22px; } .popup-container { max-width: 95%; }
+            .achievements-grid {grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));}
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content-box">
+        <div class="form-column">
+            <div class="registration-form-container">
+                <header>
+                     <div class="header-main">
+                        <h1>New member registration 🤩</h1>
+                        <p class="step-info" id="stepInfoText">Step one of two.</p>
+                        <div class="steps-indicator-container">
+                            <div class="step-indicator-number active-step" id="stepIndicator1">1</div>
+                            <div class="step-indicator-number inactive-step" id="stepIndicator2">2</div>
+                        </div>
+                    </div>
+                </header>
+                <div class="form-steps-wrapper">
+                    <div id="step1Content" class="form-step active-step-content">
+                        <form id="registrationForm" novalidate>
+                            <div class="form-group">
+                                <label for="invitationCode">Invitation Code</label>
+                                <div class="input-with-internal-button">
+                                    <input type="text" id="invitationCode" name="invitationCode" placeholder="Enter code">
+                                    <button type="button" id="verifyInvitationCodeButton" class="verify-inline-btn">Verify</button>
+                                </div>
+                                <small>Enter your invitation code to unlock the form.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="e.g. Rashid Shahriyar" required minlength="4">
+                                <small>Minimum four characters</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" placeholder="e.g. rashidvaya" required minlength="4">
+                                <span class="availability-icon-container" id="usernameAvailabilityIconContainer"></span>
+                                <small id="usernameFormatMessage">Minimum four characters.</small>
+                                <small id="usernameAvailabilityMessage" class="availability-message"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="rashidvaya@example.com" required>
+                                <small>We'll never share your email with anyone else.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <div class="phone-input-wrapper">
+                                    <span class="flag-bd"><span class="flag-bd-circle"></span></span>
+                                    <span class="phone-prefix">+880</span>
+                                    <input type="tel" id="phone" name="phone" placeholder="1xxxxxxxxx" required pattern="[1][0-9]{9}" maxlength="10">
+                                </div>
+                                <small>Enter your 10-digit number (e.g., 1712345678)</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="division">Division</label>
+                                <select id="division" name="division" required>
+                                    <option value="" disabled selected>Select Division</option>
+                                    <option value="dhaka">Dhaka</option>
+                                    <option value="chattogram">Chattogram</option>
+                                    <option value="rajshahi">Rajshahi</option>
+                                    <option value="khulna">Khulna</option>
+                                    <option value="barisal">Barisal</option>
+                                    <option value="sylhet">Sylhet</option>
+                                    <option value="rangpur">Rangpur</option>
+                                    <option value="mymensingh">Mymensingh</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="district">District</label>
+                                <select id="district" name="district" disabled required>
+                                    <option value="" disabled selected>Select District</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label id="occupationLabel" for="occupationDisplay">Occupation</label>
+                                <div class="custom-select-wrapper">
+                                    <div id="occupationDisplay" class="custom-select-display" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="occupationLabel occupationDisplayText">
+                                        <span id="occupationDisplayText" class="placeholder">Select Occupation</span>
+                                        <svg class="custom-select-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                    </div>
+                                    <div id="occupationFloatingCard" class="floating-card" role="listbox">
+                                        <ul id="occupationOptionsList" tabindex="-1"></ul>
+                                        <div id="specifyOccupationContainer" style="display: none; padding: 10px;">
+                                            <label for="specifyOccupationInput" style="font-size: 12px; margin-bottom: 5px; display: block;">Specify your occupation:</label>
+                                            <input type="text" id="specifyOccupationInput" placeholder="Your occupation" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color-form);">
+                                            <button type="button" id="confirmSpecifyOccupation" style="margin-top: 8px; padding: 6px 10px; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Confirm</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select id="occupation" name="occupation" required style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+                                    <option value="" disabled selected>Select Occupation</option>
+                                    <option value="student">Student</option><option value="engineer">Engineer</option><option value="doctor">Doctor</option><option value="teacher">Teacher</option><option value="business">Business Person</option><option value="service">Service Holder</option><option value="homemaker">Homemaker</option><option value="other">Other</option>
+                                </select>
+                                <small>Select your current occupation.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="occupationAt">At (e.g., Company, Institution)</label>
+                                <input type="text" id="occupationAt" name="occupationAt" placeholder="e.g. Google, Dhaka University" required minlength="2">
+                                <small>Required: Where you work or study (min. 2 characters).</small>
+                            </div>
+                        </form>
+                         <div class="form-footer">
+                           <div class="footer-contact" style="align-items: flex-start; gap: 5px;">
+                                <span>😊 Need a hand?</span>
+                                <span style="display: flex; align-items: center; gap: 5px;"> No worries — our AI is here to help <a href="#" aria-label="Chat with AI assistant" style="display: inline-flex; align-items: center; justify-content: center; color: var(--primary-color); margin-left: 3px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.2em; height: 1.2em;"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17.607 2.383 13.8A7.962 7.962 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" /></svg></a></span>
+                            </div>
+                            <div class="footer-actions">
+                                <button type="button" id="continueToStep2Button" disabled> Next Step
+                                  <div class="icon-1"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 26.3 65.33"><path class="fil0" d="M13.98 52.87c0.37-.8.6-1.74.67-2.74 1.01 1.1 2.23 2.68 1.24 3.87-.22.26-.41.61-.59.97-2.95 5.89 3.44 10.87 2.98.78.29.23.73.82 1.03 1.18.33.4.7.77 1 1.15.29.64-.09 2.68 1.77 4.91 5.42 6.5 5.67-2.38.47-4.62-.41-.18-.95-.26-1.28-.54-.5-.41-1.23-1.37-1.66-1.9.03-.43-.17-.13.11-.33 4.98 1.72 8.4-1.04 2.38-3.16-1.98-.7-2.9-.36-4.72.16-.63-.58-2.38-3.82-2.82-4.76 1.21.56 1.72 1.17 3.47 1.3 6.5.5 2.31-4.21-2.07-4.04-1.12.04-1.62.37-2.49.62l-1.25-3.11c.03-.26.01-.18.1-.28 1.35.86 1.43 1 3.25 1.45 2.35.15 3.91-.15 1.75-2.4-1.22-1.27-2.43-2.04-4.22-2.23l-2.08.13c-.35-.58-.99-2.59-1.12-3.3l-.01-.01v0c-.24-.36 1.88 1.31 2.58 1.57 1.32.49 2.6.33 3.82 0-.37-1.08-1.17-2.31-2.13-3.11-1.79-1.51-3.07-1.41-5.22-1.38l-.93-4.07c.41-.57 1.41.9 2.82 1.36.96.31 1.94.41 3 .14 2-.52-2.25-4.4-4.53-4.71-.7-.1-1.23-.04-1.92-.03-.46-.82-.68-3.61-.92-4.74.8.88 1.15 1.54 2.25 2.23.8.5 1.58.78 2.57.85 2.54.18-.1-3.47-.87-4.24-1.05-1.05-2.34-1.59-4.32-1.78l-.33-3.49c.83.67 1.15 1.48 2.3 2.16 1.07.63 2.02.89 3.58.79.15-1.34-1.07-3.39-2.03-4.3-1.05-.99-2.08-1.47-3.91-1.68l-.07-3.27.32-.65c.44.88 1.4 1.74 2.24 2.22.69.39 2.4 1.1 3.44.67.31-1.92-1.84-4.49-3.5-5.29-.81-.39-1.61-.41-2.18-.68-.12-1.28.27-3.23.37-4.55l-.89 0c-.06 1.28-.35 3.12-.34 4.31-.44.45-.37.42-.96.64-3.88 1.49-4.86 6.38-3.65 7.34 1.42-.31 3.69-2.14 4.16-3.66.23.5.1 2.36.05 3.05-1.23.4-2.19 1.05-2.92 1.82-1.17 1.24-2.36 4.04-1.42 5.69 1.52.09 4.07-2.49 4.49-4.07l.29 3.18c-2.81.96-5.01 3.68-4.18 7.43 2.06-.09 3.78-2.56 4.66-4.15.23 1.45.67 3.06.74 4.52-1.26.93-2.37 1.8-2.97 3.55-.48 1.4-.49 3.72.19 4.55.59.71 2.06-1.17 2.42-1.67 1-1.35.81-1.92 1.29-2.46l.7 3.44c-.49.45-.94.55-1.5 1.19-1.93 2.23-2.14 4.33-1.01 6.92.72.09 2.04-1.4 2.49-2.06.65-.95.79-1.68 1.14-2.88l.97 2.92c-.2.55-1.84 1.32-2.6 3.62-.54 1.62-.37 3.86.67 4.93.58-.09 1.85-1.61 2.2-2.19.66-1.09.66-1.64 1-2.93l1.32 3.18c-.23.72-1.63 1.72-1.82 4.18-.17 2.16 1.11 6.88 3.13 2.46zm-4.09-16.89l0 .01z"></path></svg></div>
+                                  <div class="icon-2"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 11.67 37.63"><path class="fil0" d="M7.63 35.26c-.02.13.01.05-.06.14 0 0-.08.07-.11.1-.42.25-.55.94-.23 1.4.68.95 2.66.91 3.75.21.2-.13.47-.3.57-.49.09-.02.04.03.11-.07l-1.35-1.24c-.78-.78-1.25-1.9-2.07-.62-.11.18-.06.16-.22.26-.4-.72-.95-1.79-1.26-2.59.82.02 1.57-.12 2.16-.45.49-.27 1.15-.89 1.33-1.4.1-.06.02.01.06-.1-.24-.16-.87-.37-1.19-.52-.4-.19-.73-.39-1.09-.62-.25-.16-.85-.6-1.18-.3-.35.32-.32.83-.53 1.17-.71-.3-.55-.26-.84-1.22-.15-.5-.31-1.12-.41-1.66l.03-.13c.56.23 1.28.37 1.99.28.56-.07 1.33-.42 1.62-.71l.1-.1c-.74-.68-1.09-1.2-1.65-1.99-1.09-1.52-1.2-.28-1.92.17-.26-.79-.73.2-.12-2.76.06-.3.19-.7.2-.98.18.08.01-.01.11.08.05.05.07.07.1.12.94 1.17 3.63.82 4.21.01.13-.02.06.03.1-.1-1.14-.81-1.91-2.89-2.58-2.67-.29.09-.78.63-.93.87-.54-.48-.36-.63-.38-.81.01-.01.03-.04.03-.03.01.02.36-.35.45-.6.13-.35.04-.65-.05-.95.06-.41.33-1.33.28-1.71.22-.05.19.05.45.17.47.23 1.17.33 1.7.32.62 0 1.74-.39 1.94-.75.14-.02.05.06.13-.09-1.05-1.1-.7-.64-1.62-1.92-.58-.81-.9-1.27-1.9.12-.44-.5-.64-.69-.66-1.24.02-.31.15-.36.08-.73-.04-.24-.14-.41-.29-.59l-.47-2.54c.09-.14-.09-.1.2-.05.06.01.19.05.3.07.54.09 1.47.01 1.95-.15.57-.19 1.53-.8 1.68-1.18.16-.07.05.02.15-.13-.12-.15-.95-.65-1.15-.8-1.43-1.08-2.21-2.77-3.16-.38-.2-.1-.75-.55-.83-.74-.15-.35-.21-.81-.37-1.15l-.1-.25c-.03-.3-.44-1.33-.57-1.64-.2-.51-.47-1.09-.64-1.6l-.55 0c.14.42.36.84.53 1.28.12.3.19.35.06.66l-.21.52c-.01.01-.01.02-.02.03-.06.1-.03.05-.06.09-1.44-1.03-1.66-.73-2.07.46-.16.46-.3.93-.5 1.36l-.64 1.28c.06.07 0 .03.1.03.05.05.02.03.1.08l.49.14c.23.05.44.09.66.1.55.04.94-.06 1.35-.19.54-.18 1.09-.44 1.5-.82.15-.14.24-.3.4-.41l.46 1.66c.03.74-.09.6.27 1.21.01.01.01.02.02.03.01.01.01.02.02.04l.07.11c-.02.22.19 1.01.24 1.29.09.46-.21.79-.3 1.2-.55-.23-1.25-1.06-1.66-.23-.12.25-.17.36-.26.62-.33 1.01-.63 1.61-1.06 2.43l.12.04.23.11c.06.02.17.04.25.06.17.04.34.08.52.09.29.02.93.07 1.12-.13.42.01 1.24-.49 1.51-.71.01.01.03 0 .04.02l.09.06c-.04.29.02.41.03.7l-.05 1.41c-.06 1.12-.29 1.06-.76 1.69-.08-.07-.03-.01-.11-.11-.03-.03-.06-.08-.09-.11-.2-.25-.38-.54-.7-.69-.7-.32-1.52 1.73-2.82 2.61.04.2-.01.06.1.11.25.3 1 .67 1.5.78.35.08.71.08 1.09.05.25-.02.82-.16.92-.13-.16.69-.35 1.35-.52 2.03-.25 1-.03.77-.98 1.53-.3-.31-.33-.77-.77-1.02-.42-.25-.91.35-1.12.55-.33.32-.58.6-.97.89-.19.14-.34.26-.53.4-.14.11-.43.29-.53.4.1.15-.02.06.15.13.09.22.35.38.54.52.22.16.43.29.69.39.43.17 1.32.31 1.87.23l.23-.05c.01 0 .03-.02.04-.02.01 0 .02-.01.03-.02.32.05.52-.18.79-.24l-.02.66c0 .77-.24.75.16 1.51l.04.07c0 .01.01.03.02.04-.05.35.18 1.03.24 1.4-.23.18-.34.33-.51.41-.75-1.17-.82-1.52-1.92-.43-.32.31-.59.57-.95.86-.23.19-.95.65-1.05.81l.13.1c.88 1.15 3.14 1.5 4.1.82.47-.34.54-.56.52-1.34l.67 1.84c.03.16.06.28.12.42.03.06.05.12.09.17.1.15.03.06.13.14 0 .29.14.22.06.56-.03.13-.14.43-.19.53-1.94-1.27-1.57-.02-2.28 1.76-.16.41-.37.77-.53 1.2.09.08.01.03.15.03.29.33 1.66.28 2.36-.01.48-.2.96-.46 1.3-.82.15-.16.16-.3.38-.33.14.08.17.19.27.36zm-3.62-12.85c.13-.01.31-.15.55-.19-.01.45.02.74-.34.45-.06-.05-.09-.06-.12-.09-.09-.1-.04-.01-.09-.17zm1.92-12.29l-.04.13c-.07-.02-.17-.02-.21-.03-.27-.08-.09.04-.16-.16.12-.08.18-.23.34-.35l.08.4zm1.33 3.05l-.4.17c0-.08 0-.15-.02-.23-.02-.09-.03-.07-.05-.11l.07-.16c.21.11.28.16.4.32zm-1.54 6.48l.16-.51c.17.07.25.14.36.29l-.52.22zm.28 10.88l-.09-.38.37.07c-.02.1-.03.13-.09.19-.13.15.01.06-.19.12zm-1.05-5.97c.06.12.16.16.26.23-.09.14-.22.18-.37.21 0-.02-.02-.27-.02-.27.04-.19-.06-.09.13-.16zm1.03-8.01c-.09-.02-.15-.02-.22-.07-.21-.13-.08-.02-.14-.18.15-.05.21-.15.45-.24l-.08.48zm.57 16.58l-.45 0c.02-.18.12-.3.26-.42l.18.42zm-1.45-3.7l-.19-.23c-.06-.07-.1-.13-.17-.19-.24-.23-.29-.14-.36-.36l.46-.19c.07.14.25.78.26.97zm.37-23.67l-.12-.57.54.21c-.07.16-.27.31-.41.36zm-1.46-3.02c-.07.01-.19-.04-.3-.06-.04-.01-.14-.02-.18-.03-.15-.07-.06.04-.14-.13.11-.07.2-.27.37-.4.13.13.2.43.24.62z"></path></svg></div>
+                                  <div class="icon-3"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 25.29 76.92"><path class="fil0" d="M19.14 6.58c.09.1-.02.03.17.15.04.03.19.09.27.13l.16.02c.12.14.02.06.22.18.63.37 1.81.52 2.51.53.42-.26.61-1.58.55-2.27-.11-1.17-1.02-3.42-2.17-3.76-.84-.25-1.19.02-1.4.7-.03.1-.05.19-.09.28l-.18.25c-.18-.36-.77-.97-1.2-1.18-.64-.31-.36-.26-.84-1.59l-.75 0c.2.63.44 1.27.61 1.92.17.64.47 1.46.58 2.05-.21.36-.43.5-.31 1.1.11.51.35.71.76.9.13.31.36 1.33.39 1.78-.68.24-1.38.85-1.62 1.43-.45-.47-.29-1.59-1.59-1.22-.8.22-1.09.8-1.45 1.52-.58 1.18-.96 2.15-.6 3.58.04.17.13.4.19.55.11.29.09.34.35.44 1.74-.01 2.96-.82 4.13-1.55.22-.13.65-.39.79-.62.74-1.2-.74-2.14-1.7-2.43-.01-.51 1.07-.87 1.7-.82.21 1.74.56 3.5.61 5.33.05 2.05.01 3.68-.08 5.71-1.2.52-.99.65-1.77 1.46-.39-.45-.22-1.6-1.59-1.18-.79.24-.91.63-1.42 1.55-.78 1.41-.95 2.66-.36 4.15.14.35.06.36.36.37.78 0 1.47-.18 2.09-.43.51-.2 1.26-.76 1.69-.86-.18.3-.34.91-.48 1.25l-1.54 3.5c-1.75.08-1.26.29-2.27.59.1-1.15.1-1.69-1.1-1.78-.7-.05-1.5.65-1.91.96-1.04.82-1.93 1.81-1.94 3.77.09.22-.03.09.18.11.24.36 1.4.49 1.94.58l.19-.01.71-.01.08-.02 1.74-.17c.25.04.03-.07.19.09l-2.62 4.74c-.28.51-.56 1.2-.86 1.61-.44-.02-.69-.14-1.18-.08-.38.04-.72.17-1.08.22.1-.53.78-1.5-.62-1.96-.79-.26-1.74.32-2.33.6-2.12 1.02-2.81 3.28-2.36 3.38.01.01.03.02.03.04l.11.1c.42.34 1.16.64 1.66.79.65.19 1.73.31 2.43.38 3 .28 1.16-2.8 1.09-3.14.86.12 1.3-.05 1.81.56-.08.35-.53 1.2-.71 1.6-.74 1.61-1.24 3.24-1.73 4.96-.92.11-1.11.44-1.77.69.01-1.08.1-1.68-1.14-1.71-.55-.01-.8.17-1.11.41-1.43 1.08-2.52 2.24-2.53 4.15 0 .62.11.48.22.54.63.38 1.79.44 2.67.35.47-.05.97-.11 1.43-.2l.98-.22c.38-.08.14-.15.26.06-.08.78-.66 2.6-.56 3.29-.13.14-.07.08-.17.29-.06.13-.08.18-.12.33-.07.3-.02.6-.03.92-.09.94-.17.52-.78.94-.32.22-.57.55-.86.82-.29-.69-.22-1.44-1.39-1.13-.93.25-1.93 2.19-2.03 3.16-.06.56.02 1.84.39 2.08 2 .02 2.64-.6 4.08-1.25l-.01.28c-.06.58-.22 2.09-.14 2.62-.44.37-.46 1.03-.12 1.49-.08 3.97.16 2.73-.77 3.57-.24.21-.37.4-.62.62-.36-.53-.09-1.43-1.37-1.13-.98.23-1.92 2.22-2.06 3.14-.07.47-.07 1.79.41 2.09.86.04 1.94-.12 2.51-.52l.16-.08c.6-.17 1.39-.67 1.84-.94.12.18.04.07.14.1-.18.38-.31.07-.71.58-.67.86.33 1.72.89 2.31.6.64 1.71 1.63 2.94 1.88.38-.11.92-1.2 1.04-1.69.21-.86.15-1.53-.05-2.41-.22-.94-.24-1.38-1.01-1.81-.93-.52-1.19.28-1.59.76-.21-.33-.33-.79-.58-1.12-.48-.62-.48-.13-.5-1.22-.02-1.09.05-2.25.01-3.32.37.22.89.86 1.37 1.21.51.37 1.05.65 1.76.82.32-.02.92-1.21 1.04-1.68.22-.87.15-1.53-.04-2.41-.19-.86-.3-1.41-.96-1.79-1.06-.6-1.26.38-1.71.74-.22-.8-.65-1.34-1.19-1.71l.5-4.35.38.28c.23.25.6.67.87.82.07.1.05.1.19.21.18.23.66.57.92.6.1.13-.01.03.16.16.08.06.1.07.18.11.14.07.26.1.44.15l.45.17c.35.08.75-.74.91-1.05.21-.4.41-1.07.43-1.57 0-.28.04-.67-.1-.85l.03-.17c0-.04-.01-.13-.01-.15-.05-.13-.03-.1-.09-.17.06-.51-.25-1.75-.94-2.22-1.11-.74-1.37.09-1.86.69l-.12-.2c-.28-.56-.41-1.06-1-1.45.04-1.21 1.29-5.03 1.31-5.65.07.06.05.04.12.13.63.83.41.6 1.22 1.38.76.74 1.67 1.73 2.95 1.92.28.13.55-.41.69-.64.21-.34.36-.64.47-1.02.36-1.24.14-3.92-1.03-4.6-1.23-.72-1.67.89-1.75.72-.01-.01-.03.02-.04.03-.19-.33-.3-.68-.49-1-.22-.38-.47-.51-.68-.79.39-1.04 1.05-2.29 1.59-3.3.57-1.06 1.2-2.15 1.7-3.17 1.43-.02 1.51.55 1.8.6-.1.19-.02.07-.16.2-.01.01-.21.13-.23.15-.8.47-1.8.96-1.37 2.09.14.37.42.53.75.73 1.23.73 2.46 1.53 4.32 1.53.28-.08.25-.15.35-.44.22-.63.33-1.22.26-1.93-.11-1.05-1.06-3.33-2.21-3.65-1.31-.37-1.17.6-1.56 1.21l-.2-.19c-.84-.96-.61-.56-1.27-1.09.16-.47.7-1.32.98-1.82 1.05-1.91 1.94-3.59 2.84-5.61.73.01 1.23.31 1.57.68-.26.25-1.37.7-1.67 1.19-.51.8-.07 1.45.63 1.87 1.15.7 2.56 1.58 4.34 1.55.33-.09.46-.67.52-.98.28-1.4-.01-2.34-.66-3.5-.49-.87-.67-1.3-1.44-1.54-1.15-.36-1.27.44-1.56 1.23-.65-.55.03-.23-1.38-1.25.22-.6 1.08-2.59 1.06-3.14.38-.35.52-.78.43-1.4.22-.75.67-4.16.53-5 .32.09.75.4 1.06.57.35.2.71.39 1.06.57.73.38 1.61.62 2.65.61.58-.21.64-1.82.61-2.32-.04-.79-.45-1.64-.77-2.19-.39-.68-.64-1.3-1.45-1.52-1.33-.36-1.16.63-1.55 1.24-.67-.66-.61-.87-1.64-1.37-.06-2.55-.87-5.97-.9-6.74l.15-.03.01-.03zm-14.34 62.71l-.02 1.23c-.17-.13-.38-.3-.62-.45-.2-.13-.4-.21-.59-.39.26-.28.65-.51 1.16-.55l.07.15zm14.26-66.46c-.03.28.03.13-.15.29-.01.01-.24.12-.24.13-.22.12-.24.17-.54.21.01-.4-.17-.77-.25-1.14.63.03.9.46 1.18.51zm-14.86 55.33c.15-.05.34-.22.51-.31.29-.15.4-.14.78-.16-.03.41-.14.81-.08 1.19-.26.14-.08.13-.34-.03-.26-.16-.76-.47-.88-.69zm2.5-3.73c.16-.41.11-.97.32-1.32.3.08.44.22.64.41.2.19.27.36.41.49-.16.21.06.08-.33.21-.1.03-.26.05-.36.08-.23.05-.43.12-.68.14zm.14 8.74l-1.08.27c-.09-.08-.07.14-.08-.17l.07-1.1c.51.12.97.57 1.09 1.01zm-.43 8.78c-.17.02-.31.07-.44.1-.01 0-.23.03-.24.03-.22-.04 0 .16-.14-.1l-.01-.9c.37.15.68.48.83.88zm7.48-41.68c.31-.02.51-.13.93-.12.35 0 .54.09.82.17-.11.53-.59.91-.64 1.43-.25-.04-.12.01-.27-.15l-.84-1.31zm4.93-8.23c-.27 0-.43-.17-.68-.32-.41-.23-.51-.16-.64-.47.15-.04.4-.31.62-.42.29-.15.49-.18.85-.23.05.51-.12.95-.14 1.43zm-12.94 26.21c.63-.04.61-.21 1.47-.11l-.33 1.55c-.33-.14-.22-.21-.62-.71-.32-.39-.42-.39-.52-.74zm15.47-33.38c-.15.29-.36.33-.67.51-.26.15-.4.29-.69.42-.01-.23.02-.53-.08-.67l.03-.86c.33.01.6.1.83.21.22.11.42.34.58.38zm-12.41 30.37c.14-.37.45-1.36.68-1.6.66.19 1.09.56 1.31 1.14-.34.04-.75.16-1.08.25-.9.24-.77.49-.91.21z"></path></svg></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="step2Content" class="form-step next-step-position">
+                        <form id="step2Form" novalidate>
+                             <div class="form-group">
+                                <label for="profilePicture">Profile Picture (Optional)</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                                    <a href="#" class="adjust-picture-button" onclick="openImageAdjustPopup(event)" aria-label="Adjust Profile Picture"><svg class="adjust-picture-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg></a>
+                                </div>
+                                <small>Choose an image for your avatar.</small>
+                             </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="" disabled selected>Select Gender</option>
+                                    <option value="male">Male</option><option value="female">Female</option><option value="other">Other</option><option value="prefer_not_say">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" id="dob" name="dob" required max="2006-12-31">
+                                 <small>You must be at least 18 years old.</small>
+                            </div>
+                             <div class="form-group">
+                                <label for="password">Create Password</label>
+                                <input type="password" id="password" name="password" placeholder="Min. 8 characters" required minlength="8">
+                                <small>Minimum eight characters, include letters and numbers.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+                                <small id="confirmPasswordError" style="color: var(--error-color); display: none;">Passwords do not match.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileBio">Profile Bio / Interests (Optional)</label>
+                                <textarea id="profileBio" name="profileBio" rows="3" placeholder="e.g. Traveling, Cricket, & Photographer" style="background-color: var(--input-bg-form); border: 1px solid var(--border-color-form); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: var(--text-primary-form); width: 100%; box-sizing: border-box; resize: vertical;"></textarea>
+                                <small>Max 200 characters. This can be a short bio or your interests.</small>
+                            </div>
+                        </form>
+                        <div class="form-footer">
+                             <div class="footer-contact" style="align-items: flex-start; gap: 5px;">
+                                <span>😊 Need a hand?</span>
+                                <span style="display: flex; align-items: center; gap: 5px;">No worries — our AI is here to help <a href="#" aria-label="Chat with AI assistant" style="display: inline-flex; align-items: center; justify-content: center; color: var(--primary-color); margin-left: 3px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 1.2em; height: 1.2em;"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17.607 2.383 13.8A7.962 7.962 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" /></svg></a></span>
+                            </div>
+                            <div class="footer-actions">
+                                <button type="button" id="newBackToStep1Button" class="uiverse-back-btn">
+                                  <div class="uiverse-back-btn-bg">
+                                    <svg width="20px" height="20px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z"></path><path fill="currentColor" d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z"></path></svg>
+                                  </div>
+                                  <span class="uiverse-back-btn-text">Back to Step 1</span>
+                                </button>
+                                <button type="button" id="finalSubmitButton" class="action-button" disabled>Complete Registration</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="info-panel-column">
+            <h2 class="phone-preview-title">This Is How The Profile Will Looks Like ✨</h2>
+             <div class="phone-image-wrapper">
+                <img src="/assets/phone.png" alt="Phone Frame" class="phone-frame-img">
+                <div class="phone-screen">
+                    <div class="inga-status-bar">
+                        <span class="inga-status-time" id="phoneTime">9:41</span>
+                        <div class="inga-status-icons">
+                            <svg class="inga-status-icon signal-icon" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg"><rect y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity="0.3"/></svg>
+                            <svg class="inga-status-icon wifi-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 6C9.15 6 6.58 7.08 4.63 8.76l1.42 1.42C7.47 8.96 9.61 8.25 12 8.25s4.53.71 5.95 1.93l1.42-1.42C17.42 7.08 14.85 6 12 6zm0-4C6.92 2 2.45 4.16.89 7.64l1.42 1.42C3.62 6.13 7.5 4.25 12 4.25s8.38 1.88 9.69 4.81l1.42-1.42C21.55 4.16 17.08 2 12 2zm0 8c-1.31 0-2.5.46-3.47 1.24l1.42 1.42C10.66 12.96 11.3 12.75 12 12.75s1.34.21 2.05.54l1.42-1.42C14.5 10.46 13.31 10 12 10z"/><circle cx="12" cy="16" r="1.5"/></svg>
+                            <svg class="inga-status-icon battery-icon" width="25" height="12" viewBox="0 0 25 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="currentColor" stroke-width="1"/><rect x="2" y="2" width="17" height="8" rx="1.5" fill="currentColor"/><path d="M22 3.5V8.5C22 8.77614 22.2239 9 22.5 9H23C23.5523 9 24 8.55228 24 8V4C24 3.44772 23.5523 3 23 3H22.5C22.2239 3 22 3.22386 22 3.5Z" fill="currentColor"/></svg>
+                        </div>
+                    </div>
+                    <div class="inga-profile-content">
+                        <div class="inga-profile-header" id="ingaProfileHeader">
+                            <div class="inga-screen-top-bar">
+                                <svg class="inga-icon-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                                <div class="inga-screen-top-bar-icons-right">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" /></svg>
+                                    <svg class="inga-icon-settings" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12-.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49.42l.38-2.65c.61-.25 1.17-.59 1.69.98l2.49 1c.23-.09.49 0 .61.22l2 3.46c.13.22.07.49.12.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="inga-avatar-container"> 
+                           <img src="/assets/user.jpg" id="previewAvatar" class="inga-avatar" alt="user profile">
+                        </div>
+                        <div class="inga-profile-body-card">
+                            <h1 class="inga-name"><span id="previewNameText">Rashid Shahriyar</span><svg id="verifiedBadge" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="0.8em" height="0.8em" style="color: var(--primary-color);"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg></h1>
+                            <p id="previewProfileBioText">This is a short example bio. It can span multiple lines if needed.</p>
+                            <div class="inga-user-details-line">
+                                <p id="previewJoinedSince"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg><span id="joinedSinceText">Joined Since Month Year</span></p>
+                                <p id="previewUsernameDisplay">@username</p>
+                            </div>
+                            <div class="inga-action-buttons">
+                                <button class="inga-action-btn inga-action-btn-icon-only" aria-label="Call">
+                                    <img src="/assets/call.svg" alt="Call">
+                                </button>
+                                <button class="inga-action-btn inga-action-btn-icon-only" aria-label="WhatsApp">
+                                     <img src="/assets/whatsapp.svg" alt="WhatsApp">
+                                </button>
+                                <button class="inga-action-btn inga-action-btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17.607 2.383 13.8A7.962 7.962 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zm-4 0H9v2h2V9z" clip-rule="evenodd" />
+                                    </svg>Message
+                                </button>
+                            </div>
+                            <div class="inga-stats">
+                                <div class="inga-stat-item">
+                                    <span class="inga-stat-count">3</span>
+                                    <span class="inga-stat-label">Life Saved</span>
+                                </div>
+                                <div class="inga-stat-item">
+                                    <span class="inga-stat-count">256</span>
+                                    <span class="inga-stat-label">Appreciated</span>
+                                </div>
+                                <div class="inga-stat-item">
+                                    <span class="inga-stat-count">105</span>
+                                    <span class="inga-stat-label">Network</span>
+                                </div>
+                            </div>
+                            <div class="inga-profile-tabs">
+                                <button class="inga-tab-button" data-tab="about">About</button>
+                                <button class="inga-tab-button inga-active-tab" data-tab="achievements">Achievements</button>
+                                <button class="inga-tab-button" data-tab="community">Community</button>
+                            </div>
+                            <div class="inga-tab-content-area">
+                                <div id="aboutTabContent" style="display: none;"><p id="previewLocationLine"><svg class="preview-location-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.145l.005-.002.007-.004.012-.007a7.499 7.499 0 00.91-.546c.338-.245.68-.507 1.02-.787l.032-.027a11.22 11.22 0 001.994-1.897.036.036 0 00.01-.006 13.096 13.096 0 002.37-3.006A10.11 10.11 0 0018 9c0-4.62-3.501-8.441-7.915-8.961a.502.502 0 00-.17 0C5.501.559 2 4.38 2 9c0 1.998.57 3.83 1.57 5.37l.01.014a13.1 13.1 0 002.37 3.006.036.036 0 00.01.006 11.22 11.22 0 001.994 1.897l.032.027c.34.28.682.542 1.02.787a7.499 7.499 0 00.91.546l.012.007.007.004.005.002a5.741 5.741 0 00.281.145l.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" clip-rule="evenodd" /></svg><span id="previewLocationText">Your Location, Bangladesh</span></p><p id="previewOccupationLine">Your Occupation</p></div>
+                                <p id="tabContentText" style="display: none;"> Achievements content will show here. </p>
+                                <div id="achievementsTabContent" class="achievements-grid" style="display: grid;">
+                                    <div class="achievement-card"><img src="/assets/user.jpg" alt="Achievement 1"><div class="achievement-info"><h3>Blood Donor Hero</h3><p>Donated 10+ times</p></div></div>
+                                    <div class="achievement-card"><img src="/assets/user.jpg" alt="Achievement 2"><div class="achievement-info"><h3>Community Champion</h3><p>Organized 3 drives</p></div></div>
+                                    <div class="achievement-card"><img src="/assets/user.jpg" alt="Achievement 3"><div class="achievement-info"><h3>Life Saver Award</h3><p>Emergency donation</p></div></div>
+                                    <div class="achievement-card"><img src="/assets/user.jpg" alt="Achievement 4"><div class="achievement-info"><h3>Top Recruiter</h3><p>Brought 5 new donors</p></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="imageAdjustPopup" class="popup-overlay">
+        <div class="popup-container">
+            <div class="popup-header"><h2 class="popup-title">Adjust Image</h2><button class="popup-close-btn" aria-label="Close Adjust Image Popup" onclick="closeImageAdjustPopup()">×</button></div>
+            <div class="popup-content">
+                <img id="popupImagePreview" src="/assets/user.jpg" alt="Image Preview">
+                <div class="popup-controls">
+                    <label for="zoomRange">Zoom:</label><input type="range" id="zoomRange" name="zoomRange" min="1" max="3" step="0.1" value="1" disabled>
+                    <label for="brightnessRange">Brightness:</label><input type="range" id="brightnessRange" name="brightnessRange" min="0" max="2" step="0.1" value="1" disabled>
+                    <div class="placeholder-buttons"><button type="button" disabled>Rotate Left</button><button type="button" disabled>Rotate Right</button><button type="button" disabled>Crop</button></div>
+                </div>
+            </div>
+            <div class="popup-footer"><button type="button" class="popup-cancel-btn" onclick="closeImageAdjustPopup()">Cancel</button><button type="button" class="popup-apply-btn" onclick="applyImageAdjustments()">Apply</button></div>
+        </div>
+    </div>
+    <div id="phoneVerificationPopup" class="popup-overlay">
+        <div class="popup-container">
+            <div class="popup-header"><h2 class="popup-title">Verify Phone Number</h2><button class="popup-close-btn" aria-label="Close Phone Verification Popup" onclick="closePhoneVerificationPopup(true)">×</button></div>
+            <div class="popup-content">
+                <p id="phoneVerificationIntro" style="text-align: center; margin-bottom: 15px; font-size: 14px; color: var(--text-secondary-form);">Enter the 6-digit code sent to <strong id="popupVerificationPhoneNumberDisplay"></strong>.</p>
+                <div id="verificationCodeContainer" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                    <input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required><input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required><input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required><input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required><input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required><input type="text" class="verification-code-input" maxlength="1" pattern="[0-9]" required>
+                </div>
+                <p id="phoneVerificationPopupMessage" style="text-align: center; font-size: 13px; min-height: 1.2em; margin-bottom: 15px;"></p>
+                <p style="text-align: center; margin-top: 15px; font-size: 13px;">Didn't receive the code? <a href="#" id="resendCodeLink" style="color: var(--primary-color); font-weight: 500;">Resend code</a></p>
+            </div>
+            <div class="popup-footer"><button type="button" id="skipPhoneVerificationButton" class="popup-skip-btn">Skip</button><button type="button" id="verifyCodeButton" class="popup-apply-btn" style="width: auto;" disabled>Verify Code</button></div>
+        </div>
+    </div>
+    <script>
+        const defaultProfileBioPreviewText = "Tell us a bit about yourself...";
+        const ingaProfileHeader = document.getElementById('ingaProfileHeader');
+
+        function updateProfileHeaderGradient(imageElement, targetHeaderElement) {
+            if (!imageElement || !targetHeaderElement) return;
+            const defaultGradient = 'linear-gradient(to bottom, rgba(161, 196, 253, 0.8), rgba(194, 233, 251, 0.7))';
+
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; 
+
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const w = img.naturalWidth || img.width;
+                const h = img.naturalHeight || img.height;
+                
+                if (w === 0 || h === 0) {
+                     console.error("Image for gradient has zero dimensions after load:", imageElement.src);
+                     targetHeaderElement.style.backgroundImage = defaultGradient;
+                    return;
+                }
+                canvas.width = w;
+                canvas.height = h;
+                ctx.drawImage(img, 0, 0, w, h);
+
+                let color1 = 'rgba(161, 196, 253, 0.85)'; 
+                let color2 = 'rgba(194, 233, 251, 0.75)'; 
+
+                try {
+                    const topPixelData = ctx.getImageData(Math.floor(w / 2), Math.floor(h * 0.15), 1, 1).data;
+                    const bottomPixelData = ctx.getImageData(Math.floor(w / 2), Math.floor(h * 0.85), 1, 1).data;
+                    color1 = `rgba(${topPixelData[0]}, ${topPixelData[1]}, ${topPixelData[2]}, 0.85)`;
+                    color2 = `rgba(${bottomPixelData[0]}, ${bottomPixelData[1]}, ${bottomPixelData[2]}, 0.75)`;
+                } catch (e) {
+                    console.error("Error extracting colors from avatar for gradient:", e);
+                }
+                targetHeaderElement.style.backgroundImage = `linear-gradient(to bottom, ${color1}, ${color2})`;
+            };
+            img.onerror = () => {
+                console.error("Failed to load image for gradient color extraction:", imageElement.src);
+                targetHeaderElement.style.backgroundImage = defaultGradient;
+            };
+            
+            if (imageElement.src && imageElement.src !== window.location.href && !imageElement.src.startsWith('blob:')) {
+                 img.src = imageElement.src;
+            } else if (imageElement.src && imageElement.src.startsWith('blob:')) {
+                img.src = imageElement.src;
+            }
+            else { 
+                 console.warn("Invalid or missing image src for gradient, using fallback:", imageElement.src);
+                 targetHeaderElement.style.backgroundImage = defaultGradient;
+            }
+        }
+
+
+        const districtsByDivision = {
+            dhaka: ["Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail"],
+            chattogram: ["Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Comilla", "Cox's Bazar", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati"],
+            rajshahi: ["Bogra", "Joypurhat", "Naogaon", "Natore", "Nawabganj", "Pabna", "Rajshahi", "Sirajganj"],
+            khulna: ["Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"],
+            barisal: ["Barguna", "Barisal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur"],
+            sylhet: ["Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"],
+            rangpur: ["Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon"],
+            mymensingh: ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"]
+        };
+        const registrationForm = document.getElementById('registrationForm');
+        const step2Form = document.getElementById('step2Form');
+        const profilePictureInput = document.getElementById('profilePicture');
+        const previewAvatarElement = document.getElementById('previewAvatar');
+        const popupImagePreviewElement = document.getElementById('popupImagePreview');
+        const imageAdjustPopup = document.getElementById('imageAdjustPopup');
+        const profileBioTextarea = document.getElementById('profileBio');
+        const previewProfileBioTextElement = document.getElementById('previewProfileBioText');
+        const divisionSelect = document.getElementById('division');
+        const districtSelect = document.getElementById('district');
+        const formFullNameInput = document.getElementById('fullName');
+        const formUsernameInput = document.getElementById('username');
+        const phoneInput = document.getElementById('phone');
+        const previewNameTextElement = document.getElementById('previewNameText');
+        const previewUsernameDisplayElement = document.getElementById('previewUsernameDisplay');
+        const previewLocationLineElement = document.getElementById('previewLocationLine');
+        const previewLocationTextElement = document.getElementById('previewLocationText');
+        const previewOccupationLineElement = document.getElementById('previewOccupationLine');
+        const joinedSinceTextElement = document.getElementById('joinedSinceText');
+        const tabButtons = document.querySelectorAll('.inga-tab-button');
+        const tabContentText = document.getElementById('tabContentText');
+        const achievementsTabContent = document.getElementById('achievementsTabContent');
+        const aboutTabContent = document.getElementById('aboutTabContent');
+        const continueToStep2Button = document.getElementById('continueToStep2Button');
+        const newBackToStep1Button = document.getElementById('newBackToStep1Button');
+        const finalSubmitButton = document.getElementById('finalSubmitButton');
+        const step1Content = document.getElementById('step1Content');
+        const step2Content = document.getElementById('step2Content');
+        const formStepsWrapper = document.querySelector('.form-steps-wrapper');
+        const stepInfoText = document.getElementById('stepInfoText');
+        const stepIndicator1 = document.getElementById('stepIndicator1');
+        const stepIndicator2 = document.getElementById('stepIndicator2');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const occupationSelect = document.getElementById('occupation');
+        const occupationDisplay = document.getElementById('occupationDisplay');
+        const occupationDisplayText = document.getElementById('occupationDisplayText');
+        const occupationFloatingCard = document.getElementById('occupationFloatingCard');
+        const occupationOptionsList = document.getElementById('occupationOptionsList');
+        const specifyOccupationContainer = document.getElementById('specifyOccupationContainer');
+        const specifyOccupationInput = document.getElementById('specifyOccupationInput');
+        const confirmSpecifyOccupationButton = document.getElementById('confirmSpecifyOccupation');
+        const occupationAtInput = document.getElementById('occupationAt');
+        const usernameFormatMessage = document.getElementById('usernameFormatMessage');
+        const usernameAvailabilityIconContainer = document.getElementById('usernameAvailabilityIconContainer');
+        const usernameAvailabilityMessage = document.getElementById('usernameAvailabilityMessage');
+        const phoneVerificationPopupEl = document.getElementById('phoneVerificationPopup');
+        const popupVerificationPhoneNumberDisplayEl = document.getElementById('popupVerificationPhoneNumberDisplay');
+        const verificationCodeContainerEl = document.getElementById('verificationCodeContainer');
+        const verificationCodeInputsArr = Array.from(verificationCodeContainerEl.querySelectorAll('.verification-code-input'));
+        const verifyCodeButtonEl = document.getElementById('verifyCodeButton');
+        const resendCodeLinkEl = document.getElementById('resendCodeLink');
+        const phoneVerificationPopupMessageEl = document.getElementById('phoneVerificationPopupMessage');
+        const skipPhoneVerificationButtonEl = document.getElementById('skipPhoneVerificationButton');
+        const defaultNameText = "Rashid Shahriyar"; const defaultLocationPlaceholder = "Your Location, Bangladesh"; const defaultAvatarSrc = "/assets/user.jpg"; const defaultUsernamePlaceholder = "@username"; const defaultOccupationPlaceholder = "Your Occupation"; const defaultJoinedSinceText = "Joined Since Month Year";
+        const takenUsernames = ["admin", "root", "test", "user", "rashidvaya", "shahriyar"];
+        let usernameAvailabilityState = 'IDLE'; let debounceTimeout;
+        let isPhoneVerified = false; let wasPhoneSkipped = false; let generatedVerificationCode = ''; let phoneVerificationAttemptInProgress = false;
+        const lottieSpinnerUrl = "https://lottie.host/015a2716-935b-4f90-ac08-963a05960a1a/7WqA9cy2Qx.lottie"; const lottieTickUrl = "https://lottie.host/27978a99-f93d-4533-831f-c97b4d820179/6jR4m10i3R.json"; const lottieCrossUrl = "https://lottie.host/11d97f44-7a69-41dd-a6cb-10589309d66c/uHauX5ajs1.json";
+        
+        const invitationCodeInput = document.getElementById('invitationCode');
+        const verifyInvitationCodeButton = document.getElementById('verifyInvitationCodeButton');
+
+        function setStep1FormFieldsDisabled(isDisabled) {
+            const fieldsToToggle = registrationForm.querySelectorAll(
+                'input:not(#invitationCode), select, textarea'
+            );
+            fieldsToToggle.forEach(field => {
+                field.disabled = isDisabled;
+            });
+
+            if (occupationDisplay) {
+                if (isDisabled) {
+                    occupationDisplay.setAttribute('tabindex', '-1');
+                    occupationDisplay.style.pointerEvents = 'none';
+                    occupationDisplay.style.opacity = '0.7';
+                } else {
+                    occupationDisplay.setAttribute('tabindex', '0');
+                    occupationDisplay.style.pointerEvents = 'auto';
+                    occupationDisplay.style.opacity = '1';
+                }
+            }
+            
+            if (districtSelect) {
+                // The select element itself is handled by the loop above.
+                // This is just for resetting its content if disabling.
+                if (isDisabled) {
+                    districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+                }
+            }
+
+            if (!isDisabled) { // If unlocking fields
+                populateDistricts(); // Set initial district state based on division
+            }
+
+            if (continueToStep2Button) {
+                continueToStep2Button.disabled = true; 
+            }
+        }
+
+        if (verifyInvitationCodeButton && invitationCodeInput) {
+            invitationCodeInput.addEventListener('input', () => {
+                verifyInvitationCodeButton.disabled = invitationCodeInput.value.trim() === '';
+                invitationCodeInput.style.borderColor = ''; 
+                if (verifyInvitationCodeButton.classList.contains('invalid')) {
+                    verifyInvitationCodeButton.textContent = 'Verify';
+                    verifyInvitationCodeButton.classList.remove('invalid');
+                }
+            });
+
+            verifyInvitationCodeButton.addEventListener('click', () => {
+                const code = invitationCodeInput.value.trim();
+                if (!code) { // Should not happen if button is disabled when input is empty
+                    invitationCodeInput.focus();
+                    invitationCodeInput.style.borderColor = 'var(--error-color)';
+                    setTimeout(() => { invitationCodeInput.style.borderColor = ''; }, 1500);
+                    return;
+                }
+                
+                verifyInvitationCodeButton.textContent = 'Verifying...';
+                verifyInvitationCodeButton.classList.remove('invalid', 'verified');
+                verifyInvitationCodeButton.classList.add('verifying');
+                verifyInvitationCodeButton.disabled = true;
+                invitationCodeInput.disabled = true;
+
+                setTimeout(() => { 
+                    const isValidCode = (code.toUpperCase() === "VALID123" || code.toUpperCase() === "TESTCODE");
+
+                    if (isValidCode) {
+                        verifyInvitationCodeButton.textContent = 'Verified';
+                        verifyInvitationCodeButton.classList.remove('verifying');
+                        verifyInvitationCodeButton.classList.add('verified');
+                        // Button and input remain disabled as "Verified"
+                        
+                        setStep1FormFieldsDisabled(false); // Unlock the rest of the form
+                        if (formFullNameInput) formFullNameInput.focus(); 
+                        updateStep1ContinueButtonState(); 
+                    } else {
+                        verifyInvitationCodeButton.textContent = 'Invalid';
+                        verifyInvitationCodeButton.classList.remove('verifying');
+                        verifyInvitationCodeButton.classList.add('invalid');
+                        verifyInvitationCodeButton.disabled = false; 
+                        invitationCodeInput.disabled = false;
+                        invitationCodeInput.focus();
+                        
+                        setTimeout(() => { 
+                            if (verifyInvitationCodeButton.classList.contains('invalid')) {
+                                verifyInvitationCodeButton.textContent = 'Verify';
+                                verifyInvitationCodeButton.classList.remove('invalid');
+                                // Re-disable button if input is now empty after clearing for invalid attempt
+                                verifyInvitationCodeButton.disabled = invitationCodeInput.value.trim() === '';
+                            }
+                        }, 2000);
+                    }
+                }, 1500);
+            });
+        }
+
+        function openImageAdjustPopup(event) {event.preventDefault(); if (!imageAdjustPopup || !profilePictureInput || !popupImagePreviewElement) return; const file = profilePictureInput.files[0]; if (file && file.type.startsWith('image/')) { const reader = new FileReader(); reader.onload = function(e) { popupImagePreviewElement.src = e.target.result; imageAdjustPopup.classList.add('show'); } reader.readAsDataURL(file); } else { popupImagePreviewElement.src = previewAvatarElement.src; imageAdjustPopup.classList.add('show'); }}
+        function closeImageAdjustPopup() {if (imageAdjustPopup) imageAdjustPopup.classList.remove('show');}
+        function applyImageAdjustments() {console.log("Apply button clicked. Image adjustment logic needed here."); closeImageAdjustPopup();}
+        if (imageAdjustPopup) {imageAdjustPopup.addEventListener('click', function(event) {if (event.target === imageAdjustPopup) closeImageAdjustPopup();}); document.addEventListener('keydown', function(event) {if (event.key === 'Escape' && imageAdjustPopup.classList.contains('show')) closeImageAdjustPopup();});}
+        if (tabButtons.length > 0 && achievementsTabContent && aboutTabContent && tabContentText) {tabButtons.forEach(button => {button.addEventListener('click', function() {tabButtons.forEach(btn => btn.classList.remove('inga-active-tab')); this.classList.add('inga-active-tab'); const tabName = this.dataset.tab; achievementsTabContent.style.display = 'none'; aboutTabContent.style.display = 'none'; tabContentText.style.display = 'none'; if (tabName === "achievements") achievementsTabContent.style.display = 'grid'; else if (tabName === "about") aboutTabContent.style.display = 'block'; else if (tabName === "community"){ tabContentText.textContent = `Community content will show here.`; tabContentText.style.display = 'block';}});});}
+        function updateJoinedSince() {if (joinedSinceTextElement) { const now = new Date(); const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]; joinedSinceTextElement.textContent = `Joined Since ${monthNames[now.getMonth()]} ${now.getFullYear()}`; } else if(joinedSinceTextElement) joinedSinceTextElement.textContent = defaultJoinedSinceText;}
+        
+        function updateStep1ContinueButtonState() {
+            if (!registrationForm || !continueToStep2Button) return;
+            
+            if (verifyInvitationCodeButton && !verifyInvitationCodeButton.classList.contains('verified')) {
+                continueToStep2Button.disabled = true;
+                return;
+            }
+
+            let allRequiredStep1FieldsValid = true;
+            registrationForm.querySelectorAll('[required]').forEach(field => {
+                if (!field.disabled) { 
+                    if (field.id === 'username') { 
+                        if (!(formUsernameInput.checkValidity() && usernameAvailabilityState === 'AVAILABLE')) {
+                            allRequiredStep1FieldsValid = false;
+                        }
+                    } else if (field.id === 'phone') { 
+                        if (!(phoneInput.checkValidity() && isPhoneVerified)) {
+                            allRequiredStep1FieldsValid = false;
+                        }
+                    } else if (field.id === 'occupation') { // Check actual hidden select for occupation
+                        if (!occupationSelect.checkValidity()) allRequiredStep1FieldsValid = false;
+                    }
+                     else if (!field.checkValidity()) {
+                        allRequiredStep1FieldsValid = false;
+                    }
+                }
+            });
+            
+            continueToStep2Button.disabled = !allRequiredStep1FieldsValid;
+        }
+
+        function updateStep2SubmitButtonState() {if (!step2Form || !finalSubmitButton) return; let allFieldsValid = true; step2Form.querySelectorAll('[required]:not([disabled])').forEach(field => {if (field.offsetParent !== null && !field.checkValidity()) allFieldsValid = false;}); if (passwordInput.value !== confirmPasswordInput.value && confirmPasswordInput.value !== '') allFieldsValid = false; finalSubmitButton.disabled = !allFieldsValid;}
+        
+        function populateDistricts() {
+            const selectedDivision = divisionSelect.value; 
+            const districts = districtsByDivision[selectedDivision] || []; 
+            districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>'; 
+            
+            // Only populate and enable if division is selected AND districtSelect is not generally disabled by the form lock
+            if (selectedDivision && !divisionSelect.disabled && districtSelect && !districtSelect.disabled) { 
+                if (districts.length > 0) {
+                    districts.forEach(district => { 
+                        const option = document.createElement('option'); 
+                        option.value = district.toLowerCase().replace(/\s+/g, '-'); 
+                        option.textContent = district; 
+                        districtSelect.appendChild(option); 
+                    });
+                    // districtSelect.disabled = false; // It's already not disabled due to the check above
+                } else {
+                    // districtSelect.disabled = true; // Should already be handled by the general form lock if applicable
+                }
+            } else if (districtSelect) { // If no division selected or form is locked
+                 districtSelect.disabled = true;
+            }
+
+            if(districtSelect && !districtSelect.disabled) checkFieldValidity(districtSelect, registrationForm); 
+            updateLocationInPreview(); 
+            updateStep1ContinueButtonState();
+        }
+
+        function updatePreviewName() {if (previewNameTextElement && formFullNameInput) {previewNameTextElement.textContent = formFullNameInput.value.trim() || defaultNameText;}}
+        function updatePreviewUsername() {if (previewUsernameDisplayElement && formUsernameInput) {const usernameValue = formUsernameInput.value.trim(); previewUsernameDisplayElement.textContent = usernameValue ? `@${usernameValue}` : defaultUsernamePlaceholder;}}
+        function updatePreviewBio() {if (previewProfileBioTextElement && profileBioTextarea) {previewProfileBioTextElement.textContent = profileBioTextarea.value.trim() || defaultProfileBioPreviewText;}}
+        function updateLocationInPreview() {if (previewLocationTextElement && divisionSelect && districtSelect) {const selectedDivisionValue = divisionSelect.value; const selectedDistrictValue = districtSelect.value; const countryName = "Bangladesh"; let divisionText = (selectedDivisionValue && divisionSelect.selectedIndex > 0 && !divisionSelect.disabled) ? divisionSelect.options[divisionSelect.selectedIndex].text : ""; let districtText = (selectedDistrictValue && districtSelect.selectedIndex > 0 && !districtSelect.disabled) ? districtSelect.options[districtSelect.selectedIndex].text : ""; let fullLocationText = defaultLocationPlaceholder; if (districtText && divisionText) fullLocationText = `${districtText}, ${divisionText}, ${countryName}`; else if (divisionText) fullLocationText = `${divisionText}, ${countryName}`; else if (districtText) fullLocationText = `${districtText}, ${countryName}`; previewLocationTextElement.textContent = fullLocationText;}}
+        function updatePreviewOccupationAndAt() {if (!previewOccupationLineElement || !occupationSelect || !occupationAtInput) return; const selectedNativeOption = occupationSelect.options[occupationSelect.selectedIndex]; let occupationText = (selectedNativeOption && selectedNativeOption.value && !occupationSelect.disabled) ? selectedNativeOption.text : ""; let atText = occupationAtInput.disabled ? "" : occupationAtInput.value.trim(); let combinedText = defaultOccupationPlaceholder; if (occupationText && atText) combinedText = `${occupationText} at ${atText}`; else if (occupationText) combinedText = occupationText; else if (atText) combinedText = `Works at ${atText}`; previewOccupationLineElement.textContent = combinedText;}
+        const lottieErrorUrl = "https://lottie.host/a855dc76-c4ce-4e10-8768-52c6db6db14a/LPywRu3kYb.lottie"; const lottiePhoneTickUrl = lottieTickUrl;
+        function clearAllLottieErrors(formElement) {formElement.querySelectorAll('.validation-error-lottie, .validation-lottie-icon').forEach(player => player.remove()); formElement.querySelectorAll('.form-group.has-error, .phone-input-wrapper.has-error, .custom-select-display.has-error, .phone-input-wrapper.verified').forEach(el => {el.classList.remove('has-error', 'verified');});}
+        function managePhoneIcon(iconUrl, isErrorType) {const phoneWrapper = phoneInput.closest('.phone-input-wrapper'); if (!phoneWrapper) return; const existingIcon = phoneWrapper.querySelector('.validation-lottie-icon'); if (existingIcon) existingIcon.remove(); phoneWrapper.classList.remove('has-error', 'verified'); if (iconUrl && !wasPhoneSkipped) { const player = document.createElement('dotlottie-player'); player.setAttribute('src', iconUrl); player.setAttribute('background', 'transparent'); player.setAttribute('speed', '1'); player.setAttribute('loop', ''); player.setAttribute('autoplay', ''); player.classList.add('validation-lottie-icon'); if (isErrorType) player.classList.add('error-type'); phoneWrapper.appendChild(player); if (isErrorType) phoneWrapper.classList.add('has-error'); else phoneWrapper.classList.add('verified');} else if (wasPhoneSkipped) {phoneWrapper.classList.remove('has-error', 'verified');}}
+        function addLottieError(fieldElement) {if (fieldElement.id === 'phone') {if (!wasPhoneSkipped) managePhoneIcon(lottieErrorUrl, true); return;} const isCustomSelect = fieldElement.id === 'occupation'; let lottieTargetParent = fieldElement.closest('.form-group'); if (!lottieTargetParent) return; if (isCustomSelect) {const customSelectWrapper = lottieTargetParent.querySelector('.custom-select-wrapper'); if (customSelectWrapper) lottieTargetParent = customSelectWrapper.parentNode;} if (fieldElement.id === 'username' && usernameAvailabilityIconContainer.querySelector('dotlottie-player')) {} const existingLottie = lottieTargetParent.querySelector(`.validation-error-lottie[data-field="${fieldElement.id}"]`); if (existingLottie) existingLottie.remove(); const player = document.createElement('dotlottie-player'); player.setAttribute('src', lottieErrorUrl); player.setAttribute('background', 'transparent'); player.setAttribute('speed', '1'); player.setAttribute('loop', ''); player.setAttribute('autoplay', ''); player.classList.add('validation-error-lottie'); player.dataset.field = fieldElement.id; const label = fieldElement.closest('.form-group').querySelector(`label[for="${fieldElement.id}"], label[for="${fieldElement.closest('.custom-select-wrapper')?.querySelector('.custom-select-display')?.id}"]`); let topOffset = (label && fieldElement.type !== 'file' && fieldElement.id !== 'invitationCode') ? `calc(${label.offsetHeight}px + 18px)` : (label && fieldElement.type === 'file') ? `calc(50% + ${label.offsetHeight/2}px + 4px)` : 'calc(50% + 8px)'; player.style.top = topOffset; if (isCustomSelect) {player.style.right = '5px'; lottieTargetParent.querySelector('.custom-select-wrapper').insertAdjacentElement('afterend', player);} else if(fieldElement.closest('.file-input-wrapper')) player.style.right = '40px'; else if (fieldElement.id === 'username') {usernameAvailabilityIconContainer.insertAdjacentElement('beforebegin', player);} else if (fieldElement.id === 'invitationCode') { player.style.right = 'calc(8px + 80px + 5px)';  lottieTargetParent.querySelector('.input-with-internal-button').appendChild(player); } else player.style.right = '10px'; if (fieldElement.id !== 'username' && fieldElement.id !== 'invitationCode') {if (!isCustomSelect && !fieldElement.closest('.file-input-wrapper')) {lottieTargetParent.appendChild(player);}}}
+        function removeLottieError(fieldElement) {if (fieldElement.id === 'phone') {if (!wasPhoneSkipped) managePhoneIcon(null); else {const phoneWrapper = phoneInput.closest('.phone-input-wrapper'); const existingIcon = phoneWrapper.querySelector('.validation-lottie-icon'); if (existingIcon) existingIcon.remove(); phoneWrapper.classList.remove('has-error', 'verified');} return;} let parentContext = fieldElement.closest('.form-group'); if (fieldElement.id === 'occupation') parentContext = fieldElement.closest('.form-group').querySelector('.custom-select-wrapper').parentNode; if (!parentContext) return; const selector = (fieldElement.id === 'username' || fieldElement.id === 'invitationCode') ? `.validation-error-lottie[data-field="${fieldElement.id}"]` : `.validation-error-lottie[data-field="${fieldElement.id}"]`; const lottiePlayer = parentContext.querySelector(selector); if (lottiePlayer) lottiePlayer.remove();}
+        function checkFieldValidity(field, formElement) {if (field.type === 'file' || field.id === 'invitationCode') return true; const isCustomOccupationSelect = field.id === 'occupation'; let elementToApplyErrorClassTo = field; let parentGroup = field.closest('.form-group'); if (isCustomOccupationSelect) elementToApplyErrorClassTo = occupationDisplay; else if (field.id === 'phone') {elementToApplyErrorClassTo = field.closest('.phone-input-wrapper'); if (isPhoneVerified && !wasPhoneSkipped && field.checkValidity()) {managePhoneIcon(lottiePhoneTickUrl, false); parentGroup.classList.remove('has-error'); elementToApplyErrorClassTo.classList.remove('has-error'); return true;} else if (wasPhoneSkipped){managePhoneIcon(null); const isValidPattern = phoneInput.checkValidity(); if (isValidPattern) {parentGroup.classList.remove('has-error'); elementToApplyErrorClassTo.classList.remove('has-error', 'verified');} return isValidPattern;}} if (!parentGroup) return true; removeLottieError(field); if (field.id === 'phone' && !wasPhoneSkipped) managePhoneIcon(null); parentGroup.classList.remove('has-error'); if (field.id === 'phone' || isCustomOccupationSelect || field.id === 'occupationAt') {elementToApplyErrorClassTo.classList.remove('has-error'); if (field.id === 'phone') elementToApplyErrorClassTo.classList.remove('verified');} if (!field.disabled && !field.checkValidity()) {addLottieError(field); parentGroup.classList.add('has-error'); if (field.id === 'phone' || isCustomOccupationSelect || field.id === 'occupationAt') {elementToApplyErrorClassTo.classList.add('has-error');} return false;} return true;}
+        function setUsernameFeedbackIcon(iconUrl) {usernameAvailabilityIconContainer.innerHTML = ''; if (iconUrl) {const player = document.createElement('dotlottie-player'); player.setAttribute('src', iconUrl); player.setAttribute('background', 'transparent'); player.setAttribute('speed', '1'); player.setAttribute('loop', iconUrl === lottieSpinnerUrl); player.setAttribute('autoplay', ''); usernameAvailabilityIconContainer.appendChild(player);}}
+        function setUsernameFeedbackMessage(message, typeClass) {usernameAvailabilityMessage.textContent = message; usernameAvailabilityMessage.className = 'availability-message'; if (typeClass) usernameAvailabilityMessage.classList.add(typeClass);}
+        function checkUsernameAvailabilityOnServer(username) {setTimeout(() => {if (takenUsernames.includes(username.toLowerCase())) {usernameAvailabilityState = 'TAKEN'; setUsernameFeedbackIcon(lottieCrossUrl); setUsernameFeedbackMessage("Username taken. Try another.", 'error'); formUsernameInput.closest('.form-group').classList.add('has-error'); formUsernameInput.setAttribute('aria-invalid', 'true');} else {usernameAvailabilityState = 'AVAILABLE'; setUsernameFeedbackIcon(lottieTickUrl); setUsernameFeedbackMessage("Username available!", 'success'); formUsernameInput.closest('.form-group').classList.remove('has-error'); formUsernameInput.removeAttribute('aria-invalid');} updateStep1ContinueButtonState();}, 1000);}
+        const debouncedCheckUsername = debounce(checkUsernameAvailabilityOnServer, 700);
+        function handleUsernameInput() {const usernameValue = formUsernameInput.value.trim(); updatePreviewUsername(); setUsernameFeedbackIcon(''); setUsernameFeedbackMessage('', ''); usernameAvailabilityState = 'IDLE'; formUsernameInput.closest('.form-group').classList.remove('has-error'); formUsernameInput.removeAttribute('aria-invalid'); const existingFormatErrorLottie = formUsernameInput.closest('.form-group').querySelector('.validation-error-lottie[data-field="username"]'); if (existingFormatErrorLottie) existingFormatErrorLottie.remove(); const isFormatValid = formUsernameInput.checkValidity(); if (isFormatValid && usernameValue.length >= formUsernameInput.minLength) {usernameAvailabilityState = 'CHECKING'; setUsernameFeedbackIcon(lottieSpinnerUrl); setUsernameFeedbackMessage("Checking...", 'checking'); debouncedCheckUsername(usernameValue);} else if (!isFormatValid && usernameValue.length > 0) {usernameAvailabilityState = 'IDLE'; addLottieError(formUsernameInput); /* Show format error if not empty and invalid */} else {usernameAvailabilityState = 'IDLE'; if (existingFormatErrorLottie) removeLottieError(formUsernameInput); } updateStep1ContinueButtonState();}
+        function debounce(func, delay) {let timeoutId; return (...args) => { clearTimeout(timeoutId); timeoutId = setTimeout(() => func.apply(this, args), delay); };}
+        function openPhoneVerificationPopup() {if (phoneVerificationAttemptInProgress || (isPhoneVerified && !wasPhoneSkipped)) return; popupVerificationPhoneNumberDisplayEl.textContent = "+880 " + phoneInput.value; generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString(); console.log("Simulated Verification Code for " + phoneInput.value + ": " + generatedVerificationCode); phoneVerificationPopupMessageEl.textContent = ''; verificationCodeInputsArr.forEach(input => input.value = ''); verifyCodeButtonEl.disabled = true; phoneVerificationPopupEl.classList.add('show'); verificationCodeInputsArr[0].focus(); phoneInput.disabled = true; phoneVerificationAttemptInProgress = true;}
+        function closePhoneVerificationPopup(isManualClose = false) {phoneVerificationPopupEl.classList.remove('show'); phoneVerificationAttemptInProgress = false; if (isManualClose && !isPhoneVerified) {phoneInput.disabled = false; phoneInput.focus(); if (!wasPhoneSkipped) {managePhoneIcon(null); phoneInput.closest('.phone-input-wrapper').classList.remove('has-error', 'verified');}} else if (isPhoneVerified && wasPhoneSkipped){phoneInput.disabled = false; managePhoneIcon(null); phoneInput.closest('.phone-input-wrapper').classList.remove('has-error', 'verified');} updateStep1ContinueButtonState();}
+        function handleSkipPhoneVerification() {isPhoneVerified = true; wasPhoneSkipped = true; phoneInput.disabled = false; managePhoneIcon(null); phoneInput.closest('.phone-input-wrapper').classList.remove('has-error', 'verified'); closePhoneVerificationPopup(false); updateStep1ContinueButtonState();}
+        function setupVerificationCodeInputs() {verificationCodeInputsArr.forEach((input, index) => {input.addEventListener('input', () => {if (input.value.length === 1 && index < verificationCodeInputsArr.length - 1) verificationCodeInputsArr[index + 1].focus(); const allFilled = verificationCodeInputsArr.every(inp => inp.value.length === 1); verifyCodeButtonEl.disabled = !allFilled; if (allFilled) verifyCodeButtonEl.focus(); phoneVerificationPopupMessageEl.textContent = '';}); input.addEventListener('keydown', (e) => {if (e.key === "Backspace" && !input.value && index > 0) verificationCodeInputsArr[index - 1].focus(); else if (e.key === "Enter" && !verifyCodeButtonEl.disabled) { e.preventDefault(); handleVerifyCode(); }});});}
+        function handleVerifyCode() {const enteredCode = verificationCodeInputsArr.map(input => input.value).join(''); if (enteredCode === generatedVerificationCode) {isPhoneVerified = true; wasPhoneSkipped = false; phoneVerificationPopupMessageEl.textContent = 'Phone verified successfully!'; phoneVerificationPopupMessageEl.style.color = 'var(--success-color)'; managePhoneIcon(lottiePhoneTickUrl, false); phoneInput.closest('.form-group').classList.remove('has-error'); phoneInput.disabled = true; setTimeout(() => { closePhoneVerificationPopup(false); updateStep1ContinueButtonState(); }, 1000);} else {isPhoneVerified = false; wasPhoneSkipped = false; phoneVerificationPopupMessageEl.textContent = 'Invalid code. Please try again.'; phoneVerificationPopupMessageEl.style.color = 'var(--error-color)'; verificationCodeInputsArr.forEach(input => input.value = ''); verificationCodeInputsArr[0].focus(); verifyCodeButtonEl.disabled = true; if (!wasPhoneSkipped) {managePhoneIcon(lottieErrorUrl, true);}}}
+        function handleResendCode(event) {event.preventDefault(); generatedVerificationCode = Math.floor(100000 + Math.random() * 900000).toString(); console.log("Resent Simulated Verification Code: " + generatedVerificationCode); phoneVerificationPopupMessageEl.textContent = 'A new code has been sent (simulated).'; phoneVerificationPopupMessageEl.style.color = 'var(--text-secondary-form)'; verificationCodeInputsArr.forEach(input => input.value = ''); verificationCodeInputsArr[0].focus(); verifyCodeButtonEl.disabled = true; resendCodeLinkEl.style.pointerEvents = 'none'; resendCodeLinkEl.style.opacity = '0.6'; let countdown = 30; const originalText = resendCodeLinkEl.textContent; resendCodeLinkEl.textContent = `Resend in ${countdown}s`; const interval = setInterval(() => {countdown--; resendCodeLinkEl.textContent = `Resend in ${countdown}s`; if (countdown <= 0) {clearInterval(interval); resendCodeLinkEl.textContent = originalText; resendCodeLinkEl.style.pointerEvents = 'auto'; resendCodeLinkEl.style.opacity = '1';}}, 1000);}
+        if (phoneVerificationPopupEl) {phoneVerificationPopupEl.addEventListener('click', (event) => { if (event.target === phoneVerificationPopupEl) closePhoneVerificationPopup(true); }); document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && phoneVerificationPopupEl.classList.contains('show')) closePhoneVerificationPopup(true); });}
+        if (verifyCodeButtonEl) verifyCodeButtonEl.addEventListener('click', handleVerifyCode);
+        if (resendCodeLinkEl) resendCodeLinkEl.addEventListener('click', handleResendCode);
+        if (skipPhoneVerificationButtonEl) skipPhoneVerificationButtonEl.addEventListener('click', handleSkipPhoneVerification);
+        function adjustWrapperHeight(activeStepElement) {if (formStepsWrapper && activeStepElement) requestAnimationFrame(() => { formStepsWrapper.style.minHeight = activeStepElement.scrollHeight + 'px'; });}
+        function goToStep(stepNumber) {if (stepNumber === 1) {step1Content.classList.remove('prev-step-position'); step1Content.classList.add('active-step-content'); step2Content.classList.remove('active-step-content'); step2Content.classList.add('next-step-position'); stepIndicator1.classList.add('active-step'); stepIndicator1.classList.remove('inactive-step', 'completed-step'); stepIndicator2.classList.add('inactive-step'); stepIndicator2.classList.remove('active-step', 'completed-step'); stepInfoText.textContent = "Step one of two."; adjustWrapperHeight(step1Content); if (invitationCodeInput && !invitationCodeInput.disabled) { invitationCodeInput.focus(); } else if(formFullNameInput && !formFullNameInput.disabled) { formFullNameInput.focus(); }} else if (stepNumber === 2) {step1Content.classList.remove('active-step-content'); step1Content.classList.add('prev-step-position'); step2Content.classList.remove('next-step-position'); step2Content.classList.add('active-step-content'); stepIndicator1.classList.remove('active-step', 'inactive-step'); stepIndicator1.classList.add('completed-step'); stepIndicator2.classList.remove('inactive-step', 'completed-step'); stepIndicator2.classList.add('active-step'); stepInfoText.textContent = "Step two of two."; adjustWrapperHeight(step2Content); if(profilePictureInput) profilePictureInput.focus();}}
+        function populateCustomOccupationOptions() {if (!occupationSelect || !occupationOptionsList) return; occupationOptionsList.innerHTML = ''; Array.from(occupationSelect.options).forEach(option => {if (option.value === "" && option.disabled) return; const li = document.createElement('li'); li.textContent = option.text; li.dataset.value = option.value; li.setAttribute('role', 'option'); li.setAttribute('tabindex', '-1'); if (occupationSelect.value === option.value) {li.classList.add('selected'); li.setAttribute('aria-selected', 'true');} else {li.setAttribute('aria-selected', 'false');} occupationOptionsList.appendChild(li);});}
+        function toggleOccupationCard(show) {if (show) {occupationFloatingCard.classList.add('show'); occupationDisplay.classList.add('open'); occupationDisplay.setAttribute('aria-expanded', 'true'); specifyOccupationContainer.style.display = 'none'; occupationOptionsList.style.display = 'block';} else {occupationFloatingCard.classList.remove('show'); occupationDisplay.classList.remove('open'); occupationDisplay.setAttribute('aria-expanded', 'false'); specifyOccupationContainer.style.display = 'none';}}
+        if (occupationDisplay) {occupationDisplay.addEventListener('click', (event) => {event.stopPropagation(); if(occupationDisplay.style.pointerEvents === 'none') return; const isOpen = occupationFloatingCard.classList.contains('show'); toggleOccupationCard(!isOpen);}); occupationDisplay.addEventListener('keydown', (event) => {if(occupationDisplay.style.pointerEvents === 'none') return; if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); const isOpen = occupationFloatingCard.classList.contains('show'); toggleOccupationCard(!isOpen); if (!isOpen) {const firstOption = occupationOptionsList.querySelector('li'); if (firstOption) firstOption.focus();}} else if (event.key === 'Escape') {toggleOccupationCard(false);}});}
+        if (occupationOptionsList) {occupationOptionsList.addEventListener('click', (event) => {if (event.target.tagName === 'LI') {const selectedValue = event.target.dataset.value; const selectedText = event.target.textContent; Array.from(occupationOptionsList.children).forEach(child => {child.classList.remove('selected'); child.setAttribute('aria-selected', 'false');}); event.target.classList.add('selected'); event.target.setAttribute('aria-selected', 'true'); if (selectedValue === 'other') {occupationOptionsList.style.display = 'none'; specifyOccupationContainer.style.display = 'block'; specifyOccupationInput.value = ''; specifyOccupationInput.focus(); occupationSelect.value = 'other';} else {occupationDisplayText.textContent = selectedText; occupationDisplayText.classList.remove('placeholder'); occupationSelect.value = selectedValue; toggleOccupationCard(false);} updatePreviewOccupationAndAt(); checkFieldValidity(occupationSelect, registrationForm); updateStep1ContinueButtonState();}}); occupationOptionsList.addEventListener('keydown', (event) => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault(); if (document.activeElement && document.activeElement.tagName === 'LI') {document.activeElement.click();}} else if (event.key === 'Escape') {toggleOccupationCard(false); occupationDisplay.focus();}});}
+        if (confirmSpecifyOccupationButton) {confirmSpecifyOccupationButton.addEventListener('click', () => {const specifiedText = specifyOccupationInput.value.trim(); if (specifiedText) {occupationDisplayText.textContent = specifiedText; occupationDisplayText.classList.remove('placeholder'); let otherOption = Array.from(occupationSelect.options).find(opt => opt.dataset.isCustomOther === 'true'); if (!otherOption) {otherOption = document.createElement('option'); otherOption.dataset.isCustomOther = 'true'; occupationSelect.appendChild(otherOption);} otherOption.value = `other_${specifiedText.toLowerCase().replace(/\s+/g, '_')}`; otherOption.text = specifiedText; otherOption.selected = true; occupationSelect.value = otherOption.value; updatePreviewOccupationAndAt(); checkFieldValidity(occupationSelect, registrationForm); updateStep1ContinueButtonState(); toggleOccupationCard(false);} else {specifyOccupationInput.focus();}});}
+        if (specifyOccupationInput) {specifyOccupationInput.addEventListener('keydown', (event) => {if (event.key === 'Enter') {event.preventDefault(); confirmSpecifyOccupationButton.click();} else if (event.key === 'Escape') {toggleOccupationCard(false); occupationDisplay.focus();}});}
+        document.addEventListener('click', (event) => {if (occupationFloatingCard && !occupationDisplay.contains(event.target) && !occupationFloatingCard.contains(event.target)) {toggleOccupationCard(false);}});
+        if (continueToStep2Button) {continueToStep2Button.addEventListener('click', function() {let isStep1Valid = true; clearAllLottieErrors(registrationForm); setUsernameFeedbackIcon(''); setUsernameFeedbackMessage(''); formUsernameInput.closest('.form-group').classList.remove('has-error'); if (!wasPhoneSkipped) {managePhoneIcon(null); phoneInput.closest('.phone-input-wrapper').classList.remove('has-error', 'verified');} else {const phoneWrapper = phoneInput.closest('.phone-input-wrapper'); const existingIcon = phoneWrapper.querySelector('.validation-lottie-icon'); if (existingIcon) existingIcon.remove(); phoneWrapper.classList.remove('has-error', 'verified');} registrationForm.querySelectorAll('[required]:not([disabled])').forEach(field => {if (field.id === 'username') {if (!checkFieldValidity(formUsernameInput, registrationForm) || !(usernameAvailabilityState === 'AVAILABLE')) {isStep1Valid = false; if(usernameAvailabilityState === 'IDLE' && formUsernameInput.checkValidity()) handleUsernameInput(); /* Trigger check if idle */}} else if (field.id === 'phone') {const phonePatternValid = field.checkValidity(); if (!phonePatternValid && !wasPhoneSkipped) {isStep1Valid = false; checkFieldValidity(field, registrationForm);} else if (phonePatternValid && !isPhoneVerified) {isStep1Valid = false; if (!phoneVerificationAttemptInProgress && !phoneVerificationPopupEl.classList.contains('show')) {openPhoneVerificationPopup();}} else if (wasPhoneSkipped && !phonePatternValid) {isStep1Valid = false; checkFieldValidity(field, registrationForm);}} else if (field.id === 'occupation') {if(!checkFieldValidity(occupationSelect, registrationForm)) isStep1Valid = false;} else if (field.offsetParent !== null && !checkFieldValidity(field, registrationForm)) {isStep1Valid = false;}}); if (isStep1Valid && formUsernameInput.checkValidity() && usernameAvailabilityState === 'AVAILABLE' && phoneInput.checkValidity() && isPhoneVerified) {goToStep(2);} else {const firstInvalidField = registrationForm.querySelector('.form-group.has-error input:not([type="file"]):not([disabled]), .form-group.has-error select:not([disabled]), .form-group.has-error .custom-select-display.open, .phone-input-wrapper.has-error input[type="tel"]:not([disabled])'); if(firstInvalidField && firstInvalidField.offsetParent !== null) firstInvalidField.focus(); else if (!formUsernameInput.disabled && (!formUsernameInput.checkValidity() || usernameAvailabilityState !== 'AVAILABLE')) formUsernameInput.focus(); else if (!phoneInput.disabled && phoneInput.checkValidity() && !isPhoneVerified && !phoneVerificationAttemptInProgress) openPhoneVerificationPopup(); updateStep1ContinueButtonState();}});}
+        if (newBackToStep1Button) newBackToStep1Button.addEventListener('click', () => goToStep(1));
+        if (finalSubmitButton) {finalSubmitButton.addEventListener('click', function() {let isStep2Valid = true; clearAllLottieErrors(step2Form); const fieldsToValidate = step2Form.querySelectorAll('[required]:not([disabled])'); fieldsToValidate.forEach(field => {if (field.id !== 'profilePicture' && field.offsetParent !== null && !checkFieldValidity(field, step2Form)) {isStep2Valid = false;}}); if (passwordInput.value !== confirmPasswordInput.value) {isStep2Valid = false; confirmPasswordError.style.display = 'block'; confirmPasswordInput.closest('.form-group').classList.add('has-error'); if (!confirmPasswordInput.closest('.form-group').querySelector('.validation-error-lottie')) addLottieError(confirmPasswordInput);} else {confirmPasswordError.style.display = 'none'; if(confirmPasswordInput.checkValidity() && passwordInput.value === confirmPasswordInput.value){ confirmPasswordInput.closest('.form-group').classList.remove('has-error'); removeLottieError(confirmPasswordInput); } if(passwordInput.checkValidity()){ passwordInput.closest('.form-group').classList.remove('has-error'); removeLottieError(passwordInput); } } updateStep2SubmitButtonState(); if (isStep2Valid) {console.log("Form Submitted (Simulation)!"); const formDataStep1 = new FormData(registrationForm); const formDataStep2 = new FormData(step2Form); console.log("Step 1 Data:"); for (let [key, value] of formDataStep1.entries()) { console.log(key, value); } console.log("Step 2 Data:"); for (let [key, value] of formDataStep2.entries()) { console.log(key, value.name || value); } alert("Registration Complete! (Simulated)");} else {const firstInvalidField = step2Form.querySelector('.form-group.has-error input:not([type="file"]), .form-group.has-error select'); if(firstInvalidField) firstInvalidField.focus();}});}
+        
+        const allStep1FieldsToListen = Array.from(registrationForm.querySelectorAll('input[required]:not(#username):not(#occupationAt):not(#phone), select[required]:not(#occupation):not(#division):not(#district)'));
+        allStep1FieldsToListen.forEach(field => {const eventType = (field.tagName.toLowerCase() === 'select' || field.type === 'date') ? 'change' : 'input'; field.addEventListener(eventType, function() {if(this.disabled) return; checkFieldValidity(this, registrationForm); updateStep1ContinueButtonState();});});
+        if (formFullNameInput) formFullNameInput.addEventListener('input', function() {if(this.disabled) return; updatePreviewName(); checkFieldValidity(this, registrationForm); updateStep1ContinueButtonState();});
+        if (formUsernameInput) formUsernameInput.addEventListener('input', function() {if(this.disabled) return; handleUsernameInput();}); // handleUsernameInput already calls updateStep1ContinueButtonState
+        if (phoneInput) {phoneInput.addEventListener('input', function() {if(this.disabled) return; const wasPreviouslySkipped = wasPhoneSkipped; isPhoneVerified = false; wasPhoneSkipped = false; /*phoneInput.disabled = false;*/ managePhoneIcon(null); if (wasPreviouslySkipped) phoneInput.closest('.phone-input-wrapper').classList.remove('verified', 'has-error'); checkFieldValidity(this, registrationForm); updateStep1ContinueButtonState();}); phoneInput.addEventListener('blur', function() {if(this.disabled) return; if (this.checkValidity() && this.value.length === 10 && !isPhoneVerified && !phoneVerificationPopupEl.classList.contains('show')) {openPhoneVerificationPopup();} updateStep1ContinueButtonState();});}
+        if (divisionSelect) divisionSelect.addEventListener('change', function() {if(this.disabled) return; populateDistricts();});
+        if (districtSelect) districtSelect.addEventListener('change', () => {if(districtSelect.disabled) return; updateLocationInPreview(); checkFieldValidity(districtSelect, registrationForm); updateStep1ContinueButtonState(); });
+        if (occupationAtInput) occupationAtInput.addEventListener('input', () => {if(occupationAtInput.disabled) return; updatePreviewOccupationAndAt(); checkFieldValidity(occupationAtInput, registrationForm); updateStep1ContinueButtonState(); });
+        if (occupationSelect) occupationSelect.addEventListener('change', () => { if(occupationSelect.disabled) return; updatePreviewOccupationAndAt(); checkFieldValidity(occupationSelect, registrationForm); updateStep1ContinueButtonState(); });
+
+
+        if (profilePictureInput && previewAvatarElement) {
+            profilePictureInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewAvatarElement.src = e.target.result; 
+                        
+                        if (previewAvatarElement.complete && previewAvatarElement.naturalHeight !== 0) {
+                             updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+                        } else {
+                             previewAvatarElement.onload = () => {
+                                updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+                                previewAvatarElement.onload = null; 
+                            };
+                        }
+                        if (popupImagePreviewElement.closest('.popup-overlay.show')) {
+                            popupImagePreviewElement.src = e.target.result;
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                } else if (!file) {
+                    previewAvatarElement.src = defaultAvatarSrc;
+                     if (previewAvatarElement.complete && previewAvatarElement.naturalHeight !== 0) {
+                        updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+                    } else {
+                        previewAvatarElement.onload = () => { 
+                            updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+                            previewAvatarElement.onload = null;
+                        };
+                    }
+                    if (popupImagePreviewElement.closest('.popup-overlay.show')) {
+                        popupImagePreviewElement.src = defaultAvatarSrc;
+                    }
+                }
+                updateStep2SubmitButtonState();
+            });
+        }
+
+        if (profileBioTextarea && previewProfileBioTextElement) profileBioTextarea.addEventListener('input', updatePreviewBio);
+        const allStep2RequiredFields = step2Form.querySelectorAll('input[required], select[required]');
+        allStep2RequiredFields.forEach(field => {let eventType = (field.tagName.toLowerCase() === 'select' || field.type === 'date' || field.type === 'file') ? 'change' : 'input'; field.addEventListener(eventType, function() {checkFieldValidity(this, step2Form); if (this.id === 'password' || this.id === 'confirmPassword') { if (passwordInput.value !== confirmPasswordInput.value && confirmPasswordInput.value !== '') { confirmPasswordError.style.display = 'block'; confirmPasswordInput.closest('.form-group').classList.add('has-error'); if (!confirmPasswordInput.closest('.form-group').querySelector('.validation-error-lottie')) addLottieError(confirmPasswordInput); } else { confirmPasswordError.style.display = 'none'; if(confirmPasswordInput.checkValidity() && passwordInput.value === confirmPasswordInput.value){ confirmPasswordInput.closest('.form-group').classList.remove('has-error'); removeLottieError(confirmPasswordInput); } if(passwordInput.checkValidity()){ passwordInput.closest('.form-group').classList.remove('has-error'); removeLottieError(passwordInput); } } } updateStep2SubmitButtonState(); });});
+        function updatePhoneTime() {const phoneTimeElement = document.getElementById('phoneTime'); if (phoneTimeElement) {const now = new Date(); let hours = now.getHours(); const minutes = String(now.getMinutes()).padStart(2, '0'); hours = hours % 12; hours = hours ? hours : 12; const strHours = String(hours); phoneTimeElement.textContent = `${strHours}:${minutes}`;}}
+
+        document.addEventListener('DOMContentLoaded', function() {
+            populateCustomOccupationOptions();
+            setupVerificationCodeInputs();
+            
+            setStep1FormFieldsDisabled(true); 
+            if (invitationCodeInput) {
+                invitationCodeInput.disabled = false; 
+                invitationCodeInput.focus(); 
+            }
+            if (verifyInvitationCodeButton) {
+                verifyInvitationCodeButton.disabled = true; 
+            }
+
+            const initialOccupationOption = occupationSelect.options[occupationSelect.selectedIndex];
+            if(initialOccupationOption && initialOccupationOption.value) {
+                occupationDisplayText.textContent = initialOccupationOption.text;
+                occupationDisplayText.classList.remove('placeholder');
+            } else {
+                occupationDisplayText.textContent = "Select Occupation";
+                occupationDisplayText.classList.add('placeholder');
+            }
+            
+            if (finalSubmitButton) updateStep2SubmitButtonState(); // Should be disabled initially
+            if (step1Content) adjustWrapperHeight(step1Content);
+            
+            updatePreviewName();
+            updatePreviewUsername();
+            updateJoinedSince();
+            updateLocationInPreview();
+            updatePreviewOccupationAndAt();
+            updatePreviewBio();
+            updatePhoneTime();
+            setInterval(updatePhoneTime, 30000);
+
+            if (previewAvatarElement.complete && previewAvatarElement.naturalHeight !== 0) {
+                updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+            } else {
+                previewAvatarElement.onload = () => {
+                    updateProfileHeaderGradient(previewAvatarElement, ingaProfileHeader);
+                    previewAvatarElement.onload = null;
+                };
+                if (!previewAvatarElement.src || previewAvatarElement.src === window.location.href) {
+                    previewAvatarElement.src = defaultAvatarSrc; 
+                }
+            }
+
+            const activeTab = document.querySelector('.inga-tab-button.inga-active-tab');
+            if (activeTab && achievementsTabContent && aboutTabContent && tabContentText) {
+                const tabName = activeTab.dataset.tab;
+                achievementsTabContent.style.display = 'none';
+                aboutTabContent.style.display = 'none';
+                tabContentText.style.display = 'none';
+                if (tabName === "achievements") achievementsTabContent.style.display = 'grid';
+                else if (tabName === "about") aboutTabContent.style.display = 'block';
+                else {
+                    tabContentText.textContent = `${tabName.charAt(0).toUpperCase() + tabName.slice(1)} content will show here.`;
+                    tabContentText.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

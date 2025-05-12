@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodSource - Welcome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --primary-color: #D62828;
+            --accent-color: #F77F00;
+            --bg-color-soft: #F8F9FA;
+            --text-color-dark: #2B2D42;
+            --text-color-light: #6c757d;
+            --border-color-light: #dee2e6;
+            --border-color-dark: #495057;
+            --bg-color-base: #ffffff;
+            --card-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+            --card-shadow-hover: 0 10px 30px rgba(149, 157, 165, 0.25);
+            --font-logo: 'Tangerine', cursive;
+            --font-body: 'Inter', sans-serif;
+            --header-height: 75px;
+            --border-radius-lg: 20px;
+            --border-radius-md: 10px;
+            --border-radius-sm: 8px;
+            --transition-speed: 0.3s;
+            --spacing-unit: 1rem;
+            --divider-color: rgba(0, 0, 0, 0.075);
+
+            --page-bg-gradient-light-start: #FFF6EE;
+            --page-bg-gradient-light-end: #F0F4FF;
+
+            /* START --- CSS Variables from s.html (Registration Form) --- */
+            /* Renamed --primary-color to --form-primary-color to avoid conflict */
+            --form-primary-color: #3B82F6;
+            --text-primary-form: #1F2937;
+            --text-secondary-form: #4B5563;
+            --text-muted-form: #9CA3AF;
+            --border-color-form: #D1D5DB;
+            --input-bg-form: #F3F4F6;
+            /* --bg-page: #E5E7EB; /* s.html body bg, not used globally */
+            --bg-main-box-form: #FFFFFF; /* For the registration form's main box */
+
+            /* Inga Profile Theme Colors (scoped to registration form preview) */
+            --inga-pink: #FF5A79;
+            --inga-bg-screen: #F7F7F7;
+            --inga-card-bg: #FFFFFF;
+            --inga-text-primary: #202020;
+            --inga-text-secondary: #757575;
+            --inga-text-location: #606060;
+            --inga-border-light: #EEEEEE;
+            --inga-active-tab: var(--form-primary-color); /* Uses renamed variable */
+            --inga-button-border: #E0E0E0;
+            /* END --- CSS Variables from s.html --- */
+        }
+
+        body.dark-mode {
+            --bg-color-soft: #343a40;
+            --text-color-dark: #f8f9fa;
+            --text-color-light: #adb5bd;
+            --border-color-light: #495057;
+            --bg-color-base: #212529;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 10px 30px rgba(0,0,0, 0.4);
+            --divider-color: rgba(255, 255, 255, 0.075);
+            --page-bg-gradient-dark-start: #1A1D2A;
+            --page-bg-gradient-dark-end: #2E2232;
+
+            /* Dark mode overrides for registration form variables if needed */
+            /* For now, registration form uses its light theme variables by default */
+            /* Example:
+            --text-primary-form: #F3F4F6;
+            --bg-main-box-form: #2B2D42;
+            --input-bg-form: #4B5563;
+            --border-color-form: #6c757d;
+            */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+             /* scroll-padding-top: 20px; /* From s.html, can be useful */
+        }
+        body {
+            min-height: 100vh;
+            font-family: var(--font-body);
+            color: var(--text-color-dark); /* Default text color from index.html */
+            background: linear-gradient(135deg, var(--page-bg-gradient-light-start) 0%, var(--page-bg-gradient-light-end) 100%);
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+            overflow-y: auto;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, var(--page-bg-gradient-dark-start) 0%, var(--page-bg-gradient-dark-end) 100%);
+        }
+
+        h1, h2, h3 { margin-bottom: calc(var(--spacing-unit) * 1.5); font-weight: 700; line-height: 1.2; color: var(--text-color-dark); }
+        h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+        h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
+        h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 600;}
+        p { line-height: 1.7; color: var(--text-color-light); font-size: clamp(0.95rem, 1.5vw, 1.05rem); font-weight: 400; margin-bottom: var(--spacing-unit); }
+        a { color: var(--primary-color); text-decoration: none; font-weight: 500; transition: color var(--transition-speed) ease; }
+        a:hover { color: var(--accent-color); text-decoration: underline; }
+
+        button, .button-like {
+            font-family: var(--font-body); cursor: pointer; padding: calc(var(--spacing-unit)*0.9) calc(var(--spacing-unit)*1.8);
+            border: 1px solid transparent; border-radius: var(--border-radius-lg);
+            transition: all var(--transition-speed) ease; font-size: 1rem; font-weight: 600; text-align: center;
+            background-color: var(--primary-color); color: white; box-shadow: 0 4px 12px rgba(214, 40, 40, 0.2);
+        }
+        button:hover, .button-like:hover { background-color: #ad1f1f; transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 16px rgba(214, 40, 40, 0.3); }
+        button:active, .button-like:active { transform: translateY(0px) scale(0.98); box-shadow: 0 2px 8px rgba(214, 40, 40, 0.2); }
+
+        .btn-secondary { background-color: var(--bg-color-soft); color: var(--text-color-dark); border: 1px solid var(--border-color-light); box-shadow: none; }
+        .btn-secondary:hover { background-color: var(--border-color-light); border-color: var(--border-color-light); box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: var(--text-color-dark); transform: translateY(-2px) scale(1.01); }
+        .btn-secondary:active { transform: translateY(0px) scale(0.99); background-color: var(--border-color-light); }
+
+        .card {
+            background-color: var(--bg-color-base); border-radius: var(--border-radius-lg); padding: calc(var(--spacing-unit) * 2.5);
+            box-shadow: var(--card-shadow);
+            transition: box-shadow var(--transition-speed) ease, transform var(--transition-speed) ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+            border: 1px solid var(--border-color-light); margin-bottom: calc(var(--spacing-unit) * 2);
+            width: 100%;
+        }
+        .card-transparent {
+             background-color: transparent;
+             box-shadow: none;
+             border: none;
+             padding: 0;
+             margin-bottom: 0;
+             width: 100%;
+        }
+
+        .site-header {
+            height: var(--header-height);
+            background-color: transparent;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 calc(var(--spacing-unit) * 3);
+            transition: background-color var(--transition-speed) ease;
+        }
+        body.dark-mode .site-header {
+             background-color: transparent;
+        }
+        .site-header .logo { font-family: var(--font-logo); font-size: 3rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+        .header-controls { display: flex; align-items: center; gap: var(--spacing-unit); }
+        .dark-mode-toggle { background: none; border: none; color: var(--text-color-dark); font-size: 1.4rem; cursor: pointer; padding: 5px; border-radius: 50%;
+            transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+            line-height: 1; }
+        .dark-mode-toggle:hover { color: var(--accent-color); background-color: rgba(0,0,0,0.05); }
+        body.dark-mode .dark-mode-toggle { color: var(--text-color-light); }
+        body.dark-mode .dark-mode-toggle:hover { background-color: rgba(255,255,255,0.1); }
+        body.dark-mode .header-controls span { color: var(--text-color-light); }
+        .dark-mode-toggle .fa-sun { display: none; }
+        body.dark-mode .dark-mode-toggle .fa-sun { display: inline-block; }
+        body.dark-mode .dark-mode-toggle .fa-moon { display: none; }
+
+        .main-content {
+            flex-grow: 1; display: grid;
+            min-height: calc(100vh - var(--header-height) - 45px);
+            grid-template-columns: 65% 35%;
+            background-color: transparent;
+            transition: background-color var(--transition-speed) ease;
+        }
+        #left-section {
+            position: relative;
+            overflow: hidden;
+            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+            background-color: transparent;
+            min-height: calc(100vh - var(--header-height) - 45px - (var(--spacing-unit) * 6));
+        }
+        .page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
+            opacity: 0; visibility: hidden; overflow-y: auto; transform: translateY(20px);
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out, transform var(--transition-speed) ease-in-out;
+            display: none;
+        }
+        .page.active {
+            opacity: 1; visibility: visible; z-index: 1; transform: translateY(0);
+            display: block;
+        }
+        #home-page .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+        #home-page .hero-svg { max-width: 400px; margin-bottom: var(--spacing-unit); }
+        #home-page .hero-svg dotlottie-player { max-width: 100%; display: block; margin: 0 auto; }
+        #home-page h1 { color: var(--primary-color); margin-bottom: var(--spacing-unit); }
+        #home-page p { max-width: 600px; margin-left: auto; margin-right: auto; color: var(--text-color-dark); font-size: 1.1rem; }
+
+        .form-page {
+            width: 100%;
+        }
+        .page.form-page.active { /* This centers the content of login/signup page */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .page.form-page > .card { /* Style for old signup form's card, may not be needed now */
+             width: 100%;
+        }
+
+
+        /* Styles for old Sign Up page fields - will be replaced by new form styles */
+        /* Original #signup-page specific styles, to be reviewed/removed if s.html styles cover it */
+        /* #signup-page.form-page h2 { text-align: center; margin-bottom: calc(var(--spacing-unit) * 2.5); color: var(--primary-color); } */
+        /* #signup-page .card { max-width: 550px; } */
+        /* ... other old #signup-page form field styles ... */
+
+
+        .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-unit); flex-wrap: wrap; gap: 10px; }
+        .form-actions .forgot-password { font-size: 0.9rem; font-weight: 500; }
+        .submit-btn { width: 100%; font-size: 1.1rem; margin-top: calc(var(--spacing-unit) * 1.5); padding: calc(var(--spacing-unit)*1) calc(var(--spacing-unit)*1.8); }
+        .checkbox-group { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-color-light); }
+        .checkbox-group input[type="checkbox"] { width: 1.1em; height: 1.1em; accent-color: var(--primary-color); cursor: pointer; }
+        .checkbox-group label { margin-bottom: 0; font-weight: 400; cursor: pointer; }
+
+        /* Progress Indicator for Signup Page */
+        .progress-indicator { display: flex; justify-content: space-between; margin-bottom: calc(var(--spacing-unit) * 2); padding: 0 10%; position: relative; width:100%; max-width: 500px; /* Added max-width */ }
+        .progress-indicator::before { content: ''; position: absolute; top: 50%; left: 15%; right: 15%; height: 2px; background-color: var(--border-color-light); transform: translateY(-50%); z-index: 0; transition: background-color var(--transition-speed) ease; }
+        .progress-step { display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        .progress-step .step-circle { width: 30px; height: 30px; border-radius: 50%; background-color: var(--bg-color-soft); border: 2px solid var(--border-color-light); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-color-light); margin-bottom: 0.5rem; transition: all var(--transition-speed) ease; }
+        .progress-step .step-label { font-size: 0.8rem; color: var(--text-color-light); transition: all var(--transition-speed) ease; }
+        .progress-step.active .step-circle { background-color: var(--form-primary-color); border-color: var(--form-primary-color); color: white; } /* Use form's primary color */
+        .progress-step.active .step-label { color: var(--form-primary-color); font-weight: 600; } /* Use form's primary color */
+        .progress-step.completed .step-circle { background-color: var(--form-primary-color); border-color: var(--form-primary-color); color: white; } /* Use form's primary color */
+        .progress-step.completed .step-label { color: var(--text-color-dark); }
+
+        #login-page .card {
+             background-color: transparent;
+             box-shadow: none;
+             border: none;
+             padding: 0;
+             margin-bottom: 0;
+             width: 100%;
+             max-width: 420px;
+        }
+        #login-page h2 {
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: var(--text-color-dark);
+            margin-bottom: calc(var(--spacing-unit) * 0.5);
+            text-align: left;
+        }
+        #login-page .login-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-color-light);
+            margin-bottom: calc(var(--spacing-unit) * 2.2);
+            text-align: left;
+        }
+        #login-page .form-group {
+            position: relative;
+            margin-bottom: calc(var(--spacing-unit) * 1.2);
+        }
+        #login-page .form-group .input-icon {
+            position: absolute;
+            left: calc(var(--spacing-unit) * 1);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color-light);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        #login-page .form-group .password-toggle-icon {
+            position: absolute;
+            right: calc(var(--spacing-unit) * 1);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color-light);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color var(--transition-speed) ease;
+        }
+        #login-page .form-group .password-toggle-icon:hover i {
+            color: var(--primary-color);
+        }
+        body.dark-mode #login-page .form-group .password-toggle-icon:hover i {
+            color: var(--accent-color);
+        }
+
+        #login-page .form-group input[type="text"],
+        #login-page .form-group input[type="password"] {
+            width: 100%;
+            padding: calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 2.8);
+            border: 1px solid var(--border-color-light);
+            border-radius: var(--border-radius-md);
+            font-size: 0.95rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color-dark);
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease;
+        }
+
+        body.dark-mode #login-page .form-group input[type="text"],
+        body.dark-mode #login-page .form-group input[type="password"] {
+             background-color: rgba(0, 0, 0, 0.2);
+             border-color: var(--border-color-light);
+             color: var(--text-color-dark);
+        }
+
+        #login-page .form-group input[type="password"],
+        #login-page .form-group input[type="text"][name="password"] {
+             padding-right: calc(var(--spacing-unit) * 2.8);
+        }
+
+        #login-page .form-group input::placeholder {
+            color: var(--text-color-light);
+            opacity: 0.9;
+        }
+        body.dark-mode #login-page .form-group input::placeholder {
+             color: var(--text-color-light); opacity: 0.7;
+        }
+
+        #login-page .form-group input[type="text"]:focus,
+        #login-page .form-group input[type="password"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.dark-mode #login-page .form-group input[type="text"]:focus,
+        body.dark-mode #login-page .form-group input[type="password"]:focus {
+             background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        #login-page .form-group label { display: none; }
+
+        #login-page .form-actions {
+            margin-top: calc(var(--spacing-unit) * 0.8);
+            margin-bottom: calc(var(--spacing-unit) * 1.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        #login-page .checkbox-group label {
+            font-size: 0.9rem;
+            color: var(--text-color-dark);
+        }
+        body.dark-mode #login-page .checkbox-group label{
+            color: var(--text-color-light);
+        }
+        #login-page .checkbox-group input[type="checkbox"] {
+             accent-color: var(--primary-color);
+        }
+        #login-page .forgot-password {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-align: right;
+            margin-top: 0;
+        }
+        #login-page .forgot-password:hover {
+            color: var(--accent-color);
+        }
+        #login-page .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: var(--border-radius-md);
+            padding: calc(var(--spacing-unit)*0.9) calc(var(--spacing-unit)*1.8);
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(214, 40, 40, 0.2);
+            border: none;
+            width: 100%;
+            margin-top: calc(var(--spacing-unit) * 1.5);
+        }
+        #login-page .submit-btn:hover {
+            background-color: #ad1f1f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(214, 40, 40, 0.3);
+        }
+         #login-page .submit-btn:active {
+            transform: translateY(0px);
+            background-color: #931a1a;
+            box-shadow: 0 2px 8px rgba(214, 40, 40, 0.2);
+        }
+
+        .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--divider-color);
+            transition: border-color var(--transition-speed) ease;
+        }
+        .or-separator::before { margin-right: .75em; }
+        .or-separator::after { margin-left: .75em; }
+
+        #login-page .login-signup-link {
+            text-align: center;
+            margin-top: calc(var(--spacing-unit) * 2.0);
+            font-size: 0.95rem;
+            color: var(--text-color-light);
+            margin-bottom: 0;
+        }
+
+        body.dark-mode #login-page .form-group .input-icon,
+        body.dark-mode #login-page .form-group .password-toggle-icon {
+            color: var(--text-color-light);
+        }
+
+        #right-section {
+            background-color: transparent;
+            padding: calc(var(--spacing-unit) * 3);
+            display: flex; flex-direction: column;
+            overflow-y: auto;
+            border-left: 1px solid var(--divider-color);
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+            min-height: calc(100vh - var(--header-height) - 45px - (var(--spacing-unit) * 6));
+        }
+        .right-section-card {
+             background-color: transparent;
+             box-shadow: none;
+             border: none;
+             padding: 0;
+             margin-bottom: 0;
+             text-align: center;
+             flex-grow: 1; display: flex; flex-direction: column;
+        }
+        #right-section h2.mission-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-color-dark);
+            margin-bottom: var(--spacing-unit);
+            line-height: 1.3;
+        }
+        #right-section p.mission-subtitle { font-size: 1rem; color: var(--text-color-light); margin-bottom: calc(var(--spacing-unit) * 2.5); line-height: 1.6; }
+
+        .section-nav {
+            display: flex; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2.5); width: 100%; justify-content: center;
+        }
+        .section-nav button {
+            flex: 1 1 0; min-width: 0; font-weight: 500; padding: calc(var(--spacing-unit)*0.7) calc(var(--spacing-unit)*1);
+            background-color: var(--bg-color-base); color: var(--text-color-dark); border: 1px solid var(--border-color-light); box-shadow: none;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            border-radius: var(--border-radius-md);
+        }
+        body.dark-mode .section-nav button {
+             background-color: var(--bg-color-base);
+             border-color: var(--border-color-light);
+             color: var(--text-color-dark);
+        }
+        .section-nav button:hover { background-color: var(--bg-color-soft); border-color: var(--border-color-light); transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: var(--text-color-dark); }
+        .section-nav button.active { background-color: var(--bg-color-soft); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 0 2px rgba(247, 127, 0, 0.1); }
+        
+        /* For signup page, use its own primary color for active button */
+        .section-nav button[data-target="signup-page"].active {
+            border-color: var(--form-primary-color);
+            color: var(--form-primary-color);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--form-primary-color) 10%, transparent);
+        }
+
+
+        #right-section .or-separator {
+            margin: calc(var(--spacing-unit) * 1.8) 0 calc(var(--spacing-unit) * 1.5) 0;
+            font-size: 0.8rem;
+        }
+        #right-section .or-separator .or-text-bold {
+            font-weight: 600;
+            color: red;
+        }
+        body.dark-mode #right-section .or-separator .or-text-bold {
+            color: red;
+        }
+        #right-section .or-separator .or-text-regular {
+            font-weight: 400;
+            color: var(--text-color-light);
+            margin-left: 0.3em;
+        }
+        body.dark-mode #right-section .or-separator .or-text-regular {
+            color: var(--text-color-light);
+        }
+
+
+        .social-logins { width: 100%; text-align: center; padding-bottom: 0; margin-bottom: auto; }
+        .social-logins > h3 { display: none; }
+
+        .social-btn {
+            display: flex; align-items: center; justify-content: center; width: 100%;
+            padding: calc(var(--spacing-unit)*0.75) calc(var(--spacing-unit)*1);
+            margin-bottom: calc(var(--spacing-unit)*0.9);
+            border-radius: var(--border-radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all var(--transition-speed) ease;
+        }
+        .social-btn:last-child { margin-bottom: 0; }
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .social-btn.google svg {
+             margin-right: 12px;
+        }
+
+        .social-btn.google {
+            background-color: #FFFFFF;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+        .social-btn.google:hover {
+            background-color: #f8f9fa;
+            border-color: #caced3;
+            color: #5f6368;
+        }
+        body.dark-mode .social-btn.google {
+            background-color: #FFFFFF;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+        body.dark-mode .social-btn.google:hover {
+            background-color: #f1f3f4;
+        }
+
+        .social-btn.facebook {
+            background-color: #1877F2;
+            color: white;
+            border: 1px solid #1877F2;
+        }
+        .social-btn.facebook:hover {
+            background-color: #166FE5;
+            border-color: #166FE5;
+            color: white;
+        }
+        body.dark-mode .social-btn.facebook {
+            background-color: #1877F2;
+            border-color: #1877F2;
+            color: white;
+        }
+         body.dark-mode .social-btn.facebook:hover {
+            background-color: #166FE5;
+            border-color: #166FE5;
+        }
+
+        .social-btn.x-twitter {
+            background-color: #000000;
+            color: white;
+            border: 1px solid #000000;
+        }
+        .social-btn.x-twitter:hover {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+            color: white;
+        }
+        body.dark-mode .social-btn.x-twitter {
+            background-color: #14171A;
+            color: white;
+            border-color: #14171A;
+        }
+        body.dark-mode .social-btn.x-twitter:hover {
+            background-color: #272C30;
+        }
+
+        .social-btn.apple {
+            background-color: #000000;
+            color: white;
+            border: 1px solid #000000;
+        }
+        .social-btn.apple:hover {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+            color: white;
+        }
+        body.dark-mode .social-btn.apple {
+            background-color: #1C1C1E;
+            color: white;
+            border-color: #1C1C1E;
+        }
+         body.dark-mode .social-btn.apple:hover {
+            background-color: #2C2C2E;
+        }
+
+
+        .stats-section {
+            margin-top: calc(var(--spacing-unit) * 3);
+            padding-top: calc(var(--spacing-unit) * 1.5);
+            border-top: 1px solid var(--border-color-light);
+            display: flex;
+            justify-content: space-around;
+            gap: var(--spacing-unit);
+            transition: border-color var(--transition-speed) ease;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            flex: 1;
+            position: relative;
+            min-width: 130px;
+            justify-content: center;
+        }
+        .stat-item:not(:first-child)::before {
+            content: "";
+            position: absolute;
+            left: calc(var(--spacing-unit) * -0.5);
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background-color: var(--border-color-light);
+            transition: background-color var(--transition-speed) ease;
+        }
+        .stat-item .stat-icon { width: 32px; height: 32px; flex-shrink: 0; color: var(--primary-color); }
+        .stat-item .stat-icon svg { display: block; width: 100%; height: 100%;}
+        .stat-item .stat-text { display: flex; flex-direction: column; }
+        .stat-item .stat-number { font-size: 1.4rem; font-weight: 700; color: var(--text-color-dark); line-height: 1.1; }
+        .stat-item .stat-label { font-size: 0.85rem; color: var(--text-color-light); line-height: 1.3; white-space: nowrap; }
+
+        .impact-card {
+             background-color: transparent;
+             box-shadow: none;
+             border: none;
+             padding: 0;
+             margin-bottom: 0;
+
+            margin-top: calc(var(--spacing-unit) * 2.5);
+            text-align: left;
+        }
+        .impact-card h3 { color: var(--accent-color); margin-bottom: var(--spacing-unit); font-size: 1.2rem; }
+        .impact-card blockquote { font-style: italic; margin-bottom: var(--spacing-unit); color: var(--text-color-dark); padding-left: var(--spacing-unit); border-left: 3px solid var(--accent-color);
+            transition: border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+        .impact-card .author { font-weight: 600; color: var(--text-color-light); font-size: 0.9rem; text-align: right; }
+
+        .site-footer {
+            padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit);
+            text-align: center; font-size: 0.9rem; color: var(--text-color-light);
+            background-color: var(--bg-color-base);
+            border-top: 1px solid var(--border-color-light);
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        .ai-assistant-button { position: fixed; bottom: var(--spacing-unit); right: var(--spacing-unit); width: 50px; height: 50px; background-color: var(--primary-color); color: white; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 101;
+            transition: all var(--transition-speed) ease;
+        }
+        .ai-assistant-button:hover { background-color: #ad1f1f; transform: scale(1.1); }
+
+
+        /* --- START: Styles for Registration Form (s.html) --- */
+        /* These styles are applied when #signup-page is active and contains the registration form */
+
+        #signup-page .main-content-box-form { /* Scoped main container for registration form */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 600px; /* Default max-width for the form area */
+            background-color: var(--bg-main-box-form); /* Use form specific bg */
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.1);
+            font-family: 'Inter', sans-serif; /* Ensure Inter font is used within form */
+            color: var(--text-secondary-form); /* Default text color within form */
+        }
+
+        #signup-page .form-column, #signup-page .info-panel-column {
+            width: 100%;
+            max-width: none;
+            flex: none;
+        }
+         #signup-page .form-column { order: 1; }
+         #signup-page .info-panel-column { order: 2; }
+
+        #signup-page .info-panel-column {
+            position: static;
+            max-height: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        #signup-page .phone-image-wrapper {
+            width: 100%;
+            max-width: 262px;
+            position: relative;
+            border-radius: 35px;
+        }
+
+        #signup-page .phone-frame-img {
+            display: block;
+            width: 100%;
+            height: auto;
+            user-select: none;
+            border-radius: inherit;
+        }
+
+        #signup-page .phone-screen {
+            position: absolute;
+            top: 2%;
+            left: 6%;
+            width: 90%;
+            height: 97%;
+            border-radius: 1.9em;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--inga-bg-screen);
+        }
+
+        /* --- Inga Profile Styles (Scoped to #signup-page) --- */
+        #signup-page .inga-profile-content { flex-grow: 1; overflow-y: auto; font-family: 'Inter', sans-serif; background-color: var(--inga-bg-screen); color: var(--inga-text-primary); font-size: 10px; }
+        #signup-page .inga-profile-content::-webkit-scrollbar { width: 0.5em; }
+        #signup-page .inga-profile-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 1em; }
+        #signup-page .inga-header-area { position: relative; height: 13em; }
+        #signup-page .inga-cover-photo { width: 100%; height: 100%; object-fit: cover; filter: blur(0.1em) brightness(0.9); }
+        #signup-page .inga-avatar { width: 8em; height: 8em; border-radius: 50%; border: 0.3em solid var(--inga-card-bg); position: absolute; bottom: -4em; left: 50%; transform: translateX(-50%); z-index: 2; object-fit: cover; }
+        #signup-page .inga-info-card { background-color: var(--inga-card-bg); padding: 5.5em 2em 2em 2em; text-align: center; border-bottom-left-radius: 2em; border-bottom-right-radius: 2em; margin: 0 1em; box-shadow: 0 0.2em 1em rgba(0,0,0,0.05); }
+        #signup-page .inga-name { font-size: 2em; font-weight: 600; margin-bottom: 0.3em; color: var(--inga-text-primary); min-height: 1.2em; }
+        #signup-page .inga-username-preview { font-size: 1.4em; font-weight: 500; color: var(--inga-text-secondary); margin-bottom: 0.8em; min-height: 1.2em; }
+        #signup-page .inga-location { font-size: 1.3em; color: var(--inga-text-location); margin-bottom: 0.3em; display: flex; align-items: center; justify-content: center; gap: 0.4em; min-height: 1.2em; }
+        #signup-page .inga-title-static { font-size: 1.3em; margin-bottom: 1.5em; color: var(--inga-text-secondary); }
+        #signup-page .inga-actions { display: flex; gap: 0.8em; justify-content: center; margin-top: 1.5em; }
+        #signup-page .inga-btn { flex-grow: 1; max-width: 10em; padding: 0.8em 1em; border-radius: 2em; border: 0.1em solid var(--inga-button-border); background-color: transparent; font-size: 1.2em; font-weight: 500; cursor: pointer; transition: background-color 0.2s, color 0.2s; color: var(--inga-text-secondary); }
+        #signup-page .inga-btn-follow { background-color: var(--inga-pink); border-color: var(--inga-pink); color: white; }
+        #signup-page .inga-btn:not(.inga-btn-follow):hover { background-color: #f0f0f0; }
+        #signup-page .inga-stats { display: flex; justify-content: space-around; padding: 2em 1em; text-align: center; border-bottom: 0.1em solid var(--inga-border-light); }
+        #signup-page .inga-stat-item .inga-stat-count { display: block; font-size: 1.7em; font-weight: 600; color: var(--inga-text-primary); }
+        #signup-page .inga-stat-item .inga-stat-label { font-size: 1.1em; color: var(--inga-text-secondary); text-transform: uppercase; }
+        #signup-page .inga-tabs { display: flex; justify-content: space-around; border-bottom: 0.1em solid var(--inga-border-light); }
+        #signup-page .inga-tab-btn { padding: 1.2em 1em; background: none; border: none; border-bottom: 0.2em solid transparent; font-size: 1.3em; font-weight: 600; color: var(--inga-text-secondary); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+        #signup-page .inga-tab-btn.inga-active { color: var(--inga-active-tab); border-bottom-color: var(--inga-active-tab); }
+        #signup-page .inga-tab-btn:hover:not(.inga-active) { color: var(--inga-text-primary); }
+        #signup-page .inga-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.3em; padding: 0.3em; }
+        #signup-page .inga-gallery-item { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+
+        /* Registration Form Specific Styles (Scoped to #signup-page) */
+        #signup-page .registration-form-container { width: 100%; }
+        #signup-page .registration-form-container header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        /* Changed h1 to h2, and adjusted font size accordingly */
+        #signup-page .registration-form-container .header-main h2 {font-size: 24px; color: var(--text-primary-form); margin-bottom: 6px;}
+        #signup-page .registration-form-container .step-info {font-size: 14px; color: var(--text-secondary-form); margin-bottom: 15px;}
+        /* Steps container from s.html is removed, using index.html's progress bar */
+
+        #signup-page form#registrationForm {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 35px; /* Space before footer */
+            color: var(--text-secondary-form); /* Ensure text color is from form's theme */
+        }
+
+        #signup-page .form-group { display: flex; flex-direction: column; position: relative; }
+        #signup-page .form-group label { font-size: 14px; font-weight: 600; color: var(--text-primary-form); margin-bottom: 8px; display: flex; align-items: center; }
+        #signup-page .form-group input[type="text"],
+        #signup-page .form-group input[type="email"],
+        #signup-page .form-group input[type="date"],
+        #signup-page .form-group select { background-color: var(--input-bg-form); border: 1px solid var(--border-color-form); border-radius: 8px; padding: 12px 45px 12px 14px; font-size: 14px; color: var(--text-primary-form); width: 100%; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        #signup-page .form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; background-size: 0.9em; padding-right: 65px; }
+        #signup-page .form-group input::placeholder { color: var(--text-muted-form); opacity: 0.8; }
+        #signup-page .form-group input:focus,
+        #signup-page .form-group select:focus { outline: none; border-color: var(--form-primary-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--form-primary-color) 30%, transparent); background-color: #FFFFFF; }
+        #signup-page .phone-input-wrapper { display: flex; align-items: center; background-color: var(--input-bg-form); border: 1px solid var(--border-color-form); border-radius: 8px; transition: border-color 0.2s, box-shadow 0.2s; padding: 0; position: relative; }
+        #signup-page .flag-bd { display: inline-block; width: 20px; height: 12px; background-color: #006A4E; border-radius: 2px; position: relative; margin-right: 8px; margin-left: 12px; box-shadow: 1px 1px 2px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; }
+        #signup-page .flag-bd-circle { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 6px; height: 6px; background-color: #F42A41; border-radius: 50%; }
+        #signup-page .phone-prefix { padding: 12px 0; font-size: 14px; font-weight: 500; color: var(--text-secondary-form); background-color: transparent; border-right: 1px solid var(--border-color-form); padding-right: 10px; margin-right: 10px; white-space: nowrap; }
+        #signup-page .phone-input-wrapper input[type="tel"] { border: none; background: transparent; border-radius: 0; padding: 12px 45px 12px 0; flex-grow: 1; min-width: 0; box-shadow: none !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-size: 14px; color: var(--text-primary-form); }
+        #signup-page .phone-input-wrapper input[type="tel"]:focus { outline: none; }
+        #signup-page .phone-input-wrapper:focus-within { border-color: var(--form-primary-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--form-primary-color) 30%, transparent); background-color: #FFFFFF; }
+        #signup-page .form-group small { font-size: 12px; color: var(--text-secondary-form); margin-top: 6px; }
+        #signup-page .validation-error-lottie { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px !important; height: 24px !important; z-index: 2; pointer-events: none; }
+        #signup-page .form-group label + input + .validation-error-lottie,
+        #signup-page .form-group label + select + .validation-error-lottie,
+        #signup-page .form-group label + .phone-input-wrapper + .validation-error-lottie,
+        #signup-page .form-group label + input[type="date"] + .validation-error-lottie { top: calc(50% + 8px); } /* Adjusted for label height */
+        #signup-page .form-group.has-error input,
+        #signup-page .form-group.has-error select,
+        #signup-page .form-group .phone-input-wrapper.has-error { border-color: #EF4444 !important; }
+        #signup-page .form-group.has-error input:focus,
+        #signup-page .form-group.has-error select:focus,
+        #signup-page .form-group .phone-input-wrapper.has-error:focus-within { border-color: #EF4444 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3) !important; }
+
+        #signup-page .registration-form-container .form-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color-form);
+        }
+        #signup-page .registration-form-container .footer-contact {
+            font-size: 13px;
+            color: var(--text-secondary-form);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #signup-page .registration-form-container .footer-phone-icon { background-color: var(--form-primary-color); color: white; border-radius: 50%; width: 32px; height: 32px; display: inline-flex; justify-content: center; align-items: center; margin-left: 10px; font-size: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        #signup-page .registration-form-container .footer-phone-icon:hover { transform: scale(1.1); }
+        #signup-page .registration-form-container .footer-actions {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+        #signup-page .registration-form-container .footer-actions button {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
+        #signup-page .registration-form-container .footer-actions button:active { transform: translateY(1px); }
+        #signup-page .registration-form-container .cancel-button { background-color: transparent; color: var(--text-secondary-form); border: 1px solid var(--border-color-form); }
+        #signup-page .registration-form-container .cancel-button:hover { background-color: var(--input-bg-form); color: var(--text-primary-form); }
+        #signup-page .registration-form-container .continue-button { background-color: var(--form-primary-color); color: white; box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--form-primary-color) 30%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--form-primary-color) 20%, transparent); }
+        #signup-page .registration-form-container .continue-button:hover { background-color: #2563EB; box-shadow: 0 6px 8px -1px color-mix(in srgb, var(--form-primary-color) 40%, transparent), 0 3px 5px -1px color-mix(in srgb, var(--form-primary-color) 30%, transparent); }
+
+        /* Responsive Adjustments for Registration Form (s.html part, scoped to #signup-page) */
+        @media (min-width: 480px) {
+             #signup-page .main-content-box-form { padding: 30px; border-radius: 20px; }
+             #signup-page .inga-profile-content { font-size: 9px; }
+             #signup-page .phone-image-wrapper { max-width: 262px; border-radius: 35px; }
+             #signup-page .registration-form-container .header-main h2 {font-size: 26px;} /* Target h2 */
+        }
+
+        @media (min-width: 768px) {
+             #signup-page .registration-form-container .form-footer {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+             #signup-page .registration-form-container .footer-actions { width: auto; }
+             #signup-page .registration-form-container .footer-actions button { flex-grow: 0; }
+
+            #signup-page form#registrationForm {
+                 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                 gap: 20px;
+             }
+            #signup-page .form-group { margin-bottom: 0; }
+            #signup-page .phone-image-wrapper { max-width: 283px; border-radius: 38px;}
+             #signup-page .inga-profile-content { font-size: 10px; }
+        }
+
+        @media (min-width: 1024px) {
+            /* This makes the registration form itself two-column within #left-section */
+            #signup-page .main-content-box-form {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 40px;
+                padding: 40px;
+                /* width: 70vw; /* This might be too wide if #left-section is already constrained */
+                max-width: 1200px; /* Or a more suitable max-width for the form content */
+                border-radius: 24px;
+            }
+            #signup-page .form-column {
+                flex: 2;
+                order: 1;
+            }
+            #signup-page .info-panel-column {
+                flex: 1;
+                order: 2;
+                position: sticky;
+                top: 20px; /* Adjust based on overall page sticky header if any */
+                align-self: flex-start;
+                max-height: calc(100vh - 120px); /* Adjust based on overall page header */
+                padding-bottom: 0;
+            }
+        }
+        /* @media (min-width: 1280px) { } */
+
+         @media (max-width: 767px) and (min-height: 360px) and (max-height: 500px) and (orientation: landscape) {
+             #signup-page form#registrationForm {
+                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                 gap: 15px;
+             }
+        }
+
+        /* Hide preview on small portrait screens - s.html specific, scoped */
+         @media (max-width: 480px) {
+             #signup-page .info-panel-column {
+                 display: none; /* Hide the phone preview */
+             }
+             /*
+                The following .main-content-box-form styles from s.html's @media (max-width: 480px)
+                are adjusted to fit within index.html's layout.
+                It should take 100% width of its parent (.page inside #left-section)
+                not 100vw. min-height should also be auto.
+             */
+             #signup-page .main-content-box-form {
+                 padding: 20px 15px;
+                 border-radius: 0;
+                 width: 100%; /* Fills parent, not viewport */
+                 max-width: 100%; /* Fills parent */
+                 min-height: auto; /* Auto height */
+                 box-shadow: none;
+                 margin-top: 0; /* if #signup-page already has padding */
+                 margin-bottom: 0; /* if #signup-page already has padding */
+             }
+              #signup-page .form-column {
+                  padding: 0;
+              }
+              #signup-page .registration-form-container .header-main h2 { font-size: 22px; } /* Target h2 */
+         }
+        /* --- END: Styles for Registration Form --- */
+
+
+        /* General Responsive Styles from index.html */
+        @media (max-width: 1023px) {
+            html, body { overflow: auto; height: auto; }
+            .main-content {
+                grid-template-columns: 1fr;
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+            }
+            #left-section {
+                padding: calc(var(--spacing-unit) * 2);
+                position: static;
+                height: auto;
+                overflow-y: visible;
+                order: 1;
+                border-left: none;
+                border-bottom: 1px solid var(--divider-color);
+                margin-bottom: calc(var(--spacing-unit) * 1.5);
+                transition: border-color var(--transition-speed) ease;
+                background-color: transparent;
+                min-height: 0;
+            }
+             .page.form-page,
+             .page.form-page.active { /* Ensure form pages can flow naturally on mobile */
+                display: block; /* Changed from flex to block for natural flow */
+                justify-content: initial;
+                align-items: initial;
+                flex-direction: initial;
+            }
+            #left-section .page { padding: 0; position: static; height: auto; display: none; opacity: 0; transform: none;
+                transition: opacity var(--transition-speed) ease-in-out;
+            }
+            #login-page.form-page { /* For Login page specifics */
+                 padding: calc(var(--spacing-unit) * 2);
+                 max-width: 450px;
+                 margin: 0 auto;
+            }
+             #login-page .card {
+                 display: block;
+                 max-width: 100%;
+            }
+            /* For new signup page, it will contain .main-content-box-form which handles its own width */
+            #signup-page.form-page.active {
+                align-items: stretch; /* Allow .main-content-box-form to take width */
+            }
+
+
+            .page.active { display: block; opacity: 1; visibility: visible; }
+            #right-section {
+                padding: calc(var(--spacing-unit) * 2);
+                order: 2;
+                min-height: auto;
+                border-left: none;
+                border-top: none;
+                overflow-y: visible;
+                margin-top: 0;
+                background-color: transparent;
+                min-height: 0;
+            }
+            .right-section-card { padding: 0; margin-bottom: 0; }
+             .impact-card { padding: 0; margin-bottom: 0; }
+
+            .section-nav { margin-bottom: var(--spacing-unit) * 2; gap: calc(var(--spacing-unit) * 0.75); }
+            .section-nav button { padding: calc(var(--spacing-unit)*0.6) calc(var(--spacing-unit)*0.8); font-size: 0.9rem; }
+            #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 1.5); margin-bottom: calc(var(--spacing-unit) * 2); }
+            .social-logins { margin-bottom: var(--spacing-unit) * 2; }
+            .stats-section {
+                 justify-content: space-evenly;
+                 gap: calc(var(--spacing-unit) * 1);
+                 margin-top: calc(var(--spacing-unit) * 2);
+            }
+            .stat-item {
+                 flex-basis: auto;
+                 justify-content: center;
+            }
+            .stat-item:not(:first-child)::before {
+                 display: none;
+            }
+            .impact-card { margin-top: calc(var(--spacing-unit) * 2); }
+            .ai-assistant-button { bottom: calc(var(--spacing-unit)*0.8); right: calc(var(--spacing-unit)*0.8); width: 45px; height: 45px; font-size: 1.3rem;}
+            #right-section h2.mission-title { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 767px) {
+             .site-header { padding: 0 calc(var(--spacing-unit) * 1.5); height: 65px; }
+             .site-header .logo { font-size: 2.5rem; }
+             #left-section, #right-section { padding: calc(var(--spacing-unit) * 1.5); }
+             #login-page.form-page { padding: calc(var(--spacing-unit) * 1.5); max-width: 100%;}
+
+             .right-section-card { padding: 0; }
+             .impact-card { padding: 0; }
+
+             .card { /* General card styling */
+                 padding: calc(var(--spacing-unit) * 1.5);
+                 margin-bottom: calc(var(--spacing-unit) * 1.5);
+             }
+             /* .form-page { max-width: none; } /* Redundant if #signup-page.active has align-items: stretch */
+             h1 { font-size: 2rem; } h2 { font-size: 1.5rem; } h3 { font-size: 1.1rem; }
+             #login-page h2 { font-size: 1.6rem; }
+             #login-page .login-subtitle { font-size: 0.9rem; }
+             .section-nav { gap: calc(var(--spacing-unit) * 0.5); }
+             .section-nav button { padding: calc(var(--spacing-unit)*0.5) calc(var(--spacing-unit)*0.6); font-size: 0.85rem; }
+             #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 2.5); margin-bottom: calc(var(--spacing-unit) * 2.5); }
+             /* .form-actions { flex-direction: column; align-items: stretch; } /* This was for old signup */
+             /* #signup-page .form-actions .forgot-password { text-align: right; margin-top: 0.5rem;} /* Old signup */
+             #login-page .form-actions { /* For login page specifically */
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+             }
+
+             .submit-btn { font-size: 1rem; }
+             .stats-section {
+                  gap: var(--spacing-unit) * 0.5;
+                  justify-content: space-around;
+             }
+             .stat-item {
+                 min-width: 110px;
+                 gap: 8px;
+             }
+             .stat-item .stat-number { font-size: 1.2rem;}
+             .stat-item .stat-label { font-size: 0.8rem;}
+             .ai-assistant-button { width: 40px; height: 40px; font-size: 1.2rem;}
+             #right-section h2.mission-title { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 480px) {
+            .site-header { height: 60px; }
+            .site-header .logo { font-size: 2.2rem; }
+            .section-nav { gap: calc(var(--spacing-unit) * 0.35); }
+            .section-nav button { font-size: 0.75rem; padding: calc(var(--spacing-unit)*0.4) calc(var(--spacing-unit)*0.5); }
+            #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 2); }
+
+            #login-page .form-actions { /* For login page specifically */
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+            #login-page .form-actions .forgot-password {
+                text-align: right;
+                margin-top: 0;
+            }
+            #login-page .checkbox-group {
+                margin-bottom: 0;
+            }
+
+            #login-page h2 { font-size: 1.5rem; }
+            #login-page .login-subtitle { font-size: 0.85rem; }
+            #login-page.form-page { padding: calc(var(--spacing-unit) * 1.2); }
+            #right-section h2.mission-title { font-size: 1.2rem; }
+            .stats-section {
+                 justify-content: space-between;
+                 gap: var(--spacing-unit) * 0.5;
+             }
+             .stat-item {
+                  min-width: 100px;
+             }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="#home" class="logo">BloodSource</a>
+        <div class="header-controls">
+            <span style="font-size: 0.9rem; color: var(--text-color-light); margin-right: 10px;">
+                <i class="fa-solid fa-shield-heart" style="color: var(--accent-color);"></i> Hero Level
+            </span>
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section id="left-section">
+            <div id="home-page" class="page active">
+                <div class="hero-content">
+                    <div class="hero-svg">
+                        <dotlottie-player
+                            src="https://lottie.host/c2fdd210-e2c9-4323-be22-3958ca4fe8ef/r6lbQ4vPP8.lottie"
+                            background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay>
+                        </dotlottie-player>
+                    </div>
+                    <h1>Give the Gift of Life</h1>
+                    <p>
+                        Join our community connecting blood donors with those in need.
+                        Simple, fast, and life-saving. Find a center or become a donor today.
+                    </p>
+                    <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-color-light);">
+                        <i class="fa-solid fa-location-dot" style="color: var(--primary-color);"></i>
+                        Nearby donation centers will appear here after login.
+                    </p>
+                </div>
+            </div>
+
+            <div id="login-page" class="page form-page">
+                 <div class="card card-transparent">
+                    <h2>Hi, Welcome Back <span role="img" aria-label="waving hand">👋</span></h2>
+                    <p class="login-subtitle">It's great to see you again.</p>
+                    <form action="#" method="post" novalidate id="login-form">
+                        <div class="form-group">
+                            <span class="input-icon"><i class="fas fa-user"></i></span>
+                            <input type="text" id="login-username" name="username" required placeholder="Username">
+                        </div>
+                        <div class="form-group">
+                            <span class="input-icon"><i class="fas fa-lock"></i></span>
+                            <input type="password" id="login-password" name="password" required placeholder="Password">
+                            <span class="password-toggle-icon" id="loginPasswordToggle"><i class="fas fa-eye"></i></span>
+                        </div>
+                        <div class="form-actions">
+                            <div class="checkbox-group">
+                                 <input type="checkbox" id="remember-me" name="remember">
+                                <label for="remember-me">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="submit-btn">Log In</button>
+                    </form>
+                    <p class="login-signup-link">
+                        Don't have an account! Go to The Register Section <span role="img" aria-label="Smiling Face with Smiling Eyes">😊</span>
+                    </p>
+                 </div>
+            </div>
+
+            <div id="signup-page" class="page form-page">
+                <!-- Progress Indicator from index.html, adapted for 2 steps -->
+                <div class="progress-indicator" aria-label="Signup Progress">
+                     <div class="progress-step active"> <div class="step-circle" aria-hidden="true">1</div> <div class="step-label">Details</div> </div>
+                     <div class="progress-step"> <div class="step-circle" aria-hidden="true">2</div> <div class="step-label">Confirm</div> </div>
+                </div>
+
+                <!-- Content from s.html, with .main-content-box renamed to .main-content-box-form for clarity -->
+                <div class="main-content-box-form">
+                    <div class="form-column">
+                        <div class="registration-form-container">
+                            <header>
+                                 <div class="header-main">
+                                    <h2>New member registration 🤩</h2> <!-- Changed H1 to H2 -->
+                                    <p class="step-info">Step one of two.</p>
+                                    <!-- Removed s.html's .steps-container, using index.html's progress-indicator above -->
+                                </div>
+                            </header>
+
+                            <form id="registrationForm" novalidate>
+                                <!-- All form groups are now direct children -->
+                                <div class="form-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" id="fullName" name="fullName" placeholder="e.g. John Doe" required>
+                                    <small>Minimum four characters</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" name="username" placeholder="e.g. johndoe99" required>
+                                    <small>Minimum four characters</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <div class="phone-input-wrapper">
+                                        <span class="flag-bd"><span class="flag-bd-circle"></span></span>
+                                        <span class="phone-prefix">+880</span>
+                                        <input type="tel" id="phone" name="phone" placeholder="1xxxxxxxxx" required pattern="[1][0-9]{9}" maxlength="10">
+                                    </div>
+                                    <small>Enter your 10-digit number (e.g., 1712345678)</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="division">Division</label>
+                                    <select id="division" name="division" required>
+                                        <option value="" disabled selected>Select Division</option>
+                                        <option value="dhaka">Dhaka</option>
+                                        <option value="chattogram">Chattogram</option>
+                                        <option value="rajshahi">Rajshahi</option>
+                                        <option value="khulna">Khulna</option>
+                                        <option value="barisal">Barisal</option>
+                                        <option value="sylhet">Sylhet</option>
+                                        <option value="rangpur">Rangpur</option>
+                                        <option value="mymensingh">Mymensingh</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">District</label>
+                                    <select id="district" name="district" disabled required>
+                                        <option value="" disabled selected>Select District</option>
+                                        <!-- Populated by JS -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="occupation">Occupation</label>
+                                    <select id="occupation" name="occupation" required>
+                                        <option value="" disabled selected>Select Occupation</option>
+                                        <option value="student">Student</option>
+                                        <option value="engineer">Engineer</option>
+                                        <option value="doctor">Doctor</option>
+                                        <option value="teacher">Teacher</option>
+                                        <option value="business">Business Person</option>
+                                        <option value="service">Service Holder</option>
+                                        <option value="homemaker">Homemaker</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth</label>
+                                    <input type="date" id="dob" name="dob" required max="2006-12-31">
+                                     <small>You must be at least 18 years old.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" name="gender" required>
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer_not_say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                            </form>
+
+                            <!-- Footer moved outside the form -->
+                             <div class="form-footer">
+                                <div class="footer-contact">
+                                    <span>Any questions? Call us now.</span>
+                                    <a href="tel:+1234567890" class="footer-phone-icon" aria-label="Call us">
+                                        <span>☎</span>
+                                    </a>
+                                </div>
+                                <div class="footer-actions">
+                                    <button type="button" class="cancel-button">Cancel</button>
+                                    <!-- Link the submit button to the form using the form attribute -->
+                                    <button type="submit" form="registrationForm" class="continue-button">Continue to Step 2</button>
+                                </div>
+                            </div>
+
+                        </div> <!-- End registration-form-container -->
+                    </div> <!-- End form-column -->
+
+                    <!-- info-panel-column -->
+                    <div class="info-panel-column">
+                         <div class="phone-image-wrapper">
+                            <img src="/BloodSource/assets/phone.png" alt="Phone Frame" class="phone-frame-img">
+                            <div class="phone-screen">
+                                <div class="inga-profile-content">
+                                    <div class="inga-header-area">
+                                        <img src="https://source.unsplash.com/random/400x200?neon,city,night" class="inga-cover-photo" alt="Cover">
+                                        <img src="https://source.unsplash.com/random/100x100?woman,portrait" id="previewAvatar" class="inga-avatar" alt="Inga Natashkina">
+                                    </div>
+                                    <div class="inga-info-card">
+                                        <h1 class="inga-name" id="previewName">Inga Natashkina</h1>
+                                        <p class="inga-username-preview" id="previewUsername">@username</p>
+                                        <p class="inga-location" id="previewLocation">
+                                            <svg class="inga-location-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                                                <path d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"/>
+                                              </svg>
+                                            <span id="locationText">Your Location, Bangladesh</span>
+                                        </p>
+                                        <p class="inga-title-static">UI/UX and Product Designer</p>
+                                        <div class="inga-actions">
+                                            <button class="inga-btn inga-btn-follow">Follow</button>
+                                            <button class="inga-btn inga-btn-message">Message</button>
+                                            <button class="inga-btn inga-btn-email">E-mail</button>
+                                        </div>
+                                    </div>
+                                    <div class="inga-stats">
+                                        <div class="inga-stat-item">
+                                            <span class="inga-stat-count">1764</span>
+                                            <span class="inga-stat-label">Followers</span>
+                                        </div>
+                                        <div class="inga-stat-item">
+                                            <span class="inga-stat-count">332</span>
+                                            <span class="inga-stat-label">Following</span>
+                                        </div>
+                                        <div class="inga-stat-item">
+                                            <span class="inga-stat-count">589</span>
+                                            <span class="inga-stat-label">Posts</span>
+                                        </div>
+                                    </div>
+                                    <div class="inga-tabs">
+                                        <button class="inga-tab-btn">MEET ME</button>
+                                        <button class="inga-tab-btn inga-active">POSTS</button>
+                                        <button class="inga-tab-btn">TAGS</button>
+                                    </div>
+                                    <div class="inga-gallery">
+                                        <img src="https://source.unsplash.com/random/150x150?bmx,urban" alt="Gallery image 1" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?martialarts,dojo" alt="Gallery image 2" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?man,bathrobe" alt="Gallery image 3" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?shark,ocean" alt="Gallery image 4" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?abstract,blue" alt="Gallery image 5" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?suit,man" alt="Gallery image 6" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?fashion,style" alt="Gallery image 7" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?architecture,modern" alt="Gallery image 8" class="inga-gallery-item">
+                                        <img src="https://source.unsplash.com/random/150x150?nature,landscape" alt="Gallery image 9" class="inga-gallery-item">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End info-panel-column -->
+                </div> <!-- End main-content-box-form -->
+            </div>
+        </section>
+        <section id="right-section">
+            <div class="card right-section-card card-transparent">
+                <h2 class="mission-title">Join our life-saving mission.</h2>
+                <p class="mission-subtitle">Sign in or create an account to find or become a blood donor.</p>
+                <nav class="section-nav">
+                    <button id="home-btn" data-target="home-page" class="btn-secondary">Home</button>
+                    <button id="login-btn" data-target="login-page" class="btn-secondary">Log In</button>
+                    <button id="signup-btn" data-target="signup-page" class="btn-secondary">Register</button>
+                </nav>
+                <div class="or-separator">
+                    <span class="or-text-bold">Login</span><span class="or-text-regular">with Others</span>
+                </div>
+                <div class="social-logins">
+                    <a href="#" class="social-btn google">
+                        <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                            <g fill-rule="evenodd">
+                                <path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1699-1.8409H9.1818v3.4818h4.7909c-.2086 1.125-.8441 2.0782-1.7959 2.7164v2.2581h2.9087c1.7018-1.5668 2.6836-3.8741 2.6836-6.6154z" fill="#4285F4"/>
+                                <path d="M9.1818 18c2.43 0 4.4673-.8054 5.9564-2.1818l-2.9087-2.2581c-.8054.54-1.8368.8618-3.0477.8618-2.3455 0-4.3291-1.5818-5.0359-3.7109H1.0718v2.3318C2.5536 16.3109 5.6177 18 9.1818 18z" fill="#34A853"/>
+                                <path d="M4.1459 10.8327c-.1927-.54-.3032-1.1168-.3032-1.7145s.1105-1.1745.3032-1.7145V5.0718H1.0718C.3859 6.4536 0 7.9259 0 9.1182s.3859 2.6645 1.0718 4.0464l3.0741-2.3319z" fill="#FBBC05"/>
+                                <path d="M9.1818 3.5818c1.3227 0 2.5064.4554 3.4409 1.3477l2.5855-2.5855C13.6418.8818 11.6109 0 9.1818 0 5.6177 0 2.5536 1.6891 1.0718 4.0782L4.146 6.4095c.7068-2.129 2.6904-3.71 5.0358-3.71l-.0002.8823z" fill="#EA4335"/>
+                            </g>
+                        </svg>
+                        <span>Sign in with Google</span>
+                    </a>
+                    <a href="#" class="social-btn facebook">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H17V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
+                        </svg>
+                        <span>Sign in with Facebook</span>
+                    </a>
+                    <a href="#" class="social-btn x-twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                        </svg>
+                        <span>Sign in with X</span>
+                    </a>
+                    <a href="#" class="social-btn apple">
+                        <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M8.082.016C6.744.004 5.66.58 4.812 1.566c-.974 1.148-1.14 2.965-.224 4.869.688 1.416 1.778 2.445 1.778 2.445s-.208 1.822.02 3.3c.204 1.314.718 2.512 1.462 3.237.732.712 1.644.963 2.252.963.238 0 .975-.153 1.668-.48.708-.336.95-.552.95-.552s.626-2.338-.162-4.17c-.78-.182-.71-.208.146-1.535.868-1.343.762-2.735.75-2.752-.013-.026-1.536-1.017-3.262-1.003Zm1.883-.003A1.87 1.87 0 0 0 8.413 1.53c-.458.644-.65 1.44-.333 2.207.317.767.99 1.22 1.717 1.22.04 0 .08-.002.12-.004.518-.026.97-.334 1.244-.746.274-.412.34-.926.18-1.388-.14-.411-.45-.746-.82-.95-.37-.205-.805-.27-1.24-.158Z"/>
+                        </svg>
+                        <span>Sign in with Apple</span>
+                    </a>
+                </div>
+                 <div class="stats-section">
+                    <div class="stat-item"> <div class="stat-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0C201.6 0 210.5 4.2 216.5 11.7C252.9 57.7 384 228.8 384 320C384 426 298 512 192 512zM192 128c-17.7 0-32 14.3-32 32s14.3 32 32 32c11.8 0 22.2-6.4 27.7-16H192c-4.4 0-8-3.6-8-8s3.6-8 8-8h27.7C214.2 134.4 203.8 128 192 128z"/></svg> </div> <div class="stat-text"> <span class="stat-number">12,438</span> <span class="stat-label">donors connected</span> </div> </div>
+                    <div class="stat-item"> <div class="stat-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M192 0c-17.7 0-32 14.3-32 32V141.3l-9.6-6.4c-8.5-5.7-19.7-6.6-29.1-2.4S107.7 144.1 107.7 155v10.3l-41 27.3C35.9 213.8 16 256.8 16 304V448c0 35.3 28.7 64 64 64H304c35.3 0 64-28.7 64-64V304c0-47.2-19.9-90.2-50.7-111.4l-41-27.3V155c0-10.9-4.6-20.9-12.6-27.1s-18.6-8.7-29.1-2.4l-9.6 6.4V32c0-17.7-14.3-32-32-32zM96 316.1V448H64V304c0-16.7 6.7-32.4 17.4-43.9l54.6-54.6v54.4c0 5.9 4.1 11.1 9.8 12.4s11.8 0 16.2-3.8l48-40c5-4.2 7.9-10.3 7.9-16.8s-2.9-12.6-7.9-16.8l-48-40c-4.4-3.7-10.4-4.9-16.2-3.8s-9.8 6.5-9.8 12.4V192l-80 53.3V448H288V316.1l-80-53.3V448H176V262.7L96 316.1z"/></svg> </div> <div class="stat-text"> <span class="stat-number">5,729</span> <span class="stat-label">lives impacted</span> </div> </div>
+                </div>
+            </div>
+            <div class="card impact-card card-transparent">
+                 <h3>Donor Spotlight</h3>
+                 <blockquote>"Donating through BloodSource was so easy. Knowing I helped someone directly makes it incredibly rewarding."</blockquote>
+                 <p class="author">- Sarah K., 3rd Time Donor</p>
+            </div>
+        </section>
+    </main>
+    <footer class="site-footer"> <p>© 2023 BloodSource. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a></p> </footer>
+    <button class="ai-assistant-button" aria-label="Open AI Assistant"> <i class="fa-solid fa-comment-dots"></i> </button>
+
+    <script>
+        // --- START: JavaScript for Registration Form (from s.html) ---
+        function initializeSignupForm() {
+            const districtsByDivision = {
+                dhaka: ["Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail"],
+                chattogram: ["Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Comilla", "Cox's Bazar", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati"],
+                rajshahi: ["Bogra", "Joypurhat", "Naogaon", "Natore", "Nawabganj", "Pabna", "Rajshahi", "Sirajganj"],
+                khulna: ["Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"],
+                barisal: ["Barguna", "Barisal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur"],
+                sylhet: ["Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"],
+                rangpur: ["Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon"],
+                mymensingh: ["Jamalpur", "Mymensingh", "Netrokona", "Sherpur"]
+            };
+
+            const registrationForm = document.getElementById('registrationForm');
+            const divisionSelect = document.getElementById('division');
+            const districtSelect = document.getElementById('district');
+            const formFullNameInput = document.getElementById('fullName');
+            const formUsernameInput = document.getElementById('username');
+            const previewNameElement = document.getElementById('previewName');
+            const previewUsernameElement = document.getElementById('previewUsername');
+            const previewLocationTextElement = document.getElementById('locationText');
+
+            const defaultNameText = "Inga Natashkina";
+            const defaultUsernameText = "@username";
+            const defaultLocationBase = "Bangladesh";
+
+            function populateDistricts() {
+                if (!divisionSelect || !districtSelect) return; // Ensure elements exist
+                const selectedDivision = divisionSelect.value;
+                const districts = districtsByDivision[selectedDivision] || [];
+                districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+                if (districts.length > 0 && selectedDivision) {
+                    districts.forEach(district => {
+                        const option = document.createElement('option');
+                        option.value = district.toLowerCase().replace(/\s+/g, '-');
+                        option.textContent = district;
+                        districtSelect.appendChild(option);
+                    });
+                    districtSelect.disabled = false;
+                } else {
+                    districtSelect.disabled = true;
+                }
+                checkFieldValidity(districtSelect);
+                updatePreviewLocation();
+            }
+
+            function updatePreviewName() {
+                if (previewNameElement && formFullNameInput) {
+                    previewNameElement.textContent = formFullNameInput.value.trim() || defaultNameText;
+                }
+            }
+            function updatePreviewUsernameLine() {
+                if (previewUsernameElement && formUsernameInput) {
+                    const username = formUsernameInput.value.trim();
+                    previewUsernameElement.textContent = username ? `@${username}` : defaultUsernameText;
+                }
+            }
+            function updatePreviewLocation() {
+                if (previewLocationTextElement && divisionSelect && districtSelect) {
+                    const selectedDivisionValue = divisionSelect.value;
+                    const selectedDistrictValue = districtSelect.value;
+
+                    let divisionText = "";
+                    if (selectedDivisionValue && divisionSelect.selectedIndex > 0) {
+                        divisionText = divisionSelect.options[divisionSelect.selectedIndex].text;
+                    }
+
+                    let districtText = "";
+                    if (selectedDistrictValue && districtSelect.selectedIndex > 0 && !districtSelect.disabled) {
+                        districtText = districtSelect.options[districtSelect.selectedIndex].text;
+                    }
+
+                    if (districtText) {
+                        previewLocationTextElement.textContent = `${districtText}, ${divisionText || defaultLocationBase}`;
+                    } else if (divisionText) {
+                        previewLocationTextElement.textContent = `${divisionText}, ${defaultLocationBase}`;
+                    } else {
+                        previewLocationTextElement.textContent = `Your Location, ${defaultLocationBase}`;
+                    }
+                }
+            }
+
+            const lottieErrorUrl = "https://lottie.host/a855dc76-c4ce-4e10-8768-52c6db6db14a/LPywRu3kYb.lottie";
+
+            function clearAllLottieErrors() {
+                 const signupPage = document.getElementById('signup-page');
+                 if (!signupPage) return;
+                signupPage.querySelectorAll('.validation-error-lottie').forEach(player => player.remove());
+                signupPage.querySelectorAll('.form-group.has-error').forEach(el => el.classList.remove('has-error'));
+                signupPage.querySelectorAll('.phone-input-wrapper.has-error').forEach(el => el.classList.remove('has-error'));
+            }
+
+            function addLottieError(fieldElement) {
+                const targetContainer = fieldElement.closest('.phone-input-wrapper') || fieldElement;
+                const parentGroup = targetContainer.closest('.form-group');
+                if (!parentGroup) return;
+
+                const existingError = parentGroup.querySelector(`.validation-error-lottie[data-field="${fieldElement.id}"]`);
+                if (existingError) {
+                    return;
+                }
+
+                const player = document.createElement('dotlottie-player');
+                player.setAttribute('src', lottieErrorUrl);
+                player.setAttribute('background', 'transparent');
+                player.setAttribute('speed', '1');
+                player.setAttribute('loop', '');
+                player.setAttribute('autoplay', '');
+                player.classList.add('validation-error-lottie');
+                player.dataset.field = fieldElement.id;
+
+                parentGroup.appendChild(player);
+            }
+
+            function removeLottieError(fieldElement) {
+                const parentGroup = fieldElement.closest('.form-group');
+                if (!parentGroup) return;
+
+                const lottiePlayer = parentGroup.querySelector(`.validation-error-lottie[data-field="${fieldElement.id}"]`);
+                if (lottiePlayer) {
+                    lottiePlayer.remove();
+                }
+            }
+
+            function checkFieldValidity(field) {
+                if (!field) return true; // Element might not exist if called too early
+                let targetContainer = field.closest('.phone-input-wrapper') || field;
+                let parentGroup = targetContainer.closest('.form-group');
+                if (!parentGroup) return true;
+
+                parentGroup.classList.remove('has-error');
+                if (field.id === 'phone') {
+                    targetContainer.classList.remove('has-error');
+                }
+                removeLottieError(field);
+
+                if (!field.checkValidity()) {
+                    addLottieError(field);
+                    parentGroup.classList.add('has-error');
+                    if (field.id === 'phone') {
+                        targetContainer.classList.add('has-error');
+                    }
+                    return false;
+                }
+                return true;
+            }
+
+            if (registrationForm) {
+                registrationForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    clearAllLottieErrors();
+
+                    let isFormValid = true;
+                    const requiredFields = registrationForm.querySelectorAll('[required]');
+
+                    requiredFields.forEach(field => {
+                        if (field.offsetParent !== null) { // Check if field is visible
+                            if (!checkFieldValidity(field)) {
+                                isFormValid = false;
+                            }
+                        }
+                    });
+
+                    if (isFormValid) {
+                        console.log("Registration Form is valid! Proceeding...");
+                        alert("Registration Form Submitted Successfully (Simulation)");
+                        // registrationForm.submit(); // Actual submission
+                    } else {
+                        console.log("Registration Form has validation errors.");
+                        const firstInvalidField = registrationForm.querySelector('.form-group.has-error [required]');
+                        if (firstInvalidField) {
+                            firstInvalidField.focus();
+                             // Scroll to the first invalid field if it's off-screen
+                            const fieldRect = firstInvalidField.getBoundingClientRect();
+                            if (fieldRect.top < 0 || fieldRect.bottom > window.innerHeight) {
+                                firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }
+                    }
+                });
+
+                const allFields = registrationForm.querySelectorAll('input[required], select[required]');
+                allFields.forEach(field => {
+                    const eventType = (field.tagName.toLowerCase() === 'select' || field.type === 'date') ? 'change' : 'input';
+                    field.addEventListener(eventType, function() {
+                       checkFieldValidity(this);
+                    });
+                });
+            }
+
+            // Initial Setup for preview and dropdowns if elements exist
+            if (previewNameElement) updatePreviewName();
+            if (previewUsernameElement) updatePreviewUsernameLine();
+            if (previewLocationTextElement) updatePreviewLocation();
+
+            if (divisionSelect) {
+                divisionSelect.addEventListener('change', populateDistricts);
+                // Initial population if a division is pre-selected (e.g. from localStorage)
+                // populateDistricts(); 
+            }
+            if (districtSelect) {
+                districtSelect.addEventListener('change', updatePreviewLocation);
+            }
+            if (formFullNameInput) { formFullNameInput.addEventListener('input', updatePreviewName); }
+            if (formUsernameInput) { formUsernameInput.addEventListener('input', updatePreviewUsernameLine); }
+
+            console.log("Signup form initialized.");
+        }
+        // --- END: JavaScript for Registration Form ---
+
+
+        // --- START: Main Page JavaScript (from index.html) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.section-nav button');
+            const pages = document.querySelectorAll('#left-section .page');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const breakpoint = 1023;
+            let signupFormInitialized = false; // Flag for registration form JS
+
+            function applyDarkModePreference() {
+                const savedPreference = localStorage.getItem('darkMode');
+                if (savedPreference === 'enabled') {
+                    body.classList.add('dark-mode');
+                } else {
+                    body.classList.remove('dark-mode');
+                }
+            }
+            darkModeToggle.addEventListener('click', () => { body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled'); });
+            applyDarkModePreference();
+
+            function setActivePage(targetId) {
+                 let pageActivated = false;
+                 const isDesktopLayout = window.innerWidth > breakpoint;
+
+                 pages.forEach(page => {
+                     page.classList.remove('active');
+                     page.style.display = 'none';
+                     page.style.opacity = '0';
+                     page.style.transform = 'translateY(20px)';
+                 });
+                 navButtons.forEach(button => button.classList.remove('active'));
+
+                 const targetPageElement = document.getElementById(targetId);
+
+                 if (targetPageElement) {
+                     if (isDesktopLayout && targetPageElement.classList.contains('form-page') && targetId !== 'signup-page') { // signup page has its own flex for content
+                         targetPageElement.style.display = 'flex';
+                     } else {
+                         targetPageElement.style.display = 'block';
+                     }
+                     targetPageElement.classList.add('active');
+
+                     requestAnimationFrame(() => {
+                         targetPageElement.style.opacity = '1';
+                         targetPageElement.style.transform = 'translateY(0)';
+                     });
+
+                     pageActivated = true;
+                     const correspondingButton = document.querySelector(`.section-nav button[data-target="${targetId}"]`);
+                     if(correspondingButton) {
+                         correspondingButton.classList.add('active');
+                     }
+
+                     // Initialize signup form JS if this is the signup page and not already initialized
+                     if (targetId === 'signup-page' && !signupFormInitialized) {
+                         initializeSignupForm();
+                         signupFormInitialized = true;
+                     }
+
+                 }
+
+                 if (!pageActivated && pages.length > 0) {
+                     const homePageId = 'home-page';
+                     const homePageElement = document.getElementById(homePageId);
+                     const homeButton = document.getElementById('home-btn');
+                     if (homePageElement) {
+                         homePageElement.style.display = 'block';
+                         homePageElement.classList.add('active');
+                         requestAnimationFrame(() => {
+                             homePageElement.style.opacity = '1';
+                             homePageElement.style.transform = 'translateY(0)';
+                         });
+                     }
+                     if(homeButton) homeButton.classList.add('active');
+                 }
+            }
+
+
+            navButtons.forEach(button => { button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPageId = button.dataset.target;
+                setActivePage(targetPageId);
+            }); });
+
+            const loginPasswordInput = document.getElementById('login-password');
+            const loginPasswordToggle = document.getElementById('loginPasswordToggle');
+
+            if (loginPasswordInput && loginPasswordToggle) {
+                const iconElement = loginPasswordToggle.querySelector('i');
+
+                loginPasswordToggle.addEventListener('click', () => {
+                    const currentType = loginPasswordInput.getAttribute('type');
+                    if (currentType === 'password') {
+                        loginPasswordInput.setAttribute('type', 'text');
+                        iconElement.classList.remove('fa-eye');
+                        iconElement.classList.add('fa-eye-slash');
+                    } else {
+                        loginPasswordInput.setAttribute('type', 'password');
+                        iconElement.classList.remove('fa-eye-slash');
+                        iconElement.classList.add('fa-eye');
+                    }
+                    loginPasswordInput.focus();
+                });
+            }
+
+
+            let currentLayoutMode = window.innerWidth > breakpoint ? 'desktop' : 'mobile';
+            window.addEventListener('resize', () => {
+                 const newLayoutMode = window.innerWidth > breakpoint ? 'desktop' : 'mobile';
+                 if (newLayoutMode !== currentLayoutMode) {
+                     const activeButton = document.querySelector('.section-nav button.active');
+                     let currentActivePageId = 'home-page';
+                     if (activeButton) {
+                         currentActivePageId = activeButton.dataset.target;
+                     } else {
+                         const activePage = document.querySelector('#left-section .page.active');
+                         if (activePage) currentActivePageId = activePage.id;
+                     }
+
+                     pages.forEach(page => {
+                         page.classList.remove('active');
+                         page.style.display = 'none';
+                         page.style.opacity = '0';
+                         page.style.transform = 'translateY(20px)';
+                     });
+                     setActivePage(currentActivePageId);
+                     currentLayoutMode = newLayoutMode;
+                 }
+            });
+            setActivePage('home-page'); // Initial page load
+        });
+        // --- END: Main Page JavaScript ---
+    </script>
+</body>
+</html>
