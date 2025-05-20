@@ -2,1251 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloodSource - Welcome</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tangerine:wght@700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>BloodSource</title>
 
-    <style>
-        :root {
-            --primary-color: #D62828; 
-            --accent-color: #F77F00; 
-            --bg-color-soft: #F8F9FA; 
-            --text-color-dark: #2B2D42;
-            --text-color-light: #6c757d;
-            --border-color-light: #dee2e6;
-            --border-color-dark: #495057;
-            --bg-color-base: #ffffff; 
-            --card-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
-            --card-shadow-hover: 0 10px 30px rgba(149, 157, 165, 0.25);
-            --font-logo: 'Tangerine', cursive;
-            --font-body: 'Inter', sans-serif;
-            --header-height: 75px;
-            --border-radius-lg: 20px; 
-            --border-radius-md: 10px; 
-            --border-radius-sm: 8px;
-            --transition-speed: 0.3s;
-            --spacing-unit: 1rem;
-            --divider-color: rgba(0, 0, 0, 0.075);
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg" href="assets/logo.svg">
 
-            --skeleton-base-color: #e9ecef;
-            --skeleton-shimmer-highlight: #f8f9fa;
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 
-            --page-bg-gradient-light-start: #FFF6EE;
-            --page-bg-gradient-light-end: #F0F4FF;
-        }
-
-        body.dark-mode {
-            --bg-color-soft: #343a40;
-            --text-color-dark: #f8f9fa;
-            --text-color-light: #adb5bd;
-            --border-color-light: #495057;
-            --bg-color-base: #212529; 
-            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            --card-shadow-hover: 0 10px 30px rgba(0,0,0, 0.4);
-            --divider-color: rgba(255, 255, 255, 0.075);
-            --skeleton-base-color: #3e444c;
-            --skeleton-shimmer-highlight: #495057;
-            --page-bg-gradient-dark-start: #1A1D2A;
-            --page-bg-gradient-dark-end: #2E2232;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { 
-            scroll-behavior: smooth; 
-            overflow-x: hidden; 
-        }
-        body {
-            min-height: 100vh; 
-            font-family: var(--font-body);
-            color: var(--text-color-dark);
-            background: linear-gradient(135deg, var(--page-bg-gradient-light-start) 0%, var(--page-bg-gradient-light-end) 100%);
-            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
-            overflow-y: auto; 
-            font-size: 16px;
-            display: flex; 
-            flex-direction: column;
-        }
-        body.dark-mode {
-            background: linear-gradient(135deg, var(--page-bg-gradient-dark-start) 0%, var(--page-bg-gradient-dark-end) 100%);
-        }
-
-        /* Skeleton Loader Styles */
-        .skeleton-loader {
-            position: fixed;
-            inset: 0; /* equivalent to top:0; right:0; bottom:0; left:0; */
-            background: linear-gradient(135deg, var(--page-bg-gradient-light-start) 0%, var(--page-bg-gradient-light-end) 100%);
-            z-index: 9999;
-            opacity: 1;
-            visibility: visible;
-            transition: opacity 0.5s ease, visibility 0s 0s;
-            display: flex;
-            flex-direction: column;
-        }
-        body.dark-mode .skeleton-loader {
-            background: linear-gradient(135deg, var(--page-bg-gradient-dark-start) 0%, var(--page-bg-gradient-dark-end) 100%);
-        }
-
-        body:not(.content-loading) .skeleton-loader {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease, visibility 0s 0.5s;
-        }
-
-        .skeleton-element { /* Common class for shimmer effect */
-            background-color: var(--skeleton-base-color);
-            background-image: linear-gradient(90deg, 
-                var(--skeleton-base-color) 0px, 
-                var(--skeleton-shimmer-highlight) 40px, 
-                var(--skeleton-base-color) 80px
-            );
-            background-size: 600px; /* Adjust for desired wave width */
-            animation: skeleton-shimmer-bg 1.5s infinite linear;
-            border-radius: var(--border-radius-sm);
-        }
-
-        @keyframes skeleton-shimmer-bg {
-            0% { background-position: -300px 0; }
-            100% { background-position: 300px 0; }
-        }
-
-        .skeleton-header {
-            height: var(--header-height);
-            padding: 0 calc(var(--spacing-unit) * 3);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-shrink: 0; /* Prevent header from shrinking */
-        }
-        .skeleton-logo {
-            width: 150px;
-            height: calc(var(--header-height) * 0.5);
-        }
-        .skeleton-controls {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-unit);
-        }
-        .skeleton-control-item {
-            width: 70px;
-            height: 20px;
-        }
-        .skeleton-control-item.circle {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-        }
-
-        .skeleton-main-content {
-            flex-grow: 1;
-            display: grid;
-            grid-template-columns: 65% 35%; /* Matches actual layout */
-        }
-        .skeleton-left-section, .skeleton-right-section {
-            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4);
-            display: flex;
-            flex-direction: column;
-        }
-        .skeleton-right-section {
-             border-left: 1px solid var(--divider-color);
-        }
-
-        .skeleton-hero-svg {
-            width: 250px; /* Approximate size */
-            height: 250px;
-            margin: 0 auto var(--spacing-unit);
-            border-radius: var(--border-radius-md);
-        }
-        .skeleton-line {
-            height: 1em; /* Based on font size */
-            margin-bottom: calc(var(--spacing-unit) * 0.75);
-        }
-        .skeleton-line.large { width: 80%; height: 1.5em; margin-left:auto; margin-right: auto;}
-        .skeleton-line.medium { width: 90%; margin-left:auto; margin-right: auto;}
-        .skeleton-line.small { width: 60%; margin-left:auto; margin-right: auto;}
-        .skeleton-line.xsmall { width: 40%; }
-
-        .skeleton-nav-buttons {
-            display: flex;
-            gap: var(--spacing-unit);
-            margin-bottom: calc(var(--spacing-unit) * 2.5);
-            width: 100%;
-            justify-content: center;
-        }
-        .skeleton-block.button {
-            flex: 1 1 0;
-            min-width: 0;
-            height: 40px; /* Approx button height */
-        }
-        .skeleton-separator {
-            width: 80%;
-            height: 1px; /* Very thin line */
-            margin: calc(var(--spacing-unit) * 1.8) auto calc(var(--spacing-unit) * 1.5) auto;
-        }
-        .skeleton-block.social-button {
-            width: 100%;
-            height: 40px; /* Approx social button height */
-            margin-bottom: var(--spacing-unit);
-        }
-        .skeleton-block.social-button:last-child { margin-bottom: 0;}
-
-        .mt-large { margin-top: calc(var(--spacing-unit) * 2.5) !important; }
-        .mb-small { margin-bottom: var(--spacing-unit) !important; }
-        .mb-large { margin-bottom: calc(var(--spacing-unit) * 2.5) !important; }
-
-
-        /* Actual content initial state (hidden) */
-        .site-header, .main-content, .site-footer, .ai-assistant-button {
-            opacity: 0;
-            visibility: hidden;
-            /* Smooth fade-in for actual content */
-            transition: opacity 0.4s ease 0.2s, visibility 0s 0.6s; /* Delay visibility to prevent interaction */
-        }
-        body:not(.content-loading) .site-header,
-        body:not(.content-loading) .main-content,
-        body:not(.content-loading) .site-footer,
-        body:not(.content-loading) .ai-assistant-button {
-            opacity: 1;
-            visibility: visible;
-            transition-delay: 0s, 0s; /* Reset delay for showing */
-        }
-
-
-        h1, h2, h3 { margin-bottom: calc(var(--spacing-unit) * 1.5); font-weight: 700; line-height: 1.2; color: var(--text-color-dark); }
-        h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
-        h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); }
-        h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 600;}
-        p { margin-bottom: var(--spacing-unit); line-height: 1.7; color: var(--text-color-light); font-size: clamp(0.95rem, 1.5vw, 1.05rem); font-weight: 400; }
-        a { color: var(--primary-color); text-decoration: none; font-weight: 500; transition: color var(--transition-speed) ease; }
-        a:hover { color: var(--accent-color); text-decoration: underline; }
-
-        button, .button-like {
-            font-family: var(--font-body); cursor: pointer; padding: calc(var(--spacing-unit)*0.9) calc(var(--spacing-unit)*1.8);
-            border: 1px solid transparent; border-radius: var(--border-radius-lg);
-            transition: all var(--transition-speed) ease; font-size: 1rem; font-weight: 600; text-align: center;
-            background-color: var(--primary-color); color: white; box-shadow: 0 4px 12px rgba(214, 40, 40, 0.2);
-        }
-        button:hover, .button-like:hover { background-color: #ad1f1f; transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 16px rgba(214, 40, 40, 0.3); }
-        button:active, .button-like:active { transform: translateY(0px) scale(0.98); box-shadow: 0 2px 8px rgba(214, 40, 40, 0.2); }
-
-        .btn-secondary { background-color: var(--bg-color-soft); color: var(--text-color-dark); border: 1px solid var(--border-color-light); box-shadow: none; }
-        .btn-secondary:hover { background-color: var(--border-color-light); border-color: var(--border-color-light); box-shadow: 0 4px 10px rgba(0,0,0,0.05); color: var(--text-color-dark); transform: translateY(-2px) scale(1.01); }
-        .btn-secondary:active { transform: translateY(0px) scale(0.99); background-color: var(--border-color-light); }
-
-        .card { 
-            background-color: var(--bg-color-base); border-radius: var(--border-radius-lg); padding: calc(var(--spacing-unit) * 2.5);
-            box-shadow: var(--card-shadow); 
-            transition: box-shadow var(--transition-speed) ease, transform var(--transition-speed) ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
-            border: 1px solid var(--border-color-light); margin-bottom: calc(var(--spacing-unit) * 2);
-            width: 100%; 
-        }
-
-        .card-transparent {
-             background-color: transparent;
-             box-shadow: none;
-             border: none;
-             padding: 0; 
-             margin-bottom: 0; 
-             width: 100%; 
-        }
-
-        .site-header {
-            height: var(--header-height); 
-            background-color: transparent;
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 calc(var(--spacing-unit) * 3);
-            transition: background-color var(--transition-speed) ease; 
-        }
-        body.dark-mode .site-header {
-             background-color: transparent; 
-        }
-        .site-header .logo { font-family: var(--font-logo); font-size: 3rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
-        .header-controls { display: flex; align-items: center; gap: var(--spacing-unit); }
-        .dark-mode-toggle { background: none; border: none; color: var(--text-color-dark); font-size: 1.4rem; cursor: pointer; padding: 5px; border-radius: 50%; 
-            transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease;
-            line-height: 1; }
-        .dark-mode-toggle:hover { color: var(--accent-color); background-color: rgba(0,0,0,0.05); }
-        body.dark-mode .dark-mode-toggle { color: var(--text-color-light); } 
-        body.dark-mode .dark-mode-toggle:hover { background-color: rgba(255,255,255,0.1); }
-        body.dark-mode .header-controls span { color: var(--text-color-light); } 
-        .dark-mode-toggle .fa-sun { display: none; }
-        body.dark-mode .dark-mode-toggle .fa-sun { display: inline-block; }
-        body.dark-mode .dark-mode-toggle .fa-moon { display: none; }
-
-        .main-content {
-            flex-grow: 1; display: grid; 
-            min-height: calc(100vh - var(--header-height) - 45px); 
-            grid-template-columns: 65% 35%;
-            background-color: transparent; 
-            transition: background-color var(--transition-speed) ease;
-        }
-        #left-section { 
-            position: relative; 
-            overflow: hidden; 
-            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4); 
-            background-color: transparent; 
-            min-height: calc(100vh - var(--header-height) - 45px - (var(--spacing-unit) * 6)); 
-        }
-        .page {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 4); 
-            opacity: 0; visibility: hidden; overflow-y: auto; transform: translateY(20px);
-            transition: opacity var(--transition-speed) ease-in-out, visibility 0s var(--transition-speed), transform var(--transition-speed) ease-in-out;
-            display: none; 
-        }
-        .page.active { 
-            opacity: 1; visibility: visible; z-index: 1; transform: translateY(0); 
-            display: block; 
-            transition-delay: 0s; /* Ensure active page shows immediately */
-        }
-        #home-page .hero-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
-        #home-page .hero-svg { max-width: 400px; margin-bottom: var(--spacing-unit); }
-        #home-page .hero-svg dotlottie-player { max-width: 100%; display: block; margin: 0 auto; }
-        #home-page h1 { color: var(--primary-color); margin-bottom: var(--spacing-unit); }
-        #home-page p { max-width: 600px; margin-left: auto; margin-right: auto; color: var(--text-color-dark); font-size: 1.1rem; }
-        
-        .form-page { 
-            width: 100%; 
-        }
-        .page.form-page.active {
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
-        }
-        .page.form-page > .card { 
-             width: 100%; 
-        }
-
-        #signup-page.form-page h2 { text-align: center; margin-bottom: calc(var(--spacing-unit) * 2.5); color: var(--primary-color); }
-        
-        #signup-page .card { 
-             max-width: 550px; 
-        }
-
-        #signup-page .form-group { position: relative; margin-bottom: calc(var(--spacing-unit) * 1.8); }
-        #signup-page .form-group input[type="text"], 
-        #signup-page .form-group input[type="email"], 
-        #signup-page .form-group input[type="password"], 
-        #signup-page .form-group input[type="number"], 
-        #signup-page .form-group select {
-            width: 100%; padding: calc(var(--spacing-unit) * 1.2) var(--spacing-unit); padding-top: calc(var(--spacing-unit) * 1.5);
-            border: 1px solid var(--border-color-light); border-radius: var(--border-radius-md); font-size: 1rem;
-            background-color: var(--bg-color-base); color: var(--text-color-dark);
-            transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-        }
-        #signup-page .form-group input::placeholder { color: transparent; }
-        #signup-page .form-group label {
-            position: absolute; top: calc(var(--spacing-unit) * 1.3); left: var(--spacing-unit); font-size: 1rem; color: var(--text-color-light);
-            pointer-events: none;  background-color: var(--bg-color-base); padding: 0 4px;
-            transition: all 0.2s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-        }
-        #signup-page .form-group input:focus + label, 
-        #signup-page .form-group input:not(:placeholder-shown) + label {
-            top: -0.6rem; left: calc(var(--spacing-unit) * 0.8); font-size: 0.8rem; color: var(--primary-color); font-weight: 500;
-        }
-        #signup-page .form-group input:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 2px rgba(214, 40, 40, 0.1); }
-        #signup-page .form-group select { padding: calc(var(--spacing-unit) * 1.2) var(--spacing-unit); }
-        
-        .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-unit); flex-wrap: wrap; gap: 10px; }
-        .form-actions .forgot-password { font-size: 0.9rem; font-weight: 500; }
-        .submit-btn { width: 100%; font-size: 1.1rem; margin-top: calc(var(--spacing-unit) * 1.5); padding: calc(var(--spacing-unit)*1) calc(var(--spacing-unit)*1.8); }
-        .checkbox-group { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: var(--text-color-light); }
-        .checkbox-group input[type="checkbox"] { width: 1.1em; height: 1.1em; accent-color: var(--primary-color); cursor: pointer; }
-        .checkbox-group label { margin-bottom: 0; font-weight: 400; cursor: pointer; }
-        .progress-indicator { display: flex; justify-content: space-between; margin-bottom: var(--spacing-unit) * 2; padding: 0 10%; position: relative; }
-        .progress-indicator::before { content: ''; position: absolute; top: 50%; left: 15%; right: 15%; height: 2px; background-color: var(--border-color-light); transform: translateY(-50%); z-index: 0; transition: background-color var(--transition-speed) ease; }
-        .progress-step { display: flex; flex-direction: column; align-items: center; z-index: 1; }
-        .progress-step .step-circle { width: 30px; height: 30px; border-radius: 50%; background-color: var(--bg-color-soft); border: 2px solid var(--border-color-light); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-color-light); margin-bottom: 0.5rem; transition: all var(--transition-speed) ease; }
-        .progress-step .step-label { font-size: 0.8rem; color: var(--text-color-light); transition: all var(--transition-speed) ease; }
-        .progress-step.active .step-circle { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
-        .progress-step.active .step-label { color: var(--primary-color); font-weight: 600; }
-        .progress-step.completed .step-circle { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
-        .progress-step.completed .step-label { color: var(--text-color-dark); }
-
-        #login-page .card { 
-             background-color: transparent;
-             box-shadow: none;
-             border: none;
-             padding: 0; 
-             margin-bottom: 0; 
-             width: 100%; 
-             max-width: 420px; 
-        }
-        #login-page h2 {
-            font-size: clamp(1.8rem, 4vw, 2.2rem);
-            font-weight: 700;
-            color: var(--text-color-dark);
-            margin-bottom: calc(var(--spacing-unit) * 0.5);
-            text-align: left; 
-        }
-        #login-page .login-subtitle {
-            font-size: 0.95rem;
-            color: var(--text-color-light);
-            margin-bottom: calc(var(--spacing-unit) * 2.2);
-            text-align: left;
-        }
-        #login-page .form-group {
-            position: relative; 
-            margin-bottom: calc(var(--spacing-unit) * 1.2);
-        }
-        #login-page .form-group .input-icon {
-            position: absolute;
-            left: calc(var(--spacing-unit) * 1);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-color-light);
-            font-size: 1rem;
-            pointer-events: none;
-        }
-        #login-page .form-group .password-toggle-icon {
-            position: absolute;
-            right: calc(var(--spacing-unit) * 1);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-color-light);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: color var(--transition-speed) ease;
-        }
-        #login-page .form-group .password-toggle-icon:hover i { 
-            color: var(--primary-color);
-        }
-        body.dark-mode #login-page .form-group .password-toggle-icon:hover i {
-            color: var(--accent-color); 
-        }
-        
-        #login-page .form-group input[type="text"],
-        #login-page .form-group input[type="password"] { 
-            width: 100%;
-            padding: calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 2.8); 
-            border: 1px solid var(--border-color-light);
-            border-radius: var(--border-radius-md);
-            font-size: 0.95rem;
-            background-color: rgba(255, 255, 255, 0.1); 
-            color: var(--text-color-dark);
-            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease;
-        }
-
-        body.dark-mode #login-page .form-group input[type="text"],
-        body.dark-mode #login-page .form-group input[type="password"] { 
-             background-color: rgba(0, 0, 0, 0.2); 
-             border-color: var(--border-color-light);
-             color: var(--text-color-dark);
-        }
-
-        #login-page .form-group input[type="password"],
-        #login-page .form-group input[type="text"][name="password"] { 
-             padding-right: calc(var(--spacing-unit) * 2.8);
-        }
-
-        #login-page .form-group input::placeholder {
-            color: var(--text-color-light);
-            opacity: 0.9;
-        }
-        body.dark-mode #login-page .form-group input::placeholder {
-             color: var(--text-color-light); opacity: 0.7;
-        }
-
-        #login-page .form-group input[type="text"]:focus,
-        #login-page .form-group input[type="password"]:focus { 
-            border-color: var(--primary-color); 
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(214, 40, 40, 0.1);
-            background-color: rgba(255, 255, 255, 0.2); 
-        }
-
-        body.dark-mode #login-page .form-group input[type="text"]:focus,
-        body.dark-mode #login-page .form-group input[type="password"]:focus { 
-             background-color: rgba(0, 0, 0, 0.3); 
-        }
-
-        #login-page .form-group label { display: none; } 
-
-        #login-page .form-actions {
-            margin-top: calc(var(--spacing-unit) * 0.8);
-            margin-bottom: calc(var(--spacing-unit) * 1.5);
-            display: flex; 
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap; 
-            gap: 10px;
-        }
-        #login-page .checkbox-group label {
-            font-size: 0.9rem;
-            color: var(--text-color-dark); 
-        }
-        body.dark-mode #login-page .checkbox-group label{
-            color: var(--text-color-light);
-        }
-        #login-page .checkbox-group input[type="checkbox"] {
-             accent-color: var(--primary-color); 
-        }
-        #login-page .forgot-password {
-            font-size: 0.9rem;
-            color: var(--primary-color); 
-            font-weight: 500;
-            text-align: right; 
-            margin-top: 0; 
-        }
-        #login-page .forgot-password:hover {
-            color: var(--accent-color); 
-        }
-        #login-page .submit-btn {
-            background-color: var(--primary-color); 
-            color: white;
-            border-radius: var(--border-radius-md);
-            padding: calc(var(--spacing-unit)*0.9) calc(var(--spacing-unit)*1.8);
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(214, 40, 40, 0.2);
-            border: none;
-            width: 100%;
-            margin-top: calc(var(--spacing-unit) * 1.5); 
-        }
-        #login-page .submit-btn:hover {
-            background-color: #ad1f1f; 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(214, 40, 40, 0.3);
-        }
-         #login-page .submit-btn:active {
-            transform: translateY(0px);
-            background-color: #931a1a;
-            box-shadow: 0 2px 8px rgba(214, 40, 40, 0.2);
-        }
-        
-        .or-separator {
-            display: flex;
-            align-items: center;
-            text-align: center;
-        }
-        .or-separator::before,
-        .or-separator::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--divider-color); 
-            transition: border-color var(--transition-speed) ease;
-        }
-        .or-separator::before { margin-right: .75em; }
-        .or-separator::after { margin-left: .75em; }
-        
-        #login-page .login-signup-link {
-            text-align: center;
-            margin-top: calc(var(--spacing-unit) * 2.0); 
-            font-size: 0.95rem;
-            color: var(--text-color-light);
-            margin-bottom: 0; 
-        }
-
-        body.dark-mode #login-page .form-group .input-icon,
-        body.dark-mode #login-page .form-group .password-toggle-icon {
-            color: var(--text-color-light);
-        }
-
-        #right-section {
-            background-color: transparent; 
-            padding: calc(var(--spacing-unit) * 3); 
-            display: flex; flex-direction: column; 
-            overflow-y: auto;
-            border-left: 1px solid var(--divider-color); 
-            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
-            min-height: calc(100vh - var(--header-height) - 45px - (var(--spacing-unit) * 6)); 
-        }
-        .right-section-card { 
-             background-color: transparent;
-             box-shadow: none;
-             border: none;
-             padding: 0; 
-             margin-bottom: 0; 
-
-             text-align: center; 
-             flex-grow: 1; display: flex; flex-direction: column; 
-        }
-        #right-section h2.mission-title { 
-            font-size: 1.75rem; 
-            font-weight: 700; 
-            color: var(--text-color-dark); 
-            margin-bottom: var(--spacing-unit); 
-            line-height: 1.3; 
-        }
-        #right-section p.mission-subtitle { font-size: 1rem; color: var(--text-color-light); margin-bottom: calc(var(--spacing-unit) * 2.5); line-height: 1.6; }
-
-        .section-nav {
-            display: flex; gap: var(--spacing-unit); margin-bottom: calc(var(--spacing-unit) * 2.5); width: 100%; justify-content: center;
-        }
-        .section-nav button { 
-            flex: 1 1 0; min-width: 0; font-weight: 500; padding: calc(var(--spacing-unit)*0.7) calc(var(--spacing-unit)*1);
-            background-color: var(--bg-color-base); color: var(--text-color-dark); border: 1px solid var(--border-color-light); box-shadow: none;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            border-radius: var(--border-radius-md); 
-        }
-        body.dark-mode .section-nav button {
-             background-color: var(--bg-color-base);
-             border-color: var(--border-color-light);
-             color: var(--text-color-dark);
-        }
-        .section-nav button:hover { background-color: var(--bg-color-soft); border-color: var(--border-color-light); transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: var(--text-color-dark); }
-        .section-nav button.active { background-color: var(--bg-color-soft); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; box-shadow: 0 0 0 2px rgba(247, 127, 0, 0.1); }
-        
-        #right-section .or-separator { 
-            margin: calc(var(--spacing-unit) * 1.8) 0 calc(var(--spacing-unit) * 1.5) 0; 
-            font-size: 0.8rem; 
-        }
-        #right-section .or-separator .or-text-bold { 
-            font-weight: 600; 
-            color: red;
-        }
-        body.dark-mode #right-section .or-separator .or-text-bold {
-            color: red; 
-        }
-        #right-section .or-separator .or-text-regular { 
-            font-weight: 400; 
-            color: var(--text-color-light);
-            margin-left: 0.3em; 
-        }
-        body.dark-mode #right-section .or-separator .or-text-regular {
-            color: var(--text-color-light); 
-        }
-
-
-        .social-logins { width: 100%; text-align: center; padding-bottom: 0; margin-bottom: auto; }
-        .social-logins > h3 { display: none; }
-        
-        .social-btn { 
-            display: flex; align-items: center; justify-content: center; width: 100%; 
-            padding: calc(var(--spacing-unit)*0.75) calc(var(--spacing-unit)*1); 
-            margin-bottom: calc(var(--spacing-unit)*0.9); 
-            border-radius: var(--border-radius-md); 
-            font-size: 0.9rem; 
-            font-weight: 500; 
-            text-decoration: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-            transition: all var(--transition-speed) ease;
-        }
-        .social-btn:last-child { margin-bottom: 0; }
-        .social-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        .social-btn svg { 
-            width: 18px; 
-            height: 18px; 
-            margin-right: 10px; 
-            vertical-align: middle; 
-        }
-        .social-btn.google svg {
-             margin-right: 12px; 
-        }
-
-        .social-btn.google {
-            background-color: #FFFFFF;
-            color: #5f6368; 
-            border: 1px solid #dadce0;
-        }
-        .social-btn.google:hover {
-            background-color: #f8f9fa;
-            border-color: #caced3;
-            color: #5f6368;
-        }
-        body.dark-mode .social-btn.google {
-            background-color: #FFFFFF; 
-            color: #5f6368;
-            border: 1px solid #dadce0; 
-        }
-        body.dark-mode .social-btn.google:hover {
-            background-color: #f1f3f4;
-        }
-
-        .social-btn.facebook {
-            background-color: #1877F2;
-            color: white;
-            border: 1px solid #1877F2;
-        }
-        .social-btn.facebook:hover {
-            background-color: #166FE5;
-            border-color: #166FE5;
-            color: white;
-        }
-        body.dark-mode .social-btn.facebook {
-            background-color: #1877F2;
-            border-color: #1877F2;
-            color: white;
-        }
-         body.dark-mode .social-btn.facebook:hover {
-            background-color: #166FE5;
-            border-color: #166FE5;
-        }
-
-        .social-btn.x-twitter {
-            background-color: #000000;
-            color: white;
-            border: 1px solid #000000;
-        }
-        .social-btn.x-twitter:hover {
-            background-color: #1a1a1a; 
-            border-color: #1a1a1a;
-            color: white;
-        }
-        body.dark-mode .social-btn.x-twitter {
-            background-color: #14171A; 
-            color: white;
-            border-color: #14171A;
-        }
-        body.dark-mode .social-btn.x-twitter:hover {
-            background-color: #272C30;
-        }
-
-        .social-btn.apple {
-            background-color: #000000;
-            color: white;
-            border: 1px solid #000000;
-        }
-        .social-btn.apple:hover {
-            background-color: #1a1a1a;
-            border-color: #1a1a1a;
-            color: white;
-        }
-        body.dark-mode .social-btn.apple {
-            background-color: #1C1C1E; 
-            color: white;
-            border-color: #1C1C1E;
-        }
-         body.dark-mode .social-btn.apple:hover {
-            background-color: #2C2C2E;
-        }
-
-
-        .stats-section { 
-            margin-top: calc(var(--spacing-unit) * 3); 
-            padding-top: calc(var(--spacing-unit) * 1.5); 
-            border-top: 1px solid var(--border-color-light); 
-            display: flex; 
-            justify-content: space-around; 
-            gap: var(--spacing-unit); 
-            transition: border-color var(--transition-speed) ease; 
-            flex-wrap: wrap; 
-        }
-        .stat-item { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            text-align: left; 
-            flex: 1; 
-            position: relative; 
-            min-width: 130px; 
-            justify-content: center; 
-        }
-        .stat-item:not(:first-child)::before { 
-            content: ""; 
-            position: absolute; 
-            left: calc(var(--spacing-unit) * -0.5); 
-            top: 10px; 
-            bottom: 10px; 
-            width: 1px; 
-            background-color: var(--border-color-light); 
-            transition: background-color var(--transition-speed) ease; 
-        }
-        .stat-item .stat-icon { width: 32px; height: 32px; flex-shrink: 0; color: var(--primary-color); }
-        .stat-item .stat-icon svg { display: block; width: 100%; height: 100%;}
-        .stat-item .stat-text { display: flex; flex-direction: column; }
-        .stat-item .stat-number { font-size: 1.4rem; font-weight: 700; color: var(--text-color-dark); line-height: 1.1; }
-        .stat-item .stat-label { font-size: 0.85rem; color: var(--text-color-light); line-height: 1.3; white-space: nowrap; }
-        
-        .impact-card { 
-             background-color: transparent;
-             box-shadow: none;
-             border: none;
-             padding: 0; 
-             margin-bottom: 0; 
-
-            margin-top: calc(var(--spacing-unit) * 2.5); 
-            text-align: left; 
-        }
-        .impact-card h3 { color: var(--accent-color); margin-bottom: var(--spacing-unit); font-size: 1.2rem; }
-        .impact-card blockquote { font-style: italic; margin-bottom: var(--spacing-unit); color: var(--text-color-dark); padding-left: var(--spacing-unit); border-left: 3px solid var(--accent-color); 
-            transition: border-color var(--transition-speed) ease, color var(--transition-speed) ease;
-        }
-        .impact-card .author { font-weight: 600; color: var(--text-color-light); font-size: 0.9rem; text-align: right; }
-        
-        .site-footer { 
-            padding: calc(var(--spacing-unit) * 0.75) var(--spacing-unit); 
-            text-align: center; font-size: 0.9rem; color: var(--text-color-light); 
-            background-color: var(--bg-color-base); 
-            border-top: 1px solid var(--border-color-light); 
-            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; 
-        }
-        .ai-assistant-button { position: fixed; bottom: var(--spacing-unit); right: var(--spacing-unit); width: 50px; height: 50px; background-color: var(--primary-color); color: white; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 101; 
-            transition: all var(--transition-speed) ease;
-        }
-        .ai-assistant-button:hover { background-color: #ad1f1f; transform: scale(1.1); }
-
-        @media (max-width: 1023px) {
-            html, body { overflow: auto; height: auto; } 
-            .main-content { 
-                grid-template-columns: 1fr; 
-                height: auto; 
-                display: flex; 
-                flex-direction: column; 
-                min-height: 0; 
-            }
-            #left-section { 
-                padding: calc(var(--spacing-unit) * 2); 
-                position: static; 
-                height: auto; 
-                overflow-y: visible; 
-                order: 1; 
-                border-left: none; 
-                border-bottom: 1px solid var(--divider-color);
-                margin-bottom: calc(var(--spacing-unit) * 1.5); 
-                transition: border-color var(--transition-speed) ease; 
-                background-color: transparent; 
-                min-height: 0; 
-            }
-             .page.form-page,
-             .page.form-page.active { 
-                display: block; 
-                justify-content: initial;
-                align-items: initial;
-                flex-direction: initial; 
-            }
-            #left-section .page { padding: 0; position: static; height: auto; display: none; opacity: 0; transform: none; 
-                transition: opacity var(--transition-speed) ease-in-out;
-            }
-            #login-page.form-page { 
-                 padding: calc(var(--spacing-unit) * 2); 
-                 max-width: 450px; 
-                 margin: 0 auto; 
-            } 
-            #login-page .card { 
-                 display: block;
-                 max-width: 100%; 
-            }
-
-            .page.active { display: block; opacity: 1; visibility: visible; }
-            #right-section { 
-                padding: calc(var(--spacing-unit) * 2); 
-                order: 2; 
-                min-height: auto; 
-                border-left: none; 
-                border-top: none; 
-                overflow-y: visible; 
-                margin-top: 0; 
-                background-color: transparent; 
-                min-height: 0; 
-            }
-            .right-section-card { padding: 0; margin-bottom: 0; } 
-             .impact-card { padding: 0; margin-bottom: 0; } 
-             
-            .section-nav { margin-bottom: var(--spacing-unit) * 2; gap: calc(var(--spacing-unit) * 0.75); }
-            .section-nav button { padding: calc(var(--spacing-unit)*0.6) calc(var(--spacing-unit)*0.8); font-size: 0.9rem; }
-            #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 1.5); margin-bottom: calc(var(--spacing-unit) * 2); }
-            .social-logins { margin-bottom: var(--spacing-unit) * 2; }
-            .stats-section { 
-                 justify-content: space-evenly; 
-                 gap: calc(var(--spacing-unit) * 1); 
-                 margin-top: calc(var(--spacing-unit) * 2); 
-            }
-            .stat-item { 
-                 flex-basis: auto; 
-                 justify-content: center; 
-            }
-            .stat-item:not(:first-child)::before { 
-                 display: none; 
-            }
-            .impact-card { margin-top: calc(var(--spacing-unit) * 2); } 
-            .ai-assistant-button { bottom: calc(var(--spacing-unit)*0.8); right: calc(var(--spacing-unit)*0.8); width: 45px; height: 45px; font-size: 1.3rem;}
-            #right-section h2.mission-title { font-size: 1.5rem; } 
-        }
-
-        @media (max-width: 767px) {
-             .site-header { padding: 0 calc(var(--spacing-unit) * 1.5); height: 65px; }
-             .site-header .logo { font-size: 2.5rem; }
-             #left-section, #right-section { padding: calc(var(--spacing-unit) * 1.5); }
-             #login-page.form-page { padding: calc(var(--spacing-unit) * 1.5); max-width: 100%;} 
-             
-             .right-section-card { padding: 0; } 
-             .impact-card { padding: 0; }
-
-             .card { 
-                 padding: calc(var(--spacing-unit) * 1.5); 
-                 margin-bottom: calc(var(--spacing-unit) * 1.5);
-             } 
-             .form-page { max-width: none; } 
-             h1 { font-size: 2rem; } h2 { font-size: 1.5rem; } h3 { font-size: 1.1rem; }
-             #login-page h2 { font-size: 1.6rem; } 
-             #login-page .login-subtitle { font-size: 0.9rem; }
-             .section-nav { gap: calc(var(--spacing-unit) * 0.5); }
-             .section-nav button { padding: calc(var(--spacing-unit)*0.5) calc(var(--spacing-unit)*0.6); font-size: 0.85rem; }
-             #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 2.5); margin-bottom: calc(var(--spacing-unit) * 2.5); }
-             .form-actions { flex-direction: column; align-items: stretch; } 
-             #signup-page .form-actions .forgot-password { text-align: right; margin-top: 0.5rem;}
-             #login-page .form-actions { 
-                flex-direction: row; 
-                justify-content: space-between; 
-                align-items: center; 
-             }
-            
-             .submit-btn { font-size: 1rem; }
-             .stats-section { 
-                  gap: var(--spacing-unit) * 0.5; 
-                  justify-content: space-around; 
-             }
-             .stat-item {
-                 min-width: 110px; 
-                 gap: 8px; 
-             }
-             .stat-item .stat-number { font-size: 1.2rem;}
-             .stat-item .stat-label { font-size: 0.8rem;}
-             .ai-assistant-button { width: 40px; height: 40px; font-size: 1.2rem;}
-             #right-section h2.mission-title { font-size: 1.3rem; } 
-        }
-
-        @media (max-width: 480px) {
-            .skeleton-main-content { grid-template-columns: 1fr; } /* Stack columns on very small screens */
-            .skeleton-right-section { border-left: none; border-top: 1px solid var(--divider-color); }
-            .site-header { height: 60px; }
-            .site-header .logo { font-size: 2.2rem; }
-            .section-nav { gap: calc(var(--spacing-unit) * 0.35); }
-            .section-nav button { font-size: 0.75rem; padding: calc(var(--spacing-unit)*0.4) calc(var(--spacing-unit)*0.5); }
-            #right-section .or-separator { margin-top: calc(var(--spacing-unit) * 2); margin-bottom: calc(var(--spacing-unit) * 2); }
-            
-            #login-page .form-actions { 
-                flex-direction: row; 
-                justify-content: space-between; 
-                align-items: center; 
-                gap: 10px; 
-            }
-            #login-page .form-actions .forgot-password { 
-                text-align: right; 
-                margin-top: 0; 
-            }
-            #login-page .checkbox-group { 
-                margin-bottom: 0; 
-            }
-
-            #login-page h2 { font-size: 1.5rem; }
-            #login-page .login-subtitle { font-size: 0.85rem; }
-            #login-page.form-page { padding: calc(var(--spacing-unit) * 1.2); }
-            #right-section h2.mission-title { font-size: 1.2rem; } 
-            .stats-section {
-                 justify-content: space-between; 
-                 gap: var(--spacing-unit) * 0.5;
-             }
-             .stat-item {
-                  min-width: 100px; 
-             }
-        }
-
-    </style>
+    <!-- ICONS CDN FONTAWESOME-->
+    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
-<body class="content-loading"> 
-
-    <div class="skeleton-loader">
-        <div class="skeleton-header">
-            <div class="skeleton-logo skeleton-element"></div>
-            <div class="skeleton-controls">
-                <div class="skeleton-control-item skeleton-element"></div>
-                <div class="skeleton-control-item circle skeleton-element"></div>
-            </div>
+<body>
+  <div class="main-body">
+    <header>
+      <h1>BloodSource</h1>
+      <div class="btn">
+        <div class="btn__indicator">
+          <div class="btn__icon-container">
+            <i class="btn__icon fa-solid"></i>
+          </div>
         </div>
-        <div class="skeleton-main-content">
-            <div class="skeleton-left-section">
-                <div class="skeleton-hero-svg skeleton-element"></div>
-                <div class="skeleton-line large skeleton-element"></div>
-                <div class="skeleton-line medium skeleton-element"></div>
-                <div class="skeleton-line medium skeleton-element"></div>
-                <div class="skeleton-line small mt-large skeleton-element"></div>
-            </div>
-            <div class="skeleton-right-section">
-                <div class="skeleton-line large mb-small skeleton-element"></div>
-                <div class="skeleton-line medium mb-large skeleton-element"></div>
-                <div class="skeleton-nav-buttons">
-                    <div class="skeleton-block button skeleton-element"></div>
-                    <div class="skeleton-block button skeleton-element"></div>
-                    <div class="skeleton-block button skeleton-element"></div>
-                </div>
-                <div class="skeleton-separator skeleton-element"></div>
-                <div class="skeleton-block social-button skeleton-element"></div>
-                <div class="skeleton-block social-button skeleton-element"></div>
-                <div class="skeleton-block social-button skeleton-element"></div>
-                <div class="skeleton-block social-button skeleton-element"></div>
-            </div>
-        </div>
-    </div>
-
-    <header class="site-header">
-        <a href="#home" class="logo">BloodSource</a>
-        <div class="header-controls">
-            <span style="font-size: 0.9rem; color: var(--text-color-light); margin-right: 10px;">
-                <i class="fa-solid fa-shield-heart" style="color: var(--accent-color);"></i> Hero Level
-            </span>
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-                <i class="fas fa-moon"></i>
-                <i class="fas fa-sun"></i>
-            </button>
-        </div>
+      </div>
     </header>
 
-    <main class="main-content">
-        <section id="left-section">
-            <div id="home-page" class="page active">
-                <div class="hero-content">
-                    <div class="hero-svg">
-                        <dotlottie-player
-                            src="https://lottie.host/c2fdd210-e2c9-4323-be22-3958ca4fe8ef/r6lbQ4vPP8.lottie"
-                            background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay>
-                        </dotlottie-player>
-                    </div>
-                    <h1>Give the Gift of Life</h1>
-                    <p>
-                        Join our community connecting blood donors with those in need.
-                        Simple, fast, and life-saving. Find a center or become a donor today.
-                    </p>
-                    <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-color-light);">
-                        <i class="fa-solid fa-location-dot" style="color: var(--primary-color);"></i>
-                        Nearby donation centers will appear here after login.
-                    </p>
-                </div>
+    <section class="left-section">
+      
+      <dotlottie-player src="https://lottie.host/12f8dccf-98a2-414f-9d4f-8251edad5818/y859QLsMYp.lottie" background="transparent" speed="1" style="width: 500px; height: 500px" loop autoplay></dotlottie-player>
+
+      <h2>Give the Gift of Life</h2>
+      <p>Join our community connecting blood donors with those in need. Simple, fast, and life-saving. Find a center or become a donor today.
+        
+      </p>
+    </section>
+    <section class="right-section">
+      <h2 class="right-section-title">Join Our Life-Saving Mission</h2>
+      <p>We are dedicated to saving lives through blood donation and awareness.</p>
+      <div class="top-buttons">
+        <button type="button" class="nav-btn"><span>Home</span><i class="fa-solid fa-house"></i></button>
+        <button type="button" class="nav-btn"><span>Log In</span><i class="fa-solid fa-right-to-bracket"></i></button>
+        <button type="button" class="nav-btn"><span>Register</span><i class="fa-solid fa-user-plus"></i></button>
+      </div>
+      <div class="divider-login">
+        <span><span class="login-red">Login</span> with Others</span>
+      </div>
+      <div class="social-login-buttons">
+        <button type="button" class="social-btn google">
+          <img src="assets/google.svg" alt="Google" class="social-icon" /> Sign in with Google
+        </button>
+        <button type="button" class="social-btn facebook">
+          <img src="assets/facebook.svg" alt="Facebook" class="social-icon" /> Sign in with Facebook
+        </button>
+        <button type="button" class="social-btn twitter">
+          <img src="assets/twitter.svg" alt="Twitter" class="social-icon" /> Sign in with X
+        </button>
+        <button type="button" class="social-btn apple">
+          <img src="assets/apple.svg" alt="Apple" class="social-icon" /> Sign in with Apple
+        </button>
+      </div>
+
+      <!-- Platform Statistics -->
+      <div class="platform-stats-section">
+  <h3>Platform Statistics</h3>
+  <div class="platform-stats-grid">
+    <div class="stat-card stat-flex">
+      <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+      <div>
+        <div class="stat-number">12,500+</div>
+        <div class="stat-label">Registered Donors</div>
+      </div>
+    </div>
+    <div class="stat-card stat-flex">
+      <div class="stat-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+      <div>
+        <div class="stat-number">8,320+</div>
+        <div class="stat-label">Lives Saved</div>
+      </div>
+    </div>
+    <div class="stat-card stat-flex">
+      <div class="stat-icon"><i class="fa-solid fa-tint"></i></div>
+      <div>
+        <div class="stat-number">520+</div>
+        <div class="stat-label">Blood Drives</div>
+      </div>
+    </div>
+    <div class="stat-card stat-flex">
+      <div class="stat-icon"><i class="fa-solid fa-hospital"></i></div>
+      <div>
+        <div class="stat-number">64+</div>
+        <div class="stat-label">Partner Hospitals</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- User Testimonial -->
+      <div class="testimonial-section">
+        <h3>What Users Say</h3>
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <img src="/assets/usersarah.jpg" alt="Sarah Johnson" class="testimonial-avatar">
+            <div>
+              <span class="testimonial-name">Sarah Johnson</span><br>
+              <span class="testimonial-stars">
+                <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+                <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+                <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+                <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+                <i class="fa-solid fa-star" style="color: #FFD700;"></i>
+              </span>
             </div>
+          </div>
+          <div class="testimonial-text">
+            "Donating through BloodSource was so easy. Knowing I helped someone directly makes it incredibly rewarding."
+          </div>
+        </div>
+      </div>
+      
+    </section>
 
-            <div id="login-page" class="page form-page"> 
-                 <div class="card card-transparent"> 
-                    <h2>Hi, Welcome Back <span role="img" aria-label="waving hand">👋</span></h2>
-                    <p class="login-subtitle">It's great to see you again.</p>
-                    <form action="#" method="post" novalidate id="login-form">
-                        <div class="form-group">
-                            <span class="input-icon"><i class="fas fa-user"></i></span> 
-                            <input type="text" id="login-username" name="username" required placeholder="Username"> 
-                        </div>
-                        <div class="form-group">
-                            <span class="input-icon"><i class="fas fa-lock"></i></span>
-                            <input type="password" id="login-password" name="password" required placeholder="Password">
-                            <span class="password-toggle-icon" id="loginPasswordToggle"><i class="fas fa-eye"></i></span>
-                        </div>
-                        <div class="form-actions">
-                            <div class="checkbox-group">
-                                 <input type="checkbox" id="remember-me" name="remember">
-                                <label for="remember-me">Remember me</label>
-                            </div>
-                            <a href="#" class="forgot-password">Forgot password?</a>
-                        </div>
-                        <button type="submit" class="submit-btn">Log In</button>
-                    </form>
-                    <p class="login-signup-link"> 
-                        Don't have an account! Go to The Register Section <span role="img" aria-label="Smiling Face with Smiling Eyes">😊</span>
-                    </p>
-                 </div>
-            </div>
+    <footer>
+  <div class="footer-content">
+    <span class="footer-icon" aria-label="Robot">
+      <img src="assets/ai.svg" alt="Robot Icon" />
+    </span>
+    <span class="footer-center">© 2023 BloodSource. All rights reserved.</span>
+    <span class="footer-links">
+      <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a>
+    </span>
+  </div>
+</footer>
+  </div>
 
-            <div id="signup-page" class="page form-page"> 
-                 <div class="card"> 
-                    <div class="progress-indicator" aria-label="Signup Progress">
-                         <div class="progress-step active"> <div class="step-circle" aria-hidden="true">1</div> <div class="step-label">Account</div> </div>
-                         <div class="progress-step"> <div class="step-circle" aria-hidden="true">2</div> <div class="step-label">Details</div> </div>
-                         <div class="progress-step"> <div class="step-circle" aria-hidden="true">3</div> <div class="step-label">Confirm</div> </div>
-                    </div>
-                    <h2>Create Your Account</h2>
-                     <form action="#" method="post" novalidate>
-                        <div class="form-group"> <input type="text" id="signup-fullname" name="fullname" required placeholder="Full Name"> <label for="signup-fullname">Full Name</label> </div>
-                        <div class="form-group"> <input type="email" id="signup-email" name="email" required placeholder="Email Address"> <label for="signup-email">Email Address</label> </div>
-                        <div class="form-group"> <input type="password" id="signup-password" name="password" required minlength="8" placeholder="Password (min 8 chars)"> <label for="signup-password">Password</label> </div>
-                        <div class="form-group"> <input type="password" id="signup-confirm-password" name="confirm_password" required placeholder="Confirm Password"> <label for="signup-confirm-password">Confirm Password</label> </div>
-                        <div class="form-group"> <div class="checkbox-group"> <input type="checkbox" id="terms" name="terms" required> <label for="terms">I agree to the <a href="#" target="_blank">Terms and Conditions</a></label> </div> </div>
-                        <button type="submit" class="submit-btn">Register</button>
-                    </form>
-                 </div>
-            </div>
-        </section>
-        <section id="right-section">
-            <div class="card right-section-card card-transparent"> 
-                <h2 class="mission-title">Join our life-saving mission.</h2>
-                <p class="mission-subtitle">Sign in or create an account to find or become a blood donor.</p>
-                <nav class="section-nav">
-                    <button id="home-btn" data-target="home-page" class="btn-secondary">Home</button>
-                    <button id="login-btn" data-target="login-page" class="btn-secondary">Log In</button>
-                    <button id="signup-btn" data-target="signup-page" class="btn-secondary">Register</button> 
-                </nav>
-                <div class="or-separator"> 
-                    <span class="or-text-bold">Login</span><span class="or-text-regular">with Others</span>
-                </div>
-                <div class="social-logins">
-                    <a href="#" class="social-btn google"> 
-                        <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                            <g fill-rule="evenodd">
-                                <path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1699-1.8409H9.1818v3.4818h4.7909c-.2086 1.125-.8441 2.0782-1.7959 2.7164v2.2581h2.9087c1.7018-1.5668 2.6836-3.8741 2.6836-6.6154z" fill="#4285F4"/>
-                                <path d="M9.1818 18c2.43 0 4.4673-.8054 5.9564-2.1818l-2.9087-2.2581c-.8054.54-1.8368.8618-3.0477.8618-2.3455 0-4.3291-1.5818-5.0359-3.7109H1.0718v2.3318C2.5536 16.3109 5.6177 18 9.1818 18z" fill="#34A853"/>
-                                <path d="M4.1459 10.8327c-.1927-.54-.3032-1.1168-.3032-1.7145s.1105-1.1745.3032-1.7145V5.0718H1.0718C.3859 6.4536 0 7.9259 0 9.1182s.3859 2.6645 1.0718 4.0464l3.0741-2.3319z" fill="#FBBC05"/>
-                                <path d="M9.1818 3.5818c1.3227 0 2.5064.4554 3.4409 1.3477l2.5855-2.5855C13.6418.8818 11.6109 0 9.1818 0 5.6177 0 2.5536 1.6891 1.0718 4.0782L4.146 6.4095c.7068-2.129 2.6904-3.71 5.0358-3.71l-.0002.8823z" fill="#EA4335"/>
-                            </g>
-                        </svg>
-                        <span>Sign in with Google</span> 
-                    </a>
-                    <a href="#" class="social-btn facebook"> 
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H17V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
-                        </svg> 
-                        <span>Sign in with Facebook</span> 
-                    </a>
-                    <a href="#" class="social-btn x-twitter"> 
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
-                        </svg>
-                        <span>Sign in with X</span> 
-                    </a>
-                    <a href="#" class="social-btn apple"> 
-                        <svg viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                           <path d="M8.082.016C6.744.004 5.66.58 4.812 1.566c-.974 1.148-1.14 2.965-.224 4.869.688 1.416 1.778 2.445 1.778 2.445s-.208 1.822.02 3.3c.204 1.314.718 2.512 1.462 3.237.732.712 1.644.963 2.252.963.238 0 .975-.153 1.668-.48.708-.336.95-.552.95-.552s.626-2.338-.162-4.17c-.78-.182-.71-.208.146-1.535.868-1.343.762-2.735.75-2.752-.013-.026-1.536-1.017-3.262-1.003Zm1.883-.003A1.87 1.87 0 0 0 8.413 1.53c-.458.644-.65 1.44-.333 2.207.317.767.99 1.22 1.717 1.22.04 0 .08-.002.12-.004.518-.026.97-.334 1.244-.746.274-.412.34-.926.18-1.388-.14-.411-.45-.746-.82-.95-.37-.205-.805-.27-1.24-.158Z"/>
-                        </svg>
-                        <span>Sign in with Apple</span> 
-                    </a>
-                </div>
-                 <div class="stats-section">
-                    <div class="stat-item"> <div class="stat-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0C201.6 0 210.5 4.2 216.5 11.7C252.9 57.7 384 228.8 384 320C384 426 298 512 192 512zM192 128c-17.7 0-32 14.3-32 32s14.3 32 32 32c11.8 0 22.2-6.4 27.7-16H192c-4.4 0-8-3.6-8-8s3.6-8 8-8h27.7C214.2 134.4 203.8 128 192 128z"/></svg> </div> <div class="stat-text"> <span class="stat-number">12,438</span> <span class="stat-label">donors connected</span> </div> </div>
-                    <div class="stat-item"> <div class="stat-icon"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M192 0c-17.7 0-32 14.3-32 32V141.3l-9.6-6.4c-8.5-5.7-19.7-6.6-29.1-2.4S107.7 144.1 107.7 155v10.3l-41 27.3C35.9 213.8 16 256.8 16 304V448c0 35.3 28.7 64 64 64H304c35.3 0 64-28.7 64-64V304c0-47.2-19.9-90.2-50.7-111.4l-41-27.3V155c0-10.9-4.6-20.9-12.6-27.1s-18.6-8.7-29.1-2.4l-9.6 6.4V32c0-17.7-14.3-32-32-32zM96 316.1V448H64V304c0-16.7 6.7-32.4 17.4-43.9l54.6-54.6v54.4c0 5.9 4.1 11.1 9.8 12.4s11.8 0 16.2-3.8l48-40c5-4.2 7.9-10.3 7.9-16.8s-2.9-12.6-7.9-16.8l-48-40c-4.4-3.7-10.4-4.9-16.2-3.8s-9.8 6.5-9.8 12.4V192l-80 53.3V448H288V316.1l-80-53.3V448H176V262.7L96 316.1z"/></svg> </div> <div class="stat-text"> <span class="stat-number">5,729</span> <span class="stat-label">lives impacted</span> </div> </div>
-                </div>
-            </div>
-            <div class="card impact-card card-transparent"> 
-                 <h3>Donor Spotlight</h3> 
-                 <blockquote>"Donating through BloodSource was so easy. Knowing I helped someone directly makes it incredibly rewarding."</blockquote> 
-                 <p class="author">- Sarah K., 3rd Time Donor</p> 
-            </div>
-        </section>
-    </main>
-    <footer class="site-footer"> <p>© 2023 BloodSource. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Contact Us</a></p> </footer>
-    <button class="ai-assistant-button" aria-label="Open AI Assistant"> <i class="fa-solid fa-comment-dots"></i> </button>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navButtons = document.querySelectorAll('.section-nav button');
-            const pages = document.querySelectorAll('#left-section .page');
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const body = document.body;
-            const breakpoint = 1023; 
+  <!-- JS -->
+  <script src="js/main.js"></script>
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 
-            function applyDarkModePreference() { 
-                const savedPreference = localStorage.getItem('darkMode'); 
-                if (savedPreference === 'enabled') { 
-                    body.classList.add('dark-mode'); 
-                } else { 
-                    body.classList.remove('dark-mode'); 
-                } 
-            }
-            darkModeToggle.addEventListener('click', () => { body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled'); });
-            applyDarkModePreference();
-
-            function setActivePage(targetId) {
-                 let pageActivated = false; 
-                 const isDesktopLayout = window.innerWidth > breakpoint;
-                 
-                 pages.forEach(page => { 
-                     page.classList.remove('active'); 
-                     page.style.display = 'none'; 
-                     page.style.opacity = '0'; 
-                     page.style.transform = 'translateY(20px)'; 
-                 });
-                 navButtons.forEach(button => button.classList.remove('active'));
-
-                 const targetPageElement = document.getElementById(targetId);
-
-                 if (targetPageElement) {
-                     if (isDesktopLayout && targetPageElement.classList.contains('form-page')) {
-                         targetPageElement.style.display = 'flex'; 
-                     } else { 
-                         targetPageElement.style.display = 'block'; 
-                     }
-                     targetPageElement.classList.add('active'); 
-                    
-                     requestAnimationFrame(() => { 
-                         targetPageElement.style.opacity = '1'; 
-                         targetPageElement.style.transform = 'translateY(0)';
-                     }); 
-
-                     pageActivated = true; 
-                     const correspondingButton = document.querySelector(`.section-nav button[data-target="${targetId}"]`); 
-                     if(correspondingButton) { 
-                         correspondingButton.classList.add('active'); 
-                     }
-                 }
-
-                 if (!pageActivated && pages.length > 0) { 
-                     const homePageId = 'home-page'; 
-                     const homePageElement = document.getElementById(homePageId); 
-                     const homeButton = document.getElementById('home-btn');
-                     if (homePageElement) { 
-                         homePageElement.style.display = 'block'; 
-                         homePageElement.classList.add('active');
-                         requestAnimationFrame(() => { 
-                             homePageElement.style.opacity = '1'; 
-                             homePageElement.style.transform = 'translateY(0)';
-                         }); 
-                     }
-                     if(homeButton) homeButton.classList.add('active');
-                 }
-            }
-
-
-            navButtons.forEach(button => { button.addEventListener('click', (e) => { 
-                e.preventDefault(); 
-                const targetPageId = button.dataset.target; 
-                setActivePage(targetPageId);
-            }); });
-            
-            const loginPasswordInput = document.getElementById('login-password');
-            const loginPasswordToggle = document.getElementById('loginPasswordToggle');
-
-            if (loginPasswordInput && loginPasswordToggle) {
-                const iconElement = loginPasswordToggle.querySelector('i'); 
-
-                loginPasswordToggle.addEventListener('click', () => {
-                    const currentType = loginPasswordInput.getAttribute('type');
-                    if (currentType === 'password') {
-                        loginPasswordInput.setAttribute('type', 'text');
-                        iconElement.classList.remove('fa-eye');
-                        iconElement.classList.add('fa-eye-slash');
-                    } else {
-                        loginPasswordInput.setAttribute('type', 'password');
-                        iconElement.classList.remove('fa-eye-slash');
-                        iconElement.classList.add('fa-eye');
-                    }
-                    loginPasswordInput.focus(); 
-                });
-            }
-
-
-            let currentLayoutMode = window.innerWidth > breakpoint ? 'desktop' : 'mobile';
-            window.addEventListener('resize', () => {
-                 const newLayoutMode = window.innerWidth > breakpoint ? 'desktop' : 'mobile';
-                 if (newLayoutMode !== currentLayoutMode) {
-                     const activeButton = document.querySelector('.section-nav button.active'); 
-                     let currentActivePageId = 'home-page'; 
-                     if (activeButton) {
-                         currentActivePageId = activeButton.dataset.target;
-                     } else {
-                         const activePage = document.querySelector('#left-section .page.active');
-                         if (activePage) currentActivePageId = activePage.id;
-                     }
-                    
-                     pages.forEach(page => { 
-                         page.classList.remove('active'); 
-                         page.style.display = 'none'; 
-                         page.style.opacity = '0'; 
-                         page.style.transform = 'translateY(20px)';
-                     });
-                     setActivePage(currentActivePageId); 
-                     currentLayoutMode = newLayoutMode;
-                 }
-            });
-            setActivePage('home-page'); 
-
-            // Skeleton loader removal
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    document.body.classList.remove('content-loading');
-                }, 1000); // Adjust this delay as needed (e.g., 0 for nearly instant after load)
-            });
-        });
-    </script>
 </body>
 </html>
