@@ -30,7 +30,8 @@ This is a full-stack web application built with React frontend and Express backe
 - Type-safe communication between frontend and backend
 
 ### Frontend Components
-- **HomePage**: Main login interface with Facebook-like styling
+- **HomePage**: Main login interface with BloodSource branding
+- **SignupPage**: User registration page with smooth animations
 - **FloatingAIButton**: Interactive AI assistant button (placeholder)
 - **UI Components**: Complete set of reusable components from shadcn/ui
 - **Toast System**: User feedback notifications
@@ -50,6 +51,13 @@ This is a full-stack web application built with React frontend and Express backe
    - API request sent to `/api/login` endpoint
    - Backend validates credentials against storage
    - Response returned with user data or error
+
+2. **User Registration Flow**:
+   - User navigates to signup page with smooth animations
+   - Registration form validated with Zod schemas
+   - API request sent to `/api/signup` endpoint
+   - Backend checks for existing users and creates new account
+   - Success redirects to login page with confirmation
 
 2. **Development Workflow**:
    - Frontend served by Vite dev server
@@ -99,6 +107,7 @@ This is a full-stack web application built with React frontend and Express backe
 ```
 Changelog:
 - July 04, 2025. Initial setup
+- July 04, 2025. Added signup page with animations and backend integration
 ```
 
 ## User Preferences

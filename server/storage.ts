@@ -1,4 +1,4 @@
-import { User, LoginRequest, LoginResponse } from "@shared/schema";
+import { User, LoginRequest, LoginResponse, SignupRequest, SignupResponse } from "@shared/schema";
 
 export interface IStorage {
   // User management
@@ -8,6 +8,7 @@ export interface IStorage {
   
   // Authentication
   validateLogin(credentials: LoginRequest): Promise<LoginResponse>;
+  registerUser(userData: SignupRequest): Promise<SignupResponse>;
 }
 
 export class MemStorage implements IStorage {
@@ -56,6 +57,29 @@ export class MemStorage implements IStorage {
     return {
       success: false,
       message: "Invalid credentials",
+    };
+  }
+
+  async registerUser(userData: SignupRequest): Promise<SignupResponse> {
+    // Check if user already exists
+    const existingUser = await this.getUserByEmail(userData.email);
+    if (existingUser) {
+      return {
+        success: false,
+        message: "User with this email already exists",
+      };
+    }
+
+    // Create new user
+    const newUser = await this.createUser({
+      email: userData.email,
+      username: `${userData.firstName.toLowerCase()}.${userData.lastName.toLowerCase()}`,
+    });
+
+    return {
+      success: true,
+      message: "Account created successfully",
+      user: newUser,
     };
   }
 }

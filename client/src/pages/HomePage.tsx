@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -17,6 +18,7 @@ type LoginForm = LoginRequest;
 
 export default function HomePage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [location, navigate] = useLocation();
   const { toast } = useToast();
 
   const form = useForm<LoginForm>({
@@ -209,7 +211,8 @@ export default function HomePage() {
                       <div className="border-t border-facebook-border pt-4 mt-6">
                         <Button
                           type="button"
-                          className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out"
+                          onClick={() => navigate("/signup")}
+                          className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                         >
                           Create new account
                         </Button>
@@ -344,7 +347,8 @@ export default function HomePage() {
                       <div className="border-t border-facebook-border pt-4 mt-6">
                         <Button
                           type="button"
-                          className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px]"
+                          onClick={() => navigate("/signup")}
+                          className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px] transform hover:scale-105"
                         >
                           Create new account
                         </Button>
