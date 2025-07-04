@@ -14,6 +14,231 @@ import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
 import { PhoneInput } from "../components/PhoneInput";
 import React from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+// Mapping of Bangladesh divisions to their districts
+const divisionDistricts: Record<string, string[]> = {
+  Barisal: [
+    "Barguna", "Barisal", "Bhola", "Jhalokati", "Patuakhali", "Pirojpur"
+  ],
+  Chattogram: [
+    "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cumilla", "Cox's Bazar", "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati"
+  ],
+  Dhaka: [
+    "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur", "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur", "Tangail"
+  ],
+  Khulna: [
+    "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia", "Magura", "Meherpur", "Narail", "Satkhira"
+  ],
+  Mymensingh: [
+    "Jamalpur", "Mymensingh", "Netrokona", "Sherpur"
+  ],
+  Rajshahi: [
+    "Bogura", "Chapai Nawabganj", "Joypurhat", "Naogaon", "Natore", "Pabna", "Rajshahi", "Sirajganj"
+  ],
+  Rangpur: [
+    "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat", "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon"
+  ],
+  Sylhet: [
+    "Habiganj", "Moulvibazar", "Sunamganj", "Sylhet"
+  ]
+};
+
+// Mapping of districts to their main points (updated from CSV)
+const districtMainPoints: Record<string, string[]> = {
+  Barishal: [
+    "Floating Guava Market", "Durga Sagar", "Oxford Mission Epiphany Cathedral Church", "Barishal Divisional Museum"
+  ],
+  Barguna: [
+    "Bibichini Shahi Mosque", "Horin Ghata Eco Park", "Bihanga Island", "Bukabunia Liberation War Memorial"
+  ],
+  Bhola: [
+    "Char Kukri Mukri Wildlife Sanctuary", "Manpura Island (sunrise/sunset views)", "Bir Sreshtho Mostafa Kamal Museum"
+  ],
+  Jhalokati: [
+    "Bhimruli Floating Guava Market", "Dawud Shah's Khanqah and Mausoleum", "Sheikh Shah Khudgir's Mazar"
+  ],
+  Patuakhali: [
+    "Kuakata Beach (sunrise/sunset views)", "Rakhain Palli (ethnic community villages)"
+  ],
+  Pirojpur: [
+    "Floating Market in Kuriana (guava gardens)", "Momin Mosque", "8th Bangladesh-China Friendship Bridge", "Pirojpur River View Eco Park"
+  ],
+  Bandarban: [
+    "Nilachal", "Nilgiri", "Shoilo Propat", "Sangu River", "Nafakhum Waterfall", "Meghla Tourist Spot", "Bandarban Golden Temple"
+  ],
+  Brahmanbaria: [
+    "Titas Gas Field", "Akhaura Railway Junction", "Jamia Islamia Yunusia", "Haripur Barabari", "Hatirpul"
+  ],
+  Chandpur: [
+    "Hilsa Fish Capital", "Meghna River Cruises", "Shahid Minar", "Amanat Shah Mazar", "Rupsa Zamindar Bari"
+  ],
+  Chattogram: [
+    "Patenga Beach", "Foy's Lake", "Chattogram War Cemetery", "Shrine of Bayazid Bostami", "Ethnological Museum", "Chandanpura Mosque"
+  ],
+  Cumilla: [
+    "Shalban Vihara (ancient Buddhist monastery)", "Mainamati War Cemetery", "Dharmasagar Lake", "Kandirpar Commercial Area"
+  ],
+  "Cox's Bazar": [
+    "World's Longest Natural Sea Beach (Laboni, Sugandha, Kolatoli Points)", "Marine Drive", "Himchori Waterfall & Hill Track", "Dulahazra Safari Park", "St. Martin Island"
+  ],
+  Feni: [
+    "Bijoy Singh Dighi", "Mubarak Shah Mosque", "Rajajhir Dighi", "Jamidar Mohammad Ali Chowdhury Mosque"
+  ],
+  Khagrachari: [
+    "Sajek Valley", "Alutila Cave", "Risang Waterfall", "Panchari Shantipur Aranya Kutir (Buddha statue)", "New Zealand Road"
+  ],
+  Lakshmipur: [
+    "Dalal Bazar Zamindar Bari", "Jinn Mosque", "Raipur Boro Masjid", "Meghna River"
+  ],
+  Noakhali: [
+    "Nijhum Dwip (migratory birds)", "Gandhi Ashram Trust", "Musapur closure (Mini Cox's Bazar)", "Bozra Shahi Jame Masjid"
+  ],
+  Rangamati: [
+    "Hanging Bridge (Jhulonto Bridge)", "Rajban Bihar Pagoda", "Shuvlong Waterfall", "Kaptai Lake (largest man-made lake)", "Chakma Rajbari"
+  ],
+  Dhaka: [
+    "Ahsan Manzil (Pink Palace)", "Tara Masjid", "Lalbagh Fort", "Baitul Mukarram", "Bangladesh National Museum", "Hatirjheel"
+  ],
+  Faridpur: [
+    "Shohid Smriti Memorial", "Padma River", "Madaripur Mosque", "Gopalpur Temple"
+  ],
+  Gazipur: [
+    "Bhawal Rajbari", "Belai Bill", "Bhawal National Park", "Bangabandhu Safari Park", "Nuhash Polli", "numerous resorts"
+  ],
+  Gopalganj: [
+    "Mausoleum of Bangabandhu Sheikh Mujibur Rahman", "Orakandi Thakur Bari", "Madhumati River", "Baor Lakes"
+  ],
+  Kishoreganj: [
+    "Sholakia Eidgah Field (largest Eid Jamat)", "Egarosindur Fort", "Isha Khan's Jangalbari Fort", "Chandrabati Temple", "Haors"
+  ],
+  Madaripur: [
+    "Shah Madar Dargah Sharif", "Padma River", "Arial Khan River", "Sree Sree Harichand Ashram", "Rajoir Zamindar Bari", "Jute Industry"
+  ],
+  Manikganj: [
+    "Tewta Jomidar Bari", "Baliati Jomidar Bari", "Matta Moth", "Paturia Ferry Ghat", "Shahid Rafique Library & Memorial Museum"
+  ],
+  Munshiganj: [
+    "Idrakpur Fort", "Padma Bridge & Mawa Point", "Bikrampur Museum", "Jalalpur Zamindar Bari", "Meghna River"
+  ],
+  Narayanganj: [
+    "Panam Nagar (ancient capital)", "Bangladesh Folk Art & Crafts Foundation", "Kadam Rasul Darbar Sharif", "Zinda Park", "Hajiganj Fort", "Taj Mahal of Bengal"
+  ],
+  Narsingdi: [
+    "Dream Holiday Park", "Shitalakshya River", "Danga Jomidar Bari", "International Trade Fair"
+  ],
+  Rajbari: [
+    "Chandana River", "Kazi Hedayet Hossain Stadium", "Bahadurpur Hena Park", "UK BEACH"
+  ],
+  Shariatpur: [
+    "Padma Multipurpose Bridge", "Modern Fantasy Kingdom", "Birshrestha Lance Nayek Munshi Abdur Rouf Stadium"
+  ],
+  Tangail: [
+    "201 Dome Mosque (most domed in world)", "Mohera Zamindar Bari", "Atia Mosque", "Jamuna River"
+  ],
+  Bagerhat: [
+    "Sixty Dome Mosque (UNESCO World Heritage Site)"
+  ],
+  Chuadanga: [
+    "Alamdanga Railway Station", "Carew and Company Bangladesh", "Datt-Nagar Agricultural Firm", "Dhopkhali Shahi Mosque"
+  ],
+  Jessore: [
+    "Michael Madhusudan Dutta Memorial", "Benapole Land Port", "Monihar Cinema Hall", "Chanchra Shiva Temple"
+  ],
+  Jhenaidah: [
+    "Naldanga Rajbari", "Shailkupa Shahi Mosque", "Pagla Kanai Memorial Complex", "Jor Bangla Mandir"
+  ],
+  Khulna: [
+    "Gateway to the Sundarbans (World's largest mangrove forest)"
+  ],
+  Kushtia: [
+    "Shilaidaha Kuthibari (Rabindranath Tagore's dwelling)", "Shrine of Lalon Fakir", "Islamic University"
+  ],
+  Magura: [
+    "Magura Bus Terminal Jame Masjid", "Bir Muktijoddha Asaduzzaman Stadium", "Magura Kali Temple", "Nabaganga River"
+  ],
+  Meherpur: [
+    "Mujibnagar Complex Museum (birthplace of provisional government)", "Amjhupi Neelkuthi", "Siddheshwari Kali Mandir"
+  ],
+  Narail: [
+    "S M Sultan Memorial Gallery", "Bishreshtho Nur Mohammad Stadium", "Niribili Picnic Spot"
+  ],
+  Satkhira: [
+    "Sonabaria Moth Bari Temple", "Annapurna Temple", "Jeshoreswari Kali Mandir", "Chaikghariya Twin Shiva Temple"
+  ],
+  Jamalpur: [
+    "Jamalpur Gymkhana", "Jamalpur Waterfall", "Rail Niwas", "Old Brahmaputra River", "Bahadurabad Ferry Ghat (historical)"
+  ],
+  Mymensingh: [
+    "Bishyanath Temple", "Boro Masjid", "Mymensingh Museum", "Lohar Kutir", "Soshi Lodge"
+  ],
+  Netrakona: [
+    "Birishiri Cultural Academy (ethnic culture)", "Someshwari River", "China Matir Pahar (Kaolin Hills)", "Dingapota Haor (wetland)", "Uchitpur Haor (Mini Cox's Bazar)"
+  ],
+  Sherpur: [
+    "Madhutila Eco Park", "Ghagra Khan Bari Jami Mosque", "Mysaheba Jame Masque", "Brahmaputra River"
+  ],
+  Bogra: [
+    "Mahasthangarh (ancient city remnants)", "Panch Peer Mazar", "Gokul Medh", "Kherua Mosque"
+  ],
+  "Chapai Nawabganj": [
+    "Choto Sona Mosque", "Mughal Tahakhana", "Darasbari Mosque", "Khania Dighi Mosque", "Shah Niamatullah's Tomb"
+  ],
+  Joypurhat: [
+    "Joypurhat Sugar Mills", "Cement Factory", "Nandail Lake", "Ashranga Lake", "Pachbibir Mazar"
+  ],
+  Naogaon: [
+    "Somapura Mahavihara (UNESCO site)", "Kusumba Mosque", "Rabindranath Tagore's Patisar Kachari Bari", "Dubalhati Palace"
+  ],
+  Natore: [
+    "Uttara Gonobhobon", "Puthia Rajbari", "Patul Mini Cox's Bazar", "Baral River"
+  ],
+  Pabna: [
+    "Jorbangla Temple", "Paksey Hardinge Bridge", "House of Suchitra Sen", "Anukul Chandra Satsang Ashram"
+  ],
+  Rajshahi: [
+    "Puthia Temple Complex", "Varendra Research Museum", "Bagha Mosque", "Padma River", "Shaheb Bazar"
+  ],
+  Sirajganj: [
+    "Bangabandhu Bridge (Jamuna Bridge)", "Rabindranath Tagore's Kacharibari", "Hatikumrul Navaratna Temple", "Loom Crafting Industry"
+  ],
+  Dinajpur: [
+    "Kantojew Mondir", "Ramsagor", "Rajbari", "Noyabad Mosque", "Horinathpur Fortcity"
+  ],
+  Gaibandha: [
+    "Rajbirat Prasad", "Naldanga Zamidar Bari", "Bamondanga Zamidar Bari", "Shah Sultan Gazi's Mosque", "Jamuna River"
+  ],
+  Kurigram: [
+    "Jamuna River", "Dharla Bridge", "Mekurtari Shahi Mosque", "North Bengal Museum", "Bir Protik Taramon Bibi's house"
+  ],
+  Lalmonirhat: [
+    "Teesta Barrage", "Kakina Jomidar Bari", "Tushbhandar Jamidar Bari", "Mogolhat Port 0 Point", "Lalmonirhat Railway Station"
+  ],
+  Nilphamari: [
+    "Nilsagar", "Chini Masjid", "Tista Barrage", "Uttara Export Processing Zone", "Saidpur Railway Workshop"
+  ],
+  Panchagarh: [
+    "Tetulia Dak Bungalow", "Debiganj Karatoya Bridge", "Kazi and Kazi Tea Estate", "Banglabandha Point (Zero Point)", "Panchagarh Rocks Museum"
+  ],
+  Rangpur: [
+    "Tajhat Palace", "Rangpur Zoo", "Vinnya Jagat Amusement Park", "Begum Rokeya Memorial", "Chiklee Water Park"
+  ],
+  Thakurgaon: [
+    "Balia Mosque", "Biggest mango tree of Asia", "Tangon River", "Ramrai Dighi", "Haripur Rajbari"
+  ],
+  Habiganj: [
+    "Tea Museum", "Bodhavumi 71", "Lawachara National Park", "Ratargul Swamp Forest"
+  ],
+  Moulvibazar: [
+    "Hum Hum Falls", "Sreemangal Tea Gardens", "Lawachara National Park", "Madhobpur Lake", "Prithimpassa Jame Masjid"
+  ],
+  Sunamganj: [
+    "Tanguar Haor", "Niladri Limestone Lake", "Shimul Bagan", "Jadukata River", "Barek Tila", "Hason Raja Museum"
+  ],
+  Sylhet: [
+    "Shrine of Hazrat Shah Jalal", "Jaflong", "Ratargul Swamp Forest", "Bisnakandi", "Hazrat Shah Paran Mazar Sharif", "Madhabkunda Waterfall"
+  ]
+};
 
 const step1Schema = z.object({
   fullName: z.string().min(1, "Full name is required"),
@@ -37,6 +262,9 @@ const signupSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
   invitation: z.string().min(6, "Invitation code is required"),
+  division: z.string().min(1, "Division is required"),
+  district: z.string().min(1, "District is required"),
+  mainPoint: z.string().min(1, "Main Point is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   verify: z.string().min(6, "Please verify your password"),
 }).refine((data) => data.password === data.verify, {
@@ -68,6 +296,9 @@ export default function SignupPage() {
       password: "",
       verify: "",
       invitation: "",
+      division: "",
+      district: "",
+      mainPoint: "",
     },
   });
 
@@ -194,6 +425,16 @@ export default function SignupPage() {
     }
   };
 
+  // Auto-clear district when division changes
+  React.useEffect(() => {
+    form.setValue('district', '');
+  }, [form.watch('division')]);
+
+  // Add after the effect that resets district when division changes
+  React.useEffect(() => {
+    form.setValue('mainPoint', '');
+  }, [form.watch('district')]);
+
   return (
     <div className="min-h-screen flex flex-col bg-facebook-gray animate-in fade-in duration-500">
       <main className="flex-1 flex items-center justify-center px-4 py-8">
@@ -210,11 +451,11 @@ export default function SignupPage() {
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
                 <CardTitle className="text-2xl font-bold text-[#d91c1f]">
-                  Join BloodSource
+                  New member registration 🤩
                 </CardTitle>
               </div>
               <p className="text-facebook-muted text-sm">
-                Create your account to get started
+                You are on step {step} out of 3
               </p>
             </CardHeader>
             <CardContent className="p-6 pt-0">
@@ -439,6 +680,86 @@ export default function SignupPage() {
                   )}
                   {step === 2 && (
                     <>
+                      {/* Division and District Dropdowns Side by Side */}
+                      <div className="flex gap-2 mb-4">
+                        <div className="w-1/2">
+                          <FormField
+                            control={form.control}
+                            name="division"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue placeholder="Select Division" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="Barisal">Barisal</SelectItem>
+                                      <SelectItem value="Chattogram">Chattogram</SelectItem>
+                                      <SelectItem value="Dhaka">Dhaka</SelectItem>
+                                      <SelectItem value="Khulna">Khulna</SelectItem>
+                                      <SelectItem value="Mymensingh">Mymensingh</SelectItem>
+                                      <SelectItem value="Rajshahi">Rajshahi</SelectItem>
+                                      <SelectItem value="Rangpur">Rangpur</SelectItem>
+                                      <SelectItem value="Sylhet">Sylhet</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="w-1/2">
+                          <FormField
+                            control={form.control}
+                            name="district"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue placeholder="Select District" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {divisionDistricts[form.getValues('division')]?.map((district) => (
+                                        <SelectItem key={district} value={district}>{district}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                      {/* Main Point Dropdown (shows after district is selected) */}
+                      {form.getValues('district') && (
+                        <div className="mb-4">
+                          <FormField
+                            control={form.control}
+                            name="mainPoint"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue placeholder="Select Main Point" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {(districtMainPoints[form.getValues('district')] || ["Other"]).map((point) => (
+                                        <SelectItem key={point} value={point}>{point}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      )}
                       {/* Password Input */}
                       <FormField
                         control={form.control}
