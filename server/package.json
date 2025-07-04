@@ -1,0 +1,5 @@
+// package.json (in server/)
+"scripts": {
+  "build": "tsc",
+  "start": "node dist/index.js"
+}
