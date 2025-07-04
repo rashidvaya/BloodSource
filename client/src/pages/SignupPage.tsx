@@ -1032,7 +1032,7 @@ export default function SignupPage() {
 
                       {/* Terms (before buttons) */}
                       <p className="text-xs text-facebook-muted text-center leading-relaxed mb-2">
-                        By clicking Sign Up, you agree to our{" "}
+                        By clicking Register, you agree to our{" "}
                         <a href="#" className="text-facebook-blue hover:underline">
                           Terms
                         </a>
@@ -1060,7 +1060,7 @@ export default function SignupPage() {
                           disabled={signupMutation.isPending}
                           className="w-1/2 bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
                         >
-                          {signupMutation.isPending ? "Creating account..." : "Sign Up"}
+                          {signupMutation.isPending ? "Creating account..." : "Register"}
                         </Button>
                       </div>
                     </>
