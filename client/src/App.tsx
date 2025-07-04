@@ -1,30 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Router, Route, Switch } from "wouter";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import { queryClient } from "@/lib/queryClient";
 import HomePage from "./pages/HomePage";
 import NotFound from "./pages/not-found";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <Router>
         <div className="min-h-screen bg-facebook-gray">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Switch>
+            <Route path="/" component={HomePage} />
+            <Route component={NotFound} />
+          </Switch>
           <Toaster />
         </div>
-      </BrowserRouter>
+      </Router>
     </QueryClientProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
@@ -11,13 +11,9 @@ import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import FloatingAIButton from "@/components/FloatingAIButton";
 import { useToast } from "@/hooks/use-toast";
+import { loginSchema, type LoginRequest, type LoginResponse } from "@shared/schema";
 
-const loginSchema = z.object({
-  username: z.string().min(1, "Email address or phone number is required"),
-  password: z.string().min(1, "Password is required"),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
+type LoginForm = LoginRequest;
 
 export default function HomePage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,11 +27,48 @@ export default function HomePage() {
     },
   });
 
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginRequest): Promise<LoginResponse> => {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Login failed: ${response.status}`);
+      }
+      
+      return await response.json();
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        toast({
+          title: "Login successful",
+          description: `Welcome ${response.user?.username || "user"}!`,
+        });
+      } else {
+        toast({
+          title: "Login failed",
+          description: response.message,
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Login error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const onSubmit = (data: LoginForm) => {
-    toast({
-      title: "Login attempt",
-      description: `Username: ${data.username}`,
-    });
+    loginMutation.mutate(data);
   };
 
   const handleSocialLogin = (provider: string) => {
@@ -54,12 +87,12 @@ export default function HomePage() {
             {/* Brand Section */}
             <div className="text-left">
               <div className="mb-4">
-                <h1 className="text-6xl font-bold tracking-tight facebook-blue">
-                  facebook
+                <h1 className="text-6xl font-bold tracking-tight text-[#d91c1f]">
+                  BloodSource
                 </h1>
               </div>
               <p className="text-facebook-text text-2xl font-normal leading-8 max-w-lg">
-                Facebook helps you connect and share with the people in your life.
+                BloodSource helps you connect and share with the people in your life.
               </p>
             </div>
 
@@ -122,9 +155,10 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+                        disabled={loginMutation.isPending}
+                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50"
                       >
-                        Log in
+                        {loginMutation.isPending ? "Logging in..." : "Log in"}
                       </Button>
 
                       {/* Forgot Password Link */}
@@ -191,9 +225,9 @@ export default function HomePage() {
           <div className="lg:hidden">
             {/* Mobile Brand Section */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 facebook-blue text-[#d91c1f]">BloodSource</h1>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 text-[#d91c1f]">BloodSource</h1>
               <p className="text-facebook-text text-lg sm:text-xl font-normal leading-6 px-4">
-                Facebook helps you connect and share with the people in your life.
+                BloodSource helps you connect and share with the people in your life.
               </p>
             </div>
 
@@ -256,9 +290,10 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px]"
+                        disabled={loginMutation.isPending}
+                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px] disabled:opacity-50"
                       >
-                        Log in
+                        {loginMutation.isPending ? "Logging in..." : "Log in"}
                       </Button>
 
                       {/* Forgot Password Link */}

@@ -11,7 +11,15 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: User[] = [];
+  private users: User[] = [
+    // Default test user for development
+    {
+      id: "test-user-1",
+      email: "test@example.com",
+      username: "testuser",
+      createdAt: new Date(),
+    },
+  ];
 
   async createUser(userData: Omit<User, "id" | "createdAt">): Promise<User> {
     const user: User = {
