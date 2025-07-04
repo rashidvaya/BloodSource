@@ -796,6 +796,14 @@ export default function SignupPage() {
                             render={({ field }) => {
                               const inputRef = React.useRef<HTMLInputElement>(null);
                               const hiddenDateRef = React.useRef<HTMLInputElement>(null);
+                              // Calculate min and max dates for age 16-60
+                              const today = new Date();
+                              const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate())
+                                .toISOString()
+                                .split('T')[0];
+                              const minDate = new Date(today.getFullYear() - 60, today.getMonth(), today.getDate())
+                                .toISOString()
+                                .split('T')[0];
                               React.useEffect(() => {
                                 if (field.value && inputRef.current) {
                                   inputRef.current.value = field.value;
@@ -822,6 +830,8 @@ export default function SignupPage() {
                                         onChange={e => field.onChange(e.target.value)}
                                         style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", opacity: 0, pointerEvents: "none" }}
                                         tabIndex={-1}
+                                        min={minDate}
+                                        max={maxDate}
                                       />
                                     </div>
                                   </FormControl>
