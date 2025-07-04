@@ -191,9 +191,7 @@ export default function HomePage() {
           <div className="lg:hidden">
             {/* Mobile Brand Section */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 facebook-blue">
-                facebook
-              </h1>
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 facebook-blue text-[#d91c1f]">BloodSource</h1>
               <p className="text-facebook-text text-lg sm:text-xl font-normal leading-6 px-4">
                 Facebook helps you connect and share with the people in your life.
               </p>
@@ -324,7 +322,6 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-
       {/* X.com-style Minimal Footer */}
       <footer className="bg-white border-t border-facebook-border py-4 px-4">
         <div className="max-w-6xl mx-auto">
@@ -381,7 +378,6 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-
       <FloatingAIButton />
     </div>
   );
