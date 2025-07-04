@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
@@ -176,7 +176,7 @@ const districtMainPoints: Record<string, string[]> = {
     "Birishiri Cultural Academy (ethnic culture)", "Someshwari River", "China Matir Pahar (Kaolin Hills)", "Dingapota Haor (wetland)", "Uchitpur Haor (Mini Cox's Bazar)"
   ],
   Sherpur: [
-    "Madhutila Eco Park", "Ghagra Khan Bari Jami Mosque", "Mysaheba Jame Masque", "Brahmaputra River"
+    "Madhutila Eco Park", "Ghagra Khan Bari Jami Mosque", "Mysaheba Jame Masjid", "Brahmaputra River"
   ],
   Bogra: [
     "Mahasthangarh (ancient city remnants)", "Panch Peer Mazar", "Gokul Medh", "Kherua Mosque"
@@ -212,7 +212,7 @@ const districtMainPoints: Record<string, string[]> = {
     "Jamuna River", "Dharla Bridge", "Mekurtari Shahi Mosque", "North Bengal Museum", "Bir Protik Taramon Bibi's house"
   ],
   Lalmonirhat: [
-    "Teesta Barrage", "Kakina Jomidar Bari", "Tushbhandar Jamidar Bari", "Mogolhat Port 0 Point", "Lalmonirhat Railway Station"
+    "Teesta Barrage", "Kakina Jomidar Bari", "Tushbhandar Jagat Bari", "Mogolhat Port 0 Point", "Lalmonirhat Railway Station"
   ],
   Nilphamari: [
     "Nilsagar", "Chini Masjid", "Tista Barrage", "Uttara Export Processing Zone", "Saidpur Railway Workshop"
@@ -265,8 +265,13 @@ const signupSchema = z.object({
   division: z.string().min(1, "Division is required"),
   district: z.string().min(1, "District is required"),
   mainPoint: z.string().min(1, "Main Point is required"),
+  bloodGroup: z.enum([
+    "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"
+  ], { required_error: "Blood group is required" }),
   gender: z.enum(["Men", "Women", "Transgender"], { required_error: "Gender is required" }),
   dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  idType: z.enum(["Birth Certificate", "NID"], { required_error: "ID Type is required" }),
+  idNumber: z.string().min(1, "ID Number is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   verify: z.string().min(6, "Please verify your password"),
 }).refine((data) => data.password === data.verify, {
@@ -290,6 +295,8 @@ export default function SignupPage() {
   const [step, setStep] = useState(1);
 
   const form = useForm<SignupForm>({
+    resolver: zodResolver(step === 1 ? step1Schema : signupSchema),
+    mode: 'onChange',
     defaultValues: {
       fullName: "",
       username: "",
@@ -301,10 +308,16 @@ export default function SignupPage() {
       division: "",
       district: "",
       mainPoint: "",
+      bloodGroup: undefined,
       gender: undefined,
       dateOfBirth: "",
+      idType: undefined,
+      idNumber: "",
     },
   });
+
+  // Watch idType for dynamic placeholder
+  const watchedIdType = useWatch({ control: form.control, name: 'idType' });
 
   const signupMutation = useMutation({
     mutationFn: async (data: SignupForm) => {
@@ -339,9 +352,10 @@ export default function SignupPage() {
     },
   });
 
-  const onSubmit = (data: SignupForm) => {
+  const onSubmit: SubmitHandler<SignupForm> = (data) => {
     if (step === 1) {
       setStep(2);
+      console.log('Step after setStep(2):', step);
     } else {
       signupMutation.mutate(data);
     }
@@ -480,6 +494,9 @@ export default function SignupPage() {
                                   className="pl-4 pr-20 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
                                   {...field}
                                   disabled={false}
+                                  autoComplete="off"
+                                  id="invitation"
+                                  name="invitation"
                                 />
                                 <button
                                   type="button"
@@ -515,6 +532,9 @@ export default function SignupPage() {
                                   className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
                                   {...field}
                                   disabled={!invitationStatus?.valid}
+                                  autoComplete="name"
+                                  id="fullName"
+                                  name="fullName"
                                 />
                               </div>
                             </FormControl>
@@ -538,6 +558,9 @@ export default function SignupPage() {
                                   onChange={handleUsernameChange}
                                   onBlur={() => handleVerifyUsername(form.getValues('username'))}
                                   disabled={!invitationStatus?.valid}
+                                  autoComplete="username"
+                                  id="username"
+                                  name="username"
                                 />
                                 {verifyingUsername && (
                                   <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-facebook-muted">...</span>
@@ -568,6 +591,9 @@ export default function SignupPage() {
                                   className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                  autoComplete="email"
+                                  id="email"
+                                  name="email"
                                 />
                               </div>
                             </FormControl>
@@ -587,12 +613,16 @@ export default function SignupPage() {
                                 value={field.value}
                                 onChange={field.onChange}
                                 disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                autoComplete="tel"
+                                id="phone"
+                                name="phone"
                               />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
                       {/* OTP Input (shows after phone is filled) */}
                       {showOtp && (
                         <div className="relative mt-2">
@@ -611,6 +641,9 @@ export default function SignupPage() {
                               if (val.length === 4) verifyOtp(val);
                             }}
                             disabled={otpVerified}
+                            autoComplete="one-time-code"
+                            id="otp"
+                            name="otp"
                           />
                           {otpVerified && (
                             <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-600 font-semibold text-sm">Verified</span>
@@ -764,6 +797,35 @@ export default function SignupPage() {
                           />
                         </div>
                       )}
+                      {/* Blood Group Selector */}
+                      <div className="mb-4">
+                        <FormField
+                          control={form.control}
+                          name="bloodGroup"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                  <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select Blood Group" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="A+">A+</SelectItem>
+                                    <SelectItem value="A-">A-</SelectItem>
+                                    <SelectItem value="B+">B+</SelectItem>
+                                    <SelectItem value="B-">B-</SelectItem>
+                                    <SelectItem value="AB+">AB+</SelectItem>
+                                    <SelectItem value="AB-">AB-</SelectItem>
+                                    <SelectItem value="O+">O+</SelectItem>
+                                    <SelectItem value="O-">O-</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       {/* Gender and Date of Birth (side by side) */}
                       <div className="flex gap-2 mb-4">
                         <div className="w-1/2">
@@ -822,6 +884,9 @@ export default function SignupPage() {
                                         ref={inputRef}
                                         onClick={() => hiddenDateRef.current && hiddenDateRef.current.showPicker && hiddenDateRef.current.showPicker()}
                                         tabIndex={0}
+                                        autoComplete="bday"
+                                        id="dateOfBirth"
+                                        name="dateOfBirth"
                                       />
                                       <input
                                         type="date"
@@ -832,6 +897,9 @@ export default function SignupPage() {
                                         tabIndex={-1}
                                         min={minDate}
                                         max={maxDate}
+                                        autoComplete="bday"
+                                        id="dateOfBirth-hidden"
+                                        name="dateOfBirth"
                                       />
                                     </div>
                                   </FormControl>
@@ -839,6 +907,51 @@ export default function SignupPage() {
                                 </FormItem>
                               );
                             }}
+                          />
+                        </div>
+                      </div>
+                      {/* ID Type Select - moved here before password */}
+                      <div className="flex gap-2 mb-4">
+                        <div className="w-1/3">
+                          <FormField
+                            control={form.control}
+                            name="idType"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value}>
+                                    <SelectTrigger className="w-full bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm">
+                                      <SelectValue placeholder="Select ID Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="Birth Certificate">Birth Certificate</SelectItem>
+                                      <SelectItem value="NID">NID</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="w-2/3">
+                          <FormField
+                            control={form.control}
+                            name="idNumber"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Input
+                                    placeholder={watchedIdType === 'Birth Certificate' ? '17 Digit Birth Certificate No' : 'Enter Nid No'}
+                                    {...field}
+                                    autoComplete="off"
+                                    id="idNumber"
+                                    name="idNumber"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
                           />
                         </div>
                       </div>
@@ -857,6 +970,9 @@ export default function SignupPage() {
                                   className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                  autoComplete="new-password"
+                                  id="password"
+                                  name="password"
                                 />
                                 <button
                                   type="button"
@@ -888,6 +1004,9 @@ export default function SignupPage() {
                                   className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                  autoComplete="new-password"
+                                  id="verify"
+                                  name="verify"
                                 />
                               </div>
                             </FormControl>
