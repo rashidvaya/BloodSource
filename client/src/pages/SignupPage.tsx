@@ -265,6 +265,8 @@ const signupSchema = z.object({
   division: z.string().min(1, "Division is required"),
   district: z.string().min(1, "District is required"),
   mainPoint: z.string().min(1, "Main Point is required"),
+  gender: z.enum(["Men", "Women", "Transgender"], { required_error: "Gender is required" }),
+  dateOfBirth: z.string().min(1, "Date of Birth is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   verify: z.string().min(6, "Please verify your password"),
 }).refine((data) => data.password === data.verify, {
@@ -299,6 +301,8 @@ export default function SignupPage() {
       division: "",
       district: "",
       mainPoint: "",
+      gender: undefined,
+      dateOfBirth: "",
     },
   });
 
@@ -760,6 +764,74 @@ export default function SignupPage() {
                           />
                         </div>
                       )}
+                      {/* Gender and Date of Birth (side by side) */}
+                      <div className="flex gap-2 mb-4">
+                        <div className="w-1/2">
+                          <FormField
+                            control={form.control}
+                            name="gender"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue placeholder="Select Gender" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="Men">Men</SelectItem>
+                                      <SelectItem value="Women">Women</SelectItem>
+                                      <SelectItem value="Transgender">Transgender</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="w-1/2">
+                          <FormField
+                            control={form.control}
+                            name="dateOfBirth"
+                            render={({ field }) => {
+                              const inputRef = React.useRef<HTMLInputElement>(null);
+                              const hiddenDateRef = React.useRef<HTMLInputElement>(null);
+                              React.useEffect(() => {
+                                if (field.value && inputRef.current) {
+                                  inputRef.current.value = field.value;
+                                }
+                              }, [field.value]);
+                              return (
+                                <FormItem>
+                                  <FormControl>
+                                    <div className="relative">
+                                      <Input
+                                        type="text"
+                                        placeholder="Date of Birth"
+                                        className="w-full py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent cursor-pointer"
+                                        value={field.value ? new Date(field.value).toLocaleDateString() : ""}
+                                        readOnly
+                                        ref={inputRef}
+                                        onClick={() => hiddenDateRef.current && hiddenDateRef.current.showPicker && hiddenDateRef.current.showPicker()}
+                                        tabIndex={0}
+                                      />
+                                      <input
+                                        type="date"
+                                        ref={hiddenDateRef}
+                                        value={field.value || ""}
+                                        onChange={e => field.onChange(e.target.value)}
+                                        style={{ position: "absolute", left: 0, top: 0, width: "100%", height: "100%", opacity: 0, pointerEvents: "none" }}
+                                        tabIndex={-1}
+                                      />
+                                    </div>
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        </div>
+                      </div>
                       {/* Password Input */}
                       <FormField
                         control={form.control}
