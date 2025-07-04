@@ -102,6 +102,10 @@ export default function HomePage() {
             <div className="w-full max-w-md mx-auto">
               <Card className="shadow-lg">
                 <CardContent className="p-8">
+                  <div className="text-center mb-6 hidden lg:block">
+                    <h2 className="text-2xl font-semibold text-facebook-text mb-1">Hi, Welcome Back 👋</h2>
+                    <p className="text-facebook-muted text-base">It's great to see you again.</p>
+                  </div>
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                       {/* Username/Email Input */}
@@ -238,6 +242,10 @@ export default function HomePage() {
             <div className="w-full max-w-sm mx-auto">
               <Card className="shadow-lg">
                 <CardContent className="p-6">
+                  <div className="text-center mb-6">
+                    <h2 className="text-xl font-semibold text-facebook-text mb-1">Hi, Welcome Back 👋</h2>
+                    <p className="text-facebook-muted text-base">It's great to see you again.</p>
+                  </div>
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                       {/* Username/Email Input */}
@@ -366,51 +374,49 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           {/* Desktop Footer */}
           <div className="hidden sm:flex sm:items-center sm:justify-between">
-            <div className="flex items-center space-x-1 text-facebook-muted text-xs">
-              <a href="#" className="hover:text-facebook-text transition-colors">About</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">English</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Bangla</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Privacy</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Terms</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Help Center</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Developers</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Advertising</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Settings</a>
+            <div className="flex items-center text-facebook-muted text-xs">
+              {[
+                "About",
+                "English",
+                "Bangla",
+                "Privacy",
+                "Terms",
+                "Help Center",
+                "Developers",
+                "Advertising",
+                "Settings"
+              ].map((label, idx, arr) => (
+                <>
+                  <a key={label} href="#" className="hover:text-facebook-text transition-colors">{label}</a>
+                  {idx < arr.length - 1 && <span className="mx-2">|</span>}
+                </>
+              ))}
             </div>
-            <div className="text-facebook-muted text-xs">Modhu copyright 2025</div>
+            <div className="text-facebook-muted text-xs">RedByte Copyright 2025</div>
           </div>
 
           {/* Mobile Footer */}
           <div className="sm:hidden">
-            <div className="flex flex-wrap justify-center items-center gap-x-1 gap-y-2 text-facebook-muted text-xs mb-2">
-              <a href="#" className="hover:text-facebook-text transition-colors">About</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">English</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Bangla</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Privacy</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Terms</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Help Center</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Developers</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Advertising</a>
-              <span>,</span>
-              <a href="#" className="hover:text-facebook-text transition-colors">Settings</a>
+            <div className="flex flex-wrap justify-center items-center text-facebook-muted text-xs mb-2">
+              {[
+                "About",
+                "English",
+                "Bangla",
+                "Privacy",
+                "Terms",
+                "Help Center",
+                "Developers",
+                "Advertising",
+                "Settings"
+              ].map((label, idx, arr) => (
+                <>
+                  <a key={label} href="#" className="hover:text-facebook-text transition-colors">{label}</a>
+                  {idx < arr.length - 1 && <span className="mx-2">|</span>}
+                </>
+              ))}
             </div>
             <div className="text-center text-facebook-muted text-xs">
-              modhu copyright 2025
+            RedByte Copyright 2025
             </div>
           </div>
         </div>

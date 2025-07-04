@@ -277,12 +277,32 @@ const signupSchema = z.object({
 }).refine((data) => data.password === data.verify, {
   message: "Passwords do not match",
   path: ["verify"],
+}).superRefine((data, ctx) => {
+  if (data.idType === "NID") {
+    if (!/^\d+$/.test(data.idNumber)) {
+      ctx.addIssue({
+        path: ["idNumber"],
+        code: z.ZodIssueCode.custom,
+        message: "NID must be numeric (numbers only)",
+      });
+    }
+    // Optionally add length check for NID here
+  } else if (data.idType === "Birth Certificate") {
+    if (!/^\d{17}$/.test(data.idNumber)) {
+      ctx.addIssue({
+        path: ["idNumber"],
+        code: z.ZodIssueCode.custom,
+        message: "Birth Certificate must be numeric and exactly 17 digits",
+      });
+    }
+  }
 });
 
 type SignupForm = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showVerifyPassword, setShowVerifyPassword] = useState(false);
   const [location, navigate] = useLocation();
   const { toast } = useToast();
   const [invitationStatus, setInvitationStatus] = useState<null | { valid: boolean; message: string }>(null);
@@ -318,6 +338,10 @@ export default function SignupPage() {
 
   // Watch idType for dynamic placeholder
   const watchedIdType = useWatch({ control: form.control, name: 'idType' });
+
+  // Watch password and verify fields for instant mismatch error
+  const watchedPassword = useWatch({ control: form.control, name: 'password' });
+  const watchedVerify = useWatch({ control: form.control, name: 'verify' });
 
   const signupMutation = useMutation({
     mutationFn: async (data: SignupForm) => {
@@ -460,20 +484,12 @@ export default function SignupPage() {
           <Card className="shadow-lg animate-in slide-in-from-bottom-4 duration-700">
             <CardHeader className="text-center pb-4">
               <div className="flex items-center justify-center mb-4">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => navigate("/")}
-                  className="absolute left-4 top-4 p-2 hover:bg-facebook-gray"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                </Button>
                 <CardTitle className="text-2xl font-bold text-[#d91c1f]">
                   New member registration 🤩
                 </CardTitle>
               </div>
               <p className="text-facebook-muted text-sm">
-                You are on step {step} out of 3
+                You are on step {step} out of 2
               </p>
             </CardHeader>
             <CardContent className="p-6 pt-0">
@@ -660,23 +676,6 @@ export default function SignupPage() {
                         Next
                       </Button>
 
-                      {/* Terms */}
-                      <p className="text-xs text-facebook-muted text-center leading-relaxed">
-                        By clicking Sign Up, you agree to our{" "}
-                        <a href="#" className="text-facebook-blue hover:underline">
-                          Terms
-                        </a>
-                        ,{" "}
-                        <a href="#" className="text-facebook-blue hover:underline">
-                          Privacy Policy
-                        </a>{" "}
-                        and{" "}
-                        <a href="#" className="text-facebook-blue hover:underline">
-                          Cookies Policy
-                        </a>
-                        .
-                      </p>
-
                       {/* Divider */}
                       <div className="flex items-center my-6">
                         <Separator className="flex-1" />
@@ -797,38 +796,37 @@ export default function SignupPage() {
                           />
                         </div>
                       )}
-                      {/* Blood Group Selector */}
-                      <div className="mb-4">
-                        <FormField
-                          control={form.control}
-                          name="bloodGroup"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Select onValueChange={field.onChange} value={field.value} defaultValue="">
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select Blood Group" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="A+">A+</SelectItem>
-                                    <SelectItem value="A-">A-</SelectItem>
-                                    <SelectItem value="B+">B+</SelectItem>
-                                    <SelectItem value="B-">B-</SelectItem>
-                                    <SelectItem value="AB+">AB+</SelectItem>
-                                    <SelectItem value="AB-">AB-</SelectItem>
-                                    <SelectItem value="O+">O+</SelectItem>
-                                    <SelectItem value="O-">O-</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      {/* Gender and Date of Birth (side by side) */}
+                      {/* Blood Group, Gender, and Date of Birth in one row */}
                       <div className="flex gap-2 mb-4">
-                        <div className="w-1/2">
+                        <div className="w-1/3">
+                          <FormField
+                            control={form.control}
+                            name="bloodGroup"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <Select onValueChange={field.onChange} value={field.value} defaultValue="">
+                                    <SelectTrigger className="w-full">
+                                      <SelectValue placeholder="Blood Group" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="A+">A+</SelectItem>
+                                      <SelectItem value="A-">A-</SelectItem>
+                                      <SelectItem value="B+">B+</SelectItem>
+                                      <SelectItem value="B-">B-</SelectItem>
+                                      <SelectItem value="AB+">AB+</SelectItem>
+                                      <SelectItem value="AB-">AB-</SelectItem>
+                                      <SelectItem value="O+">O+</SelectItem>
+                                      <SelectItem value="O-">O-</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div className="w-1/3">
                           <FormField
                             control={form.control}
                             name="gender"
@@ -837,7 +835,7 @@ export default function SignupPage() {
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
-                                      <SelectValue placeholder="Select Gender" />
+                                      <SelectValue placeholder="Gender" />
                                     </SelectTrigger>
                                     <SelectContent>
                                       <SelectItem value="Men">Men</SelectItem>
@@ -851,7 +849,7 @@ export default function SignupPage() {
                             )}
                           />
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-1/3">
                           <FormField
                             control={form.control}
                             name="dateOfBirth"
@@ -911,8 +909,8 @@ export default function SignupPage() {
                         </div>
                       </div>
                       {/* ID Type Select - moved here before password */}
-                      <div className="flex gap-2 mb-4">
-                        <div className="w-1/3">
+                      <div className="flex gap-2 mb-4 flex-nowrap items-center">
+                        <div className="flex-1 min-w-[140px] max-w-[220px]">
                           <FormField
                             control={form.control}
                             name="idType"
@@ -920,8 +918,11 @@ export default function SignupPage() {
                               <FormItem>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value}>
-                                    <SelectTrigger className="w-full bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm">
-                                      <SelectValue placeholder="Select ID Type" />
+                                    <SelectTrigger
+                                      className="w-full text-left bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent px-4 py-3 text-base placeholder:text-gray-400 h-[48px]"
+                                      style={{ minWidth: '140px', fontSize: '1rem' }}
+                                    >
+                                      <SelectValue placeholder="Id Type" />
                                     </SelectTrigger>
                                     <SelectContent>
                                       <SelectItem value="Birth Certificate">Birth Certificate</SelectItem>
@@ -934,7 +935,7 @@ export default function SignupPage() {
                             )}
                           />
                         </div>
-                        <div className="w-2/3">
+                        <div className="flex-1 min-w-[180px] max-w-[350px]">
                           <FormField
                             control={form.control}
                             name="idNumber"
@@ -943,6 +944,8 @@ export default function SignupPage() {
                                 <FormControl>
                                   <Input
                                     placeholder={watchedIdType === 'Birth Certificate' ? '17 Digit Birth Certificate No' : 'Enter Nid No'}
+                                    className="w-full text-left bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent px-4 py-3 text-base placeholder:text-gray-400 h-[48px]"
+                                    style={{ textAlign: 'left', minWidth: '180px', fontSize: '1rem' }}
                                     {...field}
                                     autoComplete="off"
                                     id="idNumber"
@@ -999,7 +1002,7 @@ export default function SignupPage() {
                               <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
                                 <Input
-                                  type={showPassword ? "text" : "password"}
+                                  type={showVerifyPassword ? "text" : "password"}
                                   placeholder="Verify password"
                                   className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
@@ -1008,12 +1011,41 @@ export default function SignupPage() {
                                   id="verify"
                                   name="verify"
                                 />
+                                <button
+                                  type="button"
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  onClick={() => setShowVerifyPassword(!showVerifyPassword)}
+                                  disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                >
+                                  {showVerifyPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
                               </div>
                             </FormControl>
+                            {/* Show instant password mismatch error */}
+                            {watchedPassword && watchedVerify && watchedPassword !== watchedVerify && (
+                              <div className="text-xs mt-1 text-red-600">Passwords do not match</div>
+                            )}
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
+                      {/* Terms (before buttons) */}
+                      <p className="text-xs text-facebook-muted text-center leading-relaxed mb-2">
+                        By clicking Sign Up, you agree to our{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Terms
+                        </a>
+                        ,{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Privacy Policy
+                        </a>{" "}
+                        and{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Cookies Policy
+                        </a>
+                        .
+                      </p>
 
                       <div className="flex gap-2">
                         <Button
