@@ -122,7 +122,7 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                       >
                         Log in
                       </Button>
@@ -256,7 +256,7 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px]"
+                        className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px]"
                       >
                         Log in
                       </Button>
