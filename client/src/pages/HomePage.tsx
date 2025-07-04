@@ -114,7 +114,7 @@ export default function HomePage() {
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
                                 <Input
-                                  placeholder="Email address or phone number"
+                                  placeholder="Username"
                                   className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                 />
@@ -250,7 +250,7 @@ export default function HomePage() {
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
                                 <Input
-                                  placeholder="Email or phone"
+                                  placeholder="Username"
                                   className="pl-10 pr-4 py-4 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-base min-h-[44px]"
                                   {...field}
                                 />

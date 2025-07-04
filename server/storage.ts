@@ -9,6 +9,8 @@ export interface IStorage {
   // Authentication
   validateLogin(credentials: LoginRequest): Promise<LoginResponse>;
   registerUser(userData: SignupRequest): Promise<SignupResponse>;
+  // Invitation code verification
+  verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }>;
 }
 
 export class MemStorage implements IStorage {
@@ -81,5 +83,13 @@ export class MemStorage implements IStorage {
       message: "Account created successfully",
       user: newUser,
     };
+  }
+
+  async verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }> {
+    // For demonstration, both '******' and '666666' are valid
+    if (code === '******' || code === '666666') {
+      return { valid: true, message: 'Invitation code is valid' };
+    }
+    return { valid: false, message: 'Invalid invitation code' };
   }
 }

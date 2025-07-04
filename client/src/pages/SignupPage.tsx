@@ -12,12 +12,36 @@ import { Separator } from "@/components/ui/separator";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import { useToast } from "@/hooks/use-toast";
+import { PhoneInput } from "../components/PhoneInput";
+import React from "react";
+
+const step1Schema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  invitation: z.string().min(6, "Invitation code is required"),
+});
+
+const step2Schema = z.object({
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  verify: z.string().min(6, "Please verify your password"),
+}).refine((data) => data.password === data.verify, {
+  message: "Passwords do not match",
+  path: ["verify"],
+});
 
 const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  fullName: z.string().min(1, "Full name is required"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  invitation: z.string().min(6, "Invitation code is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  verify: z.string().min(6, "Please verify your password"),
+}).refine((data) => data.password === data.verify, {
+  message: "Passwords do not match",
+  path: ["verify"],
 });
 
 type SignupForm = z.infer<typeof signupSchema>;
@@ -26,14 +50,24 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [location, navigate] = useLocation();
   const { toast } = useToast();
+  const [invitationStatus, setInvitationStatus] = useState<null | { valid: boolean; message: string }>(null);
+  const [verifying, setVerifying] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState<null | { valid: boolean; message: string }>(null);
+  const [verifyingUsername, setVerifyingUsername] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [step, setStep] = useState(1);
 
   const form = useForm<SignupForm>({
-    resolver: zodResolver(signupSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      fullName: "",
+      username: "",
       email: "",
+      phone: "",
       password: "",
+      verify: "",
+      invitation: "",
     },
   });
 
@@ -71,7 +105,11 @@ export default function SignupPage() {
   });
 
   const onSubmit = (data: SignupForm) => {
-    signupMutation.mutate(data);
+    if (step === 1) {
+      setStep(2);
+    } else {
+      signupMutation.mutate(data);
+    }
   };
 
   const handleSocialSignup = (provider: string) => {
@@ -79,6 +117,81 @@ export default function SignupPage() {
       title: `${provider} signup`,
       description: `Sign up with ${provider} clicked`,
     });
+  };
+
+  const handleVerifyInvitation = async (code: string) => {
+    setVerifying(true);
+    setInvitationStatus(null);
+    try {
+      const response = await fetch("/api/verify-invitation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await response.json();
+      setInvitationStatus(data);
+    } catch (e) {
+      setInvitationStatus({ valid: false, message: "Verification failed" });
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleVerifyUsername = async (username: string) => {
+    if (!username || username.length < 3) {
+      setUsernameStatus(null);
+      return;
+    }
+    setVerifyingUsername(true);
+    setUsernameStatus(null);
+    try {
+      const response = await fetch("/api/verify-username", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+      const data = await response.json();
+      setUsernameStatus(data);
+    } catch (e) {
+      setUsernameStatus({ valid: false, message: "Verification failed" });
+    } finally {
+      setVerifyingUsername(false);
+    }
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue('username', e.target.value);
+    setUsernameStatus(null);
+    if (e.target.value.length >= 3) {
+      handleVerifyUsername(e.target.value);
+    }
+  };
+
+  // Watch phone field and show OTP input if 10 digits
+  const phoneValue = form.watch("phone");
+  React.useEffect(() => {
+    if (phoneValue && phoneValue.length === 10) {
+      setShowOtp(true);
+    } else {
+      setShowOtp(false);
+      setOtp("");
+    }
+  }, [phoneValue]);
+
+  React.useEffect(() => {
+    if (!showOtp) setOtpVerified(false);
+  }, [showOtp]);
+
+  // Simulate OTP verification (replace with real API call)
+  const verifyOtp = (code: string) => {
+    // Simulate async verification (replace with fetch to backend)
+    if (code.length === 4) {
+      setTimeout(() => {
+        setOtpVerified(true); // Simulate success
+      }, 500); // Simulate network delay
+    } else {
+      setOtpVerified(false);
+    }
   };
 
   return (
@@ -107,161 +220,297 @@ export default function SignupPage() {
             <CardContent className="p-6 pt-0">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  {/* First Name and Last Name */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <FormField
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="relative">
-                              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
-                              <Input
-                                placeholder="First name"
-                                className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
-                                {...field}
+                  {step === 1 && (
+                    <>
+                      {/* Invitation Code Input */}
+                      <FormField
+                        control={form.control}
+                        name="invitation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  placeholder="Invitation code"
+                                  className="pl-4 pr-20 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
+                                  {...field}
+                                  disabled={false}
+                                />
+                                <button
+                                  type="button"
+                                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-facebook-blue text-white px-3 py-1 rounded text-xs font-semibold hover:bg-blue-700 transition"
+                                  onClick={() => handleVerifyInvitation(field.value)}
+                                  disabled={verifying || !field.value}
+                                >
+                                  {verifying ? "..." : "Verify"}
+                                </button>
+                              </div>
+                            </FormControl>
+                            {invitationStatus && (
+                              <div className={`text-xs mt-1 ${invitationStatus.valid ? 'text-green-600' : 'text-red-600'}`}>
+                                {invitationStatus.message}
+                              </div>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Full Name */}
+                      <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
+                                <Input
+                                  placeholder="Full name"
+                                  className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
+                                  {...field}
+                                  disabled={!invitationStatus?.valid}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Username Field */}
+                      <FormField
+                        control={form.control}
+                        name="username"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  placeholder="Username"
+                                  className="pl-4 pr-20 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
+                                  {...field}
+                                  onChange={handleUsernameChange}
+                                  onBlur={() => handleVerifyUsername(form.getValues('username'))}
+                                  disabled={!invitationStatus?.valid}
+                                />
+                                {verifyingUsername && (
+                                  <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-facebook-muted">...</span>
+                                )}
+                              </div>
+                            </FormControl>
+                            {usernameStatus && (
+                              <div className={`text-xs mt-1 ${usernameStatus.valid ? 'text-green-600' : 'text-red-600'}`}>
+                                {usernameStatus.message}
+                              </div>
+                            )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Email Input */}
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
+                                <Input
+                                  placeholder="Email address"
+                                  className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  {...field}
+                                  disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Phone Number Input */}
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <PhoneInput
+                                value={field.value}
+                                onChange={field.onChange}
+                                disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                               />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      {/* OTP Input (shows after phone is filled) */}
+                      {showOtp && (
+                        <div className="relative mt-2">
+                          <input
+                            type="text"
+                            maxLength={4}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            className="w-full h-10 rounded-md border border-facebook-border bg-facebook-gray px-4 pr-4 text-base text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-facebook-blue focus:border-transparent outline-none transition"
+                            placeholder="Enter 4-digit code"
+                            value={otp}
+                            onChange={e => {
+                              const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+                              setOtp(val);
+                              setOtpVerified(false);
+                              if (val.length === 4) verifyOtp(val);
+                            }}
+                            disabled={otpVerified}
+                          />
+                          {otpVerified && (
+                            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-600 font-semibold text-sm">Verified</span>
+                          )}
+                        </div>
                       )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="lastName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <div className="relative">
-                              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
-                              <Input
-                                placeholder="Last name"
-                                className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-sm"
-                                {...field}
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
 
-                  {/* Email Input */}
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
-                            <Input
-                              placeholder="Email address"
-                              className="pl-10 pr-4 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
-                              {...field}
-                            />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      {/* Next Button */}
+                      <Button
+                        type="submit"
+                        disabled={signupMutation.isPending || !invitationStatus?.valid || !usernameStatus?.valid || (showOtp && !otpVerified)}
+                        className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
+                      >
+                        Next
+                      </Button>
 
-                  {/* Password Input */}
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
-                            <Input
-                              type={showPassword ? "text" : "password"}
-                              placeholder="Password"
-                              className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
-                              {...field}
-                            />
-                            <button
-                              type="button"
-                              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      {/* Terms */}
+                      <p className="text-xs text-facebook-muted text-center leading-relaxed">
+                        By clicking Sign Up, you agree to our{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Terms
+                        </a>
+                        ,{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Privacy Policy
+                        </a>{" "}
+                        and{" "}
+                        <a href="#" className="text-facebook-blue hover:underline">
+                          Cookies Policy
+                        </a>
+                        .
+                      </p>
 
-                  {/* Sign Up Button */}
-                  <Button
-                    type="submit"
-                    disabled={signupMutation.isPending}
-                    className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
-                  >
-                    {signupMutation.isPending ? "Creating account..." : "Sign Up"}
-                  </Button>
+                      {/* Divider */}
+                      <div className="flex items-center my-6">
+                        <Separator className="flex-1" />
+                        <span className="px-4 text-facebook-muted text-sm">or</span>
+                        <Separator className="flex-1" />
+                      </div>
 
-                  {/* Terms */}
-                  <p className="text-xs text-facebook-muted text-center leading-relaxed">
-                    By clicking Sign Up, you agree to our{" "}
-                    <a href="#" className="text-facebook-blue hover:underline">
-                      Terms
-                    </a>
-                    ,{" "}
-                    <a href="#" className="text-facebook-blue hover:underline">
-                      Privacy Policy
-                    </a>{" "}
-                    and{" "}
-                    <a href="#" className="text-facebook-blue hover:underline">
-                      Cookies Policy
-                    </a>
-                    .
-                  </p>
+                      {/* Social Signup Buttons */}
+                      <div className="space-y-3">
+                        <Button
+                          type="button"
+                          onClick={() => handleSocialSignup("Facebook")}
+                          className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
+                        >
+                          <SiFacebook />
+                          Sign up with Facebook
+                        </Button>
 
-                  {/* Divider */}
-                  <div className="flex items-center my-6">
-                    <Separator className="flex-1" />
-                    <span className="px-4 text-facebook-muted text-sm">or</span>
-                    <Separator className="flex-1" />
-                  </div>
+                        <Button
+                          type="button"
+                          onClick={() => handleSocialSignup("Google")}
+                          className="w-full bg-white border border-facebook-border hover:bg-gray-50 text-facebook-text font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
+                        >
+                          <SiGoogle className="text-red-500" />
+                          Sign up with Google
+                        </Button>
 
-                  {/* Social Signup Buttons */}
-                  <div className="space-y-3">
-                    <Button
-                      type="button"
-                      onClick={() => handleSocialSignup("Facebook")}
-                      className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
-                    >
-                      <SiFacebook />
-                      Sign up with Facebook
-                    </Button>
+                        <Button
+                          type="button"
+                          onClick={() => handleSocialSignup("Apple")}
+                          className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
+                        >
+                          <SiApple />
+                          Sign up with Apple
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                  {step === 2 && (
+                    <>
+                      {/* Password Input */}
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
+                                <Input
+                                  type={showPassword ? "text" : "password"}
+                                  placeholder="Password"
+                                  className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  {...field}
+                                  disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                />
+                                <button
+                                  type="button"
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                >
+                                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                </button>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <Button
-                      type="button"
-                      onClick={() => handleSocialSignup("Google")}
-                      className="w-full bg-white border border-facebook-border hover:bg-gray-50 text-facebook-text font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
-                    >
-                      <SiGoogle className="text-red-500" />
-                      Sign up with Google
-                    </Button>
+                      {/* Verify Password Input */}
+                      <FormField
+                        control={form.control}
+                        name="verify"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <div className="relative">
+                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
+                                <Input
+                                  type={showPassword ? "text" : "password"}
+                                  placeholder="Verify password"
+                                  className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  {...field}
+                                  disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <Button
-                      type="button"
-                      onClick={() => handleSocialSignup("Apple")}
-                      className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
-                    >
-                      <SiApple />
-                      Sign up with Apple
-                    </Button>
-                  </div>
-
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          onClick={() => setStep(1)}
+                          className="w-1/2 bg-facebook-gray border border-facebook-border text-facebook-text font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out"
+                        >
+                          Back
+                        </Button>
+                        <Button
+                          type="submit"
+                          disabled={signupMutation.isPending}
+                          className="w-1/2 bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
+                        >
+                          {signupMutation.isPending ? "Creating account..." : "Sign Up"}
+                        </Button>
+                      </div>
+                    </>
+                  )}
                   {/* Back to Login */}
                   <div className="text-center border-t border-facebook-border pt-4 mt-6">
                     <p className="text-facebook-muted text-sm">

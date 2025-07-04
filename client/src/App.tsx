@@ -5,6 +5,7 @@ import { queryClient } from "@/lib/queryClient";
 import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
 import NotFound from "./pages/not-found";
+import FloatingAIButton from "@/components/FloatingAIButton";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route component={NotFound} />
           </Switch>
           <Toaster />
+          <FloatingAIButton />
         </div>
       </Router>
     </QueryClientProvider>

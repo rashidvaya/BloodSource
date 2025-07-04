@@ -44,3 +44,17 @@ export const signupResponseSchema = z.object({
 });
 
 export type SignupResponse = z.infer<typeof signupResponseSchema>;
+
+// Invitation code verification schema
+export const invitationCodeSchema = z.object({
+  code: z.string().min(6, "Invitation code is required"),
+});
+
+export type InvitationCodeRequest = z.infer<typeof invitationCodeSchema>;
+
+export const invitationCodeResponseSchema = z.object({
+  valid: z.boolean(),
+  message: z.string(),
+});
+
+export type InvitationCodeResponse = z.infer<typeof invitationCodeResponseSchema>;
