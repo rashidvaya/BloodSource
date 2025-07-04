@@ -745,7 +745,7 @@ export default function SignupPage() {
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
-                                      <SelectValue placeholder="Select Main Point" />
+                                      <SelectValue placeholder="Living Around" />
                                     </SelectTrigger>
                                     <SelectContent>
                                       {(districtMainPoints[form.getValues('district')] || ["Other"]).map((point) => (
