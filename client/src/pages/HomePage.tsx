@@ -346,9 +346,7 @@ export default function HomePage() {
               <span>,</span>
               <a href="#" className="hover:text-facebook-text transition-colors">Settings</a>
             </div>
-            <div className="text-facebook-muted text-xs">
-              modhu copyright 2025
-            </div>
+            <div className="text-facebook-muted text-xs">Modhu copyright 2025</div>
           </div>
 
           {/* Mobile Footer */}
