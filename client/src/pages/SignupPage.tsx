@@ -245,7 +245,10 @@ const step1Schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  invitation: z.string().min(6, "Invitation code is required"),
+  invitation: z.string()
+    .min(6, "Invitation code must be 6 digits")
+    .max(6, "Invitation code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Invitation code must be exactly 6 digits"),
 });
 
 const step2Schema = z.object({
@@ -261,7 +264,10 @@ const signupSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email address"),
   phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  invitation: z.string().min(6, "Invitation code is required"),
+  invitation: z.string()
+    .min(6, "Invitation code must be 6 digits")
+    .max(6, "Invitation code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Invitation code must be exactly 6 digits"),
   division: z.string().min(1, "Division is required"),
   district: z.string().min(1, "District is required"),
   mainPoint: z.string().min(1, "Main Point is required"),
@@ -440,6 +446,13 @@ export default function SignupPage() {
     }
   };
 
+  const handleInvitationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow numeric input and limit to 6 characters
+    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+    form.setValue('invitation', value);
+    setInvitationStatus(null);
+  };
+
   // Watch phone field and show OTP input if 10 digits
   const phoneValue = form.watch("phone");
   React.useEffect(() => {
@@ -513,6 +526,10 @@ export default function SignupPage() {
                                   autoComplete="off"
                                   id="invitation"
                                   name="invitation"
+                                  maxLength={6}
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  onChange={handleInvitationChange}
                                 />
                                 <button
                                   type="button"

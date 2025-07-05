@@ -5,10 +5,25 @@ export const userSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   username: z.string().min(1),
+  fullName: z.string().min(1),
+  phone: z.string().min(10),
+  division: z.string().min(1),
+  district: z.string().min(1),
+  mainPoint: z.string().min(1),
+  bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]),
+  gender: z.enum(["Men", "Women", "Transgender"]),
+  dateOfBirth: z.string().min(1),
+  idType: z.enum(["Birth Certificate", "NID"]),
+  idNumber: z.string().min(1),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   createdAt: z.date(),
 });
 
 export type User = z.infer<typeof userSchema>;
+
+// User response type (without password for API responses)
+export const userResponseSchema = userSchema.omit({ password: true });
+export type UserResponse = z.infer<typeof userResponseSchema>;
 
 // Login schema
 export const loginSchema = z.object({
@@ -22,17 +37,54 @@ export type LoginRequest = z.infer<typeof loginSchema>;
 export const loginResponseSchema = z.object({
   success: z.boolean(),
   message: z.string(),
-  user: userSchema.optional(),
+  user: userResponseSchema.optional(),
 });
 
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
 
-// Signup schema
+// Signup schema - updated to match frontend form
 export const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  fullName: z.string().min(1, "Full name is required"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
   email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  invitation: z.string()
+    .min(6, "Invitation code must be 6 digits")
+    .max(6, "Invitation code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Invitation code must be exactly 6 digits"),
+  division: z.string().min(1, "Division is required"),
+  district: z.string().min(1, "District is required"),
+  mainPoint: z.string().min(1, "Main Point is required"),
+  bloodGroup: z.enum([
+    "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"
+  ], { required_error: "Blood group is required" }),
+  gender: z.enum(["Men", "Women", "Transgender"], { required_error: "Gender is required" }),
+  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  idType: z.enum(["Birth Certificate", "NID"], { required_error: "ID Type is required" }),
+  idNumber: z.string().min(1, "ID Number is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  verify: z.string().min(6, "Please verify your password"),
+}).refine((data) => data.password === data.verify, {
+  message: "Passwords do not match",
+  path: ["verify"],
+}).superRefine((data, ctx) => {
+  if (data.idType === "NID") {
+    if (!/^\d+$/.test(data.idNumber)) {
+      ctx.addIssue({
+        path: ["idNumber"],
+        code: z.ZodIssueCode.custom,
+        message: "NID must be numeric (numbers only)",
+      });
+    }
+  } else if (data.idType === "Birth Certificate") {
+    if (!/^\d{17}$/.test(data.idNumber)) {
+      ctx.addIssue({
+        path: ["idNumber"],
+        code: z.ZodIssueCode.custom,
+        message: "Birth Certificate must be numeric and exactly 17 digits",
+      });
+    }
+  }
 });
 
 export type SignupRequest = z.infer<typeof signupSchema>;
@@ -40,14 +92,17 @@ export type SignupRequest = z.infer<typeof signupSchema>;
 export const signupResponseSchema = z.object({
   success: z.boolean(),
   message: z.string(),
-  user: userSchema.optional(),
+  user: userResponseSchema.optional(),
 });
 
 export type SignupResponse = z.infer<typeof signupResponseSchema>;
 
 // Invitation code verification schema
 export const invitationCodeSchema = z.object({
-  code: z.string().min(6, "Invitation code is required"),
+  code: z.string()
+    .min(6, "Invitation code must be 6 digits")
+    .max(6, "Invitation code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Invitation code must be exactly 6 digits"),
 });
 
 export type InvitationCodeRequest = z.infer<typeof invitationCodeSchema>;
