@@ -2,7 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import { createRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { MemStorage } from "./storage";
+import { DatabaseStorage } from "./dbStorage";
 
 const app = express();
 app.use(express.json());
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 
 (async () => {
   // Setup storage and routes
-  const storage = new MemStorage();
+  const storage = new DatabaseStorage();
   const routes = createRoutes(storage);
   app.use(routes);
   

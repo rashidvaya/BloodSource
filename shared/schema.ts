@@ -1,4 +1,29 @@
 import { z } from "zod";
+import { sqliteTable, text, integer, sql } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+// Database table definition
+export const users = sqliteTable("users", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  username: text("username").notNull().unique(),
+  fullName: text("full_name").notNull(),
+  phone: text("phone").notNull(),
+  division: text("division").notNull(),
+  district: text("district").notNull(),
+  mainPoint: text("main_point").notNull(),
+  bloodGroup: text("blood_group", { enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] }).notNull(),
+  gender: text("gender", { enum: ["Men", "Women", "Transgender"] }).notNull(),
+  dateOfBirth: text("date_of_birth").notNull(),
+  idType: text("id_type", { enum: ["Birth Certificate", "NID"] }).notNull(),
+  idNumber: text("id_number").notNull(),
+  password: text("password").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+});
+
+// Database insert/select schemas
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);
 
 // User schema for potential future use
 export const userSchema = z.object({
