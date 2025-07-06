@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { sqliteTable, text, integer, sql } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 // Database table definition
@@ -18,7 +18,7 @@ export const users = sqliteTable("users", {
   idType: text("id_type", { enum: ["Birth Certificate", "NID"] }).notNull(),
   idNumber: text("id_number").notNull(),
   password: text("password").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
 // Database insert/select schemas

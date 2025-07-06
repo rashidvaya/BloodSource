@@ -1,6 +1,7 @@
 import { eq, or } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { db, users } from "./db";
+import { db } from "./db";
+import { users } from "../shared/schema";
 import { User, LoginRequest, LoginResponse, SignupRequest, SignupResponse, UserResponse } from "@shared/schema";
 import { IStorage } from "./storage";
 
