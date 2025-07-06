@@ -3,6 +3,50 @@ import { z } from "zod";
 import { IStorage } from "./storage";
 import { loginSchema, loginResponseSchema, signupSchema, signupResponseSchema, invitationCodeSchema, invitationCodeResponseSchema } from "@shared/schema";
 
+// Extend Express Request interface to include user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: { id: string };
+    }
+  }
+}
+
+// Extend session interface
+declare module "express-session" {
+  interface SessionData {
+    userId?: string;
+    username?: string;
+    email?: string;
+  }
+}
+
+// Authentication middleware
+function requireAuth(req: any, res: any, next: any) {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({
+      success: false,
+      message: "Authentication required",
+    });
+  }
+  next();
+}
+
+// Check if user is authenticated
+function isAuthenticated(req: any, res: any, next: any) {
+  if (req.session && req.session.userId) {
+    return res.status(200).json({
+      success: true,
+      message: "User is authenticated",
+      user: { id: req.session.userId },
+    });
+  }
+  return res.status(401).json({
+    success: false,
+    message: "User is not authenticated",
+  });
+}
+
 export function createRoutes(storage: IStorage) {
   const router = Router();
 
@@ -12,7 +56,29 @@ export function createRoutes(storage: IStorage) {
       const credentials = loginSchema.parse(req.body);
       const result = await storage.validateLogin(credentials);
       
-      res.json(result);
+      if (result.success && result.user) {
+        // Set session data
+        req.session.userId = result.user.id;
+        req.session.username = result.user.username;
+        req.session.email = result.user.email;
+        
+        // Save session
+        req.session.save((err: any) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Session creation failed",
+            });
+          }
+          
+          res.json({
+            ...result,
+            sessionId: req.sessionID,
+          });
+        });
+      } else {
+        res.json(result);
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({
@@ -29,13 +95,55 @@ export function createRoutes(storage: IStorage) {
     }
   });
 
+  // Logout endpoint
+  router.post("/api/logout", (req, res) => {
+    req.session.destroy((err: any) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Logout failed",
+        });
+      }
+      
+      res.json({
+        success: true,
+        message: "Logged out successfully",
+      });
+    });
+  });
+
+  // Check authentication status
+  router.get("/api/auth/status", isAuthenticated);
+
   // Signup endpoint
   router.post("/api/signup", async (req, res) => {
     try {
       const userData = signupSchema.parse(req.body);
       const result = await storage.registerUser(userData);
       
-      res.json(result);
+      if (result.success && result.user) {
+        // Set session data for newly registered user
+        req.session.userId = result.user.id;
+        req.session.username = result.user.username;
+        req.session.email = result.user.email;
+        
+        // Save session
+        req.session.save((err: any) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              message: "Session creation failed",
+            });
+          }
+          
+          res.json({
+            ...result,
+            sessionId: req.sessionID,
+          });
+        });
+      } else {
+        res.json(result);
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         res.status(400).json({
@@ -95,6 +203,39 @@ export function createRoutes(storage: IStorage) {
       return res.json({ valid: true, message: "Username is available" });
     } catch (error) {
       return res.status(500).json({ valid: false, message: "Internal server error" });
+    }
+  });
+
+  // Protected route example
+  router.get("/api/profile", requireAuth, async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({
+          success: false,
+          message: "Authentication required",
+        });
+      }
+      
+      const user = await storage.getUserById(req.session.userId);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+      
+      // Remove password from response
+      const { password, ...userWithoutPassword } = user;
+      
+      res.json({
+        success: true,
+        user: userWithoutPassword,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
     }
   });
 

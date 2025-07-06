@@ -1,5 +1,6 @@
 import { eq, or } from "drizzle-orm";
 import { nanoid } from "nanoid";
+import bcrypt from "bcrypt";
 import { db } from "./db";
 import { users } from "../shared/schema";
 import { User, LoginRequest, LoginResponse, SignupRequest, SignupResponse, UserResponse } from "@shared/schema";
@@ -8,6 +9,11 @@ import { IStorage } from "./storage";
 export class DatabaseStorage implements IStorage {
   async createUser(userData: Omit<User, "id" | "createdAt">): Promise<User> {
     const userId = nanoid();
+    
+    // Hash the password before storing
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+    
     const newUser = {
       id: userId,
       email: userData.email,
@@ -22,7 +28,8 @@ export class DatabaseStorage implements IStorage {
       dateOfBirth: userData.dateOfBirth,
       idType: userData.idType,
       idNumber: userData.idNumber,
-      password: userData.password,
+      password: hashedPassword,
+      createdAt: new Date(),
     };
 
     const [insertedUser] = await db.insert(users).values(newUser).returning();
@@ -43,6 +50,11 @@ export class DatabaseStorage implements IStorage {
     return user || null;
   }
 
+  async getUserById(id: string): Promise<User | null> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || null;
+  }
+
   async validateLogin(credentials: LoginRequest): Promise<LoginResponse> {
     // Find user by email or username
     const [user] = await db
@@ -57,8 +69,10 @@ export class DatabaseStorage implements IStorage {
       };
     }
 
-    // Check if password matches
-    if (user.password !== credentials.password) {
+    // Compare the provided password with the hashed password
+    const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+    
+    if (!isPasswordValid) {
       return {
         success: false,
         message: "Invalid credentials",
@@ -145,7 +159,7 @@ export class DatabaseStorage implements IStorage {
 
   async deleteUser(userId: string): Promise<boolean> {
     const result = await db.delete(users).where(eq(users.id, userId));
-    return result.length > 0;
+    return result.changes > 0;
   }
 
   async updateUser(userId: string, userData: Partial<Omit<User, "id" | "createdAt">>): Promise<User | null> {

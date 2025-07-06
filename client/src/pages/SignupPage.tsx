@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm, useWatch, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 import { PhoneInput } from "../components/PhoneInput";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -309,8 +308,8 @@ type SignupForm = z.infer<typeof signupSchema>;
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showVerifyPassword, setShowVerifyPassword] = useState(false);
-  const [location, navigate] = useLocation();
-  const { toast } = useToast();
+  const [, navigate] = useLocation();
+  const { signup, isLoading } = useAuth();
   const [invitationStatus, setInvitationStatus] = useState<null | { valid: boolean; message: string }>(null);
   const [verifying, setVerifying] = useState(false);
   const [usernameStatus, setUsernameStatus] = useState<null | { valid: boolean; message: string }>(null);
@@ -349,53 +348,19 @@ export default function SignupPage() {
   const watchedPassword = useWatch({ control: form.control, name: 'password' });
   const watchedVerify = useWatch({ control: form.control, name: 'verify' });
 
-  const signupMutation = useMutation({
-    mutationFn: async (data: SignupForm) => {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Signup failed: ${response.status}`);
-      }
-      
-      return await response.json();
-    },
-    onSuccess: (response) => {
-      toast({
-        title: "Account created successfully",
-        description: "Welcome to BloodSource! You can now log in.",
-      });
-      navigate("/");
-    },
-    onError: (error) => {
-      toast({
-        title: "Signup error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const onSubmit: SubmitHandler<SignupForm> = (data) => {
+  const onSubmit: SubmitHandler<SignupForm> = async (data) => {
     if (step === 1) {
       setStep(2);
-      console.log('Step after setStep(2):', step);
     } else {
-      signupMutation.mutate(data);
+      const result = await signup(data);
+      if (result.success) {
+        // User will be redirected automatically by the auth hook
+      }
     }
   };
 
   const handleSocialSignup = (provider: string) => {
-    toast({
-      title: `${provider} signup`,
-      description: `Sign up with ${provider} clicked`,
-    });
+    console.log(`${provider} signup clicked`);
   };
 
   const handleVerifyInvitation = async (code: string) => {
@@ -687,10 +652,10 @@ export default function SignupPage() {
                       {/* Next Button */}
                       <Button
                         type="submit"
-                        disabled={signupMutation.isPending || !invitationStatus?.valid || !usernameStatus?.valid || (showOtp && !otpVerified)}
+                        disabled={isLoading || !invitationStatus?.valid || !usernameStatus?.valid || (showOtp && !otpVerified)}
                         className="w-full bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
                       >
-                        Next
+                        {step === 1 ? "Next" : (isLoading ? "Creating account..." : "Register")}
                       </Button>
 
                       {/* Divider */}
@@ -1074,10 +1039,10 @@ export default function SignupPage() {
                         </Button>
                         <Button
                           type="submit"
-                          disabled={signupMutation.isPending}
+                          disabled={isLoading}
                           className="w-1/2 bg-facebook-success hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out disabled:opacity-50"
                         >
-                          {signupMutation.isPending ? "Creating account..." : "Register"}
+                          {isLoading ? "Creating account..." : "Register"}
                         </Button>
                       </div>
                     </>

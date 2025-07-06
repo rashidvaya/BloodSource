@@ -1,5 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
+import session from "express-session";
+import SQLiteStore from "connect-sqlite3";
 import { createRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { DatabaseStorage } from "./dbStorage";
@@ -7,6 +9,36 @@ import { DatabaseStorage } from "./dbStorage";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Session configuration
+const SQLiteSession = SQLiteStore(session);
+app.use(
+  session({
+    store: new SQLiteSession({
+      db: "sessions.db",
+      dir: "./",
+    }) as any,
+    secret: process.env.SESSION_SECRET || "bloodsource-secret-key-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "lax",
+    },
+  })
+);
+
+// Add user to request object if logged in
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Add user property to request if session exists
+  if (req.session && req.session.userId) {
+    // You can add user data to req.user here if needed
+    req.user = { id: req.session.userId };
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

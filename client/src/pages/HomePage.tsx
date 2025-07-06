@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,15 +10,15 @@ import { Separator } from "@/components/ui/separator";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import FloatingAIButton from "@/components/FloatingAIButton";
-import { useToast } from "@/hooks/use-toast";
-import { loginSchema, type LoginRequest, type LoginResponse } from "@shared/schema";
+import { useAuth } from "@/hooks/use-auth";
+import { loginSchema, type LoginRequest } from "@shared/schema";
 
 type LoginForm = LoginRequest;
 
 export default function HomePage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [location, navigate] = useLocation();
-  const { toast } = useToast();
+  const [, navigate] = useLocation();
+  const { login, isAuthenticated, isLoading } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -29,56 +28,23 @@ export default function HomePage() {
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginRequest): Promise<LoginResponse> => {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Login failed: ${response.status}`);
-      }
-      
-      return await response.json();
-    },
-    onSuccess: (response) => {
-      if (response.success) {
-        toast({
-          title: "Login successful",
-          description: `Welcome ${response.user?.username || "user"}!`,
-        });
-      } else {
-        toast({
-          title: "Login failed",
-          description: response.message,
-          variant: "destructive",
-        });
-      }
-    },
-    onError: (error) => {
-      toast({
-        title: "Login error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const onSubmit = (data: LoginForm) => {
-    loginMutation.mutate(data);
+  const onSubmit = async (data: LoginForm) => {
+    const result = await login(data);
+    if (result.success) {
+      // User will be redirected automatically by the auth hook
+    }
   };
 
   const handleSocialLogin = (provider: string) => {
-    toast({
-      title: `${provider} login`,
-      description: `Continue with ${provider} clicked`,
-    });
+    // Social login implementation would go here
+    console.log(`${provider} login clicked`);
   };
+
+  // If user is already authenticated, redirect to dashboard or home
+  if (isAuthenticated && !isLoading) {
+    // You can redirect to a dashboard page here
+    // navigate('/dashboard');
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-facebook-gray">
@@ -161,10 +127,10 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        disabled={loginMutation.isPending}
+                        disabled={isLoading}
                         className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-3 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50"
                       >
-                        {loginMutation.isPending ? "Logging in..." : "Log in"}
+                        {isLoading ? "Logging in..." : "Log in"}
                       </Button>
 
                       {/* Forgot Password Link */}
@@ -301,10 +267,10 @@ export default function HomePage() {
                       {/* Login Button */}
                       <Button
                         type="submit"
-                        disabled={loginMutation.isPending}
+                        disabled={isLoading}
                         className="w-full bg-[#d91c1f] hover:bg-red-700 text-[#ffffff] font-semibold py-4 px-4 rounded-md transition duration-200 ease-in-out min-h-[44px] disabled:opacity-50"
                       >
-                        {loginMutation.isPending ? "Logging in..." : "Log in"}
+                        {isLoading ? "Logging in..." : "Log in"}
                       </Button>
 
                       {/* Forgot Password Link */}
