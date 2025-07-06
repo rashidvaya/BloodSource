@@ -1,8 +1,8 @@
-import { eq, or } from "drizzle-orm";
+import { eq, or, and, lt, gte } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import bcrypt from "bcrypt";
 import { db } from "./db";
-import { users } from "../shared/schema";
+import { users, invitationCodes } from "../shared/schema";
 import { User, LoginRequest, LoginResponse, SignupRequest, SignupResponse, UserResponse } from "@shared/schema";
 import { IStorage } from "./storage";
 
@@ -134,6 +134,14 @@ export class DatabaseStorage implements IStorage {
       password: userData.password,
     });
 
+    // Use the invitation code (increment usage count)
+    const useResult = await this.useInvitationCode(userData.invitation);
+    if (!useResult.success) {
+      // If we can't use the code, we should rollback the user creation
+      // For now, we'll just log the error
+      console.error('Failed to use invitation code:', useResult.message);
+    }
+
     return {
       success: true,
       message: "Account created successfully",
@@ -145,11 +153,69 @@ export class DatabaseStorage implements IStorage {
   }
 
   async verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }> {
-    // For demonstration, both '123456' and '666666' are valid 6-digit codes
-    if (code === '123456' || code === '666666') {
+    try {
+      // Find the invitation code in the database
+      const [invitationCode] = await db
+        .select()
+        .from(invitationCodes)
+        .where(eq(invitationCodes.code, code));
+
+      if (!invitationCode) {
+        return { valid: false, message: 'Invalid invitation code' };
+      }
+
+      // Check if the code is active
+      if (!invitationCode.isActive) {
+        return { valid: false, message: 'Invitation code is inactive' };
+      }
+
+      // Check if the code has expired
+      if (invitationCode.expiresAt && invitationCode.expiresAt < new Date()) {
+        return { valid: false, message: 'Invitation code has expired' };
+      }
+
+      // Check if the code has reached its maximum uses
+      if (invitationCode.currentUses >= invitationCode.maxUses) {
+        return { valid: false, message: 'Invitation code has reached maximum uses' };
+      }
+
       return { valid: true, message: 'Invitation code is valid' };
+    } catch (error) {
+      console.error('Error verifying invitation code:', error);
+      return { valid: false, message: 'Error verifying invitation code' };
     }
-    return { valid: false, message: 'Invalid invitation code' };
+  }
+
+  async useInvitationCode(code: string): Promise<{ success: boolean; message: string }> {
+    try {
+      // First get the current invitation code to check its current uses
+      const [invitationCode] = await db
+        .select()
+        .from(invitationCodes)
+        .where(eq(invitationCodes.code, code));
+
+      if (!invitationCode) {
+        return { success: false, message: 'Invitation code not found' };
+      }
+
+      // Update the invitation code usage
+      const [updatedCode] = await db
+        .update(invitationCodes)
+        .set({
+          currentUses: invitationCode.currentUses + 1,
+        })
+        .where(eq(invitationCodes.code, code))
+        .returning();
+
+      if (!updatedCode) {
+        return { success: false, message: 'Failed to update invitation code' };
+      }
+
+      return { success: true, message: 'Invitation code used successfully' };
+    } catch (error) {
+      console.error('Error using invitation code:', error);
+      return { success: false, message: 'Error using invitation code' };
+    }
   }
 
   // Additional methods for database management

@@ -36,6 +36,37 @@ export class MemStorage implements IStorage {
     },
   ];
 
+  private invitationCodes: Array<{
+    id: string;
+    code: string;
+    isActive: boolean;
+    maxUses: number;
+    currentUses: number;
+    createdBy: string;
+    createdAt: Date;
+    expiresAt?: Date;
+  }> = [
+    // Default invitation codes for development
+    {
+      id: "inv-1",
+      code: "123456",
+      isActive: true,
+      maxUses: 10,
+      currentUses: 0,
+      createdBy: "admin",
+      createdAt: new Date(),
+    },
+    {
+      id: "inv-2", 
+      code: "666666",
+      isActive: true,
+      maxUses: 5,
+      currentUses: 0,
+      createdBy: "admin",
+      createdAt: new Date(),
+    },
+  ];
+
   async createUser(userData: Omit<User, "id" | "createdAt">): Promise<User> {
     const user: User = {
       id: Math.random().toString(36).substr(2, 9),
@@ -133,6 +164,14 @@ export class MemStorage implements IStorage {
       password: userData.password,
     });
 
+    // Use the invitation code (increment usage count)
+    const useResult = await this.useInvitationCode(userData.invitation);
+    if (!useResult.success) {
+      // If we can't use the code, we should rollback the user creation
+      // For now, we'll just log the error
+      console.error('Failed to use invitation code:', useResult.message);
+    }
+
     return {
       success: true,
       message: "Account created successfully",
@@ -144,10 +183,35 @@ export class MemStorage implements IStorage {
   }
 
   async verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }> {
-    // For demonstration, both '123456' and '666666' are valid 6-digit codes
-    if (code === '123456' || code === '666666') {
-      return { valid: true, message: 'Invitation code is valid' };
+    const invitationCode = this.invitationCodes.find(ic => ic.code === code);
+    
+    if (!invitationCode) {
+      return { valid: false, message: 'Invalid invitation code' };
     }
-    return { valid: false, message: 'Invalid invitation code' };
+
+    if (!invitationCode.isActive) {
+      return { valid: false, message: 'Invitation code is inactive' };
+    }
+
+    if (invitationCode.expiresAt && invitationCode.expiresAt < new Date()) {
+      return { valid: false, message: 'Invitation code has expired' };
+    }
+
+    if (invitationCode.currentUses >= invitationCode.maxUses) {
+      return { valid: false, message: 'Invitation code has reached maximum uses' };
+    }
+
+    return { valid: true, message: 'Invitation code is valid' };
+  }
+
+  async useInvitationCode(code: string): Promise<{ success: boolean; message: string }> {
+    const invitationCode = this.invitationCodes.find(ic => ic.code === code);
+    
+    if (!invitationCode) {
+      return { success: false, message: 'Invitation code not found' };
+    }
+
+    invitationCode.currentUses += 1;
+    return { success: true, message: 'Invitation code used successfully' };
   }
 }

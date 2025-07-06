@@ -21,9 +21,23 @@ export const users = sqliteTable("users", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
+// Invitation codes table
+export const invitationCodes = sqliteTable("invitation_codes", {
+  id: text("id").primaryKey(),
+  code: text("code").notNull().unique(),
+  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+  maxUses: integer("max_uses").notNull().default(1),
+  currentUses: integer("current_uses").notNull().default(0),
+  createdBy: text("created_by").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }),
+});
+
 // Database insert/select schemas
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
+export const insertInvitationCodeSchema = createInsertSchema(invitationCodes);
+export const selectInvitationCodeSchema = createSelectSchema(invitationCodes);
 
 // User schema for potential future use
 export const userSchema = z.object({
@@ -138,3 +152,23 @@ export const invitationCodeResponseSchema = z.object({
 });
 
 export type InvitationCodeResponse = z.infer<typeof invitationCodeResponseSchema>;
+
+// Invitation code management schemas
+export const invitationCodeCreateSchema = z.object({
+  code: z.string()
+    .min(6, "Invitation code must be 6 digits")
+    .max(6, "Invitation code must be exactly 6 digits")
+    .regex(/^\d{6}$/, "Invitation code must be exactly 6 digits"),
+  maxUses: z.number().min(1, "Max uses must be at least 1").default(1),
+  expiresAt: z.date().optional(),
+});
+
+export type InvitationCodeCreateRequest = z.infer<typeof invitationCodeCreateSchema>;
+
+export const invitationCodeCreateResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+  code: z.string().optional(),
+});
+
+export type InvitationCodeCreateResponse = z.infer<typeof invitationCodeCreateResponseSchema>;
