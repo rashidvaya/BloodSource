@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const links = [
   "About",
@@ -12,26 +13,29 @@ const links = [
   "Ads info",
   "Blog",
   "Careers",
-  "English",
-  "Bangla",
   "Advertising",
   "Developers",
   "Settings",
-  "© 2025 RedByte Corp.",
 ];
 
 export default function Footer() {
+  const { t, i18n } = useTranslation();
+
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
   return (
     <footer className="w-full bg-white border-t border-facebook-border py-4">
       <div className="flex flex-wrap justify-center items-center gap-2 text-xs text-neutral-400">
         {links.map((link, idx) => (
           <React.Fragment key={link}>
-            <a href="#" className="hover:underline">{link}</a>
+            <a href="#" className="hover:underline">{t(link)}</a>
             {idx < links.length - 1 && <span className="mx-1">|</span>}
           </React.Fragment>
         ))}
         <span className="mx-1">|</span>
-        <span className="text-neutral-500">© 2025 X Corp.</span>
+        <span className="text-neutral-500">© 2025 RedByte Corp.</span>
       </div>
     </footer>
   );
