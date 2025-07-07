@@ -47,7 +47,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-facebook-gray">
+    <div className="flex-1 flex flex-col bg-facebook-gray">
       <main className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0">
         <div className="w-full max-w-6xl mx-auto">
           {/* Desktop Layout */}
@@ -335,58 +335,6 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-      {/* X.com-style Minimal Footer */}
-      <footer className="bg-white border-t border-facebook-border py-4 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Desktop Footer */}
-          <div className="hidden sm:flex sm:items-center sm:justify-between">
-            <div className="flex items-center text-facebook-muted text-xs">
-              {[
-                "About",
-                "English",
-                "Bangla",
-                "Privacy",
-                "Terms",
-                "Help Center",
-                "Developers",
-                "Advertising",
-                "Settings"
-              ].map((label, idx, arr) => (
-                <>
-                  <a key={label} href="#" className="hover:text-facebook-text transition-colors">{label}</a>
-                  {idx < arr.length - 1 && <span className="mx-2">|</span>}
-                </>
-              ))}
-            </div>
-            <div className="text-facebook-muted text-xs">RedByte Copyright 2025</div>
-          </div>
-
-          {/* Mobile Footer */}
-          <div className="sm:hidden">
-            <div className="flex flex-wrap justify-center items-center text-facebook-muted text-xs mb-2">
-              {[
-                "About",
-                "English",
-                "Bangla",
-                "Privacy",
-                "Terms",
-                "Help Center",
-                "Developers",
-                "Advertising",
-                "Settings"
-              ].map((label, idx, arr) => (
-                <>
-                  <a key={label} href="#" className="hover:text-facebook-text transition-colors">{label}</a>
-                  {idx < arr.length - 1 && <span className="mx-2">|</span>}
-                </>
-              ))}
-            </div>
-            <div className="text-center text-facebook-muted text-xs">
-            RedByte Copyright 2025
-            </div>
-          </div>
-        </div>
-      </footer>
       <FloatingAIButton />
     </div>
   );

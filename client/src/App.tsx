@@ -6,12 +6,13 @@ import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
 import NotFound from "./pages/not-found";
 import FloatingAIButton from "@/components/FloatingAIButton";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <div className="min-h-screen bg-facebook-gray">
+        <div className="min-h-screen flex flex-col bg-facebook-gray">
           <Switch>
             <Route path="/" component={HomePage} />
             <Route path="/signup" component={SignupPage} />
@@ -19,6 +20,7 @@ function App() {
           </Switch>
           <Toaster />
           <FloatingAIButton />
+          <Footer />
         </div>
       </Router>
     </QueryClientProvider>
