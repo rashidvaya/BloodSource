@@ -234,18 +234,27 @@ export function createRoutes(storage: IStorage) {
     });
     try {
       const staffData = staffSchema.parse(req.body);
+      console.log("[register-staff] Incoming staffData:", staffData);
       // Check if username or email already exists
       const existingUser = await storage.getUserByUsername(staffData.username) || await storage.getUserByEmail(staffData.email);
       if (existingUser) {
+        console.log("[register-staff] Username or email already exists:", staffData.username, staffData.email);
         return res.status(400).json({ success: false, message: "Username or email already exists" });
       }
       // Optionally: verify staff code here if needed
       // Create the staff user
       const newUser = await storage.registerStaff(staffData);
+      console.log("[register-staff] New user created:", newUser);
+      if (!newUser) {
+        return res.status(500).json({ success: false, message: "Failed to create staff user (storage returned null)" });
+      }
       res.json({ success: true, message: "Staff registered successfully", user: newUser });
     } catch (error) {
+      console.error("[register-staff] Error:", error);
       if (error instanceof z.ZodError) {
         res.status(400).json({ success: false, message: "Invalid data", errors: error.errors });
+      } else if (error instanceof Error) {
+        res.status(500).json({ success: false, message: error.message });
       } else {
         res.status(500).json({ success: false, message: "Internal server error" });
       }

@@ -96,7 +96,17 @@ const StaffRegistrationPage: React.FC = () => {
       if (res.ok) {
         setSubmitted(true);
       } else {
-        alert("Registration failed. Please try again.");
+        const data = await res.json();
+        // Show all error details if present
+        if (data.errors) {
+          alert(
+            (data.message || "Registration failed.") +
+            "\n" +
+            data.errors.map((err: any) => `${err.path.join('.')}: ${err.message}`).join('\n')
+          );
+        } else {
+          alert(data.message || "Registration failed. Please try again.");
+        }
       }
     } catch (err) {
       alert("An error occurred. Please try again.");
