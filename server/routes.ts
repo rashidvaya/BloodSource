@@ -220,6 +220,38 @@ export function createRoutes(storage: IStorage) {
     }
   });
 
+  // Project Staff Registration endpoint
+  router.post("/api/register-staff", async (req, res) => {
+    // Simple validation for required fields
+    const staffSchema = z.object({
+      verifyCode: z.string().min(4, "Code required"),
+      username: z.string().min(3, "Username required"),
+      name: z.string().min(1, "Name required"),
+      email: z.string().email("Valid email required"),
+      phone: z.string().min(6, "Phone required"),
+      password: z.string().min(6, "Password required"),
+      role: z.string().min(1, "Role required"),
+    });
+    try {
+      const staffData = staffSchema.parse(req.body);
+      // Check if username or email already exists
+      const existingUser = await storage.getUserByUsername(staffData.username) || await storage.getUserByEmail(staffData.email);
+      if (existingUser) {
+        return res.status(400).json({ success: false, message: "Username or email already exists" });
+      }
+      // Optionally: verify staff code here if needed
+      // Create the staff user
+      const newUser = await storage.registerStaff(staffData);
+      res.json({ success: true, message: "Staff registered successfully", user: newUser });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ success: false, message: "Invalid data", errors: error.errors });
+      } else {
+        res.status(500).json({ success: false, message: "Internal server error" });
+      }
+    }
+  });
+
   // Protected route example
   router.get("/api/profile", requireAuth, async (req, res) => {
     try {

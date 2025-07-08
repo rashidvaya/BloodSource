@@ -16,6 +16,15 @@ export interface IStorage {
   registerUser(userData: SignupRequest): Promise<SignupResponse>;
   // Invitation code verification
   verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }>;
+  registerStaff(staffData: {
+    verifyCode: string;
+    username: string;
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    role: string;
+  }): Promise<Omit<User, "password">>;
 }
 
 export class MemStorage implements IStorage {
@@ -245,5 +254,39 @@ export class MemStorage implements IStorage {
       return user;
     }
     return null;
+  }
+
+  async registerStaff(staffData: {
+    verifyCode: string;
+    username: string;
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    role: string;
+  }): Promise<Omit<User, "password">> {
+    const user: User = {
+      id: Math.random().toString(36).substr(2, 9),
+      email: staffData.email,
+      username: staffData.username,
+      fullName: staffData.name,
+      phone: staffData.phone,
+      division: "", // Not required for staff
+      district: "",
+      mainPoint: "",
+      bloodGroup: "O+", // Default or empty
+      gender: "Men", // Default or empty
+      dateOfBirth: "",
+      idType: "NID",
+      idNumber: "",
+      password: staffData.password,
+      createdAt: new Date(),
+      role: staffData.role as User["role"],
+      permissions: [],
+    };
+    this.users.push(user);
+    // Return user without password
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as Omit<User, "password">;
   }
 }
