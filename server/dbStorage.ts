@@ -4,7 +4,29 @@ import bcrypt from "bcrypt";
 import { db } from "./db";
 import { users, invitationCodes } from "../shared/schema";
 import { User, LoginRequest, LoginResponse, SignupRequest, SignupResponse, UserResponse } from "@shared/schema";
-import { IStorage } from "./storage";
+
+export interface IStorage {
+  createUser(userData: Omit<User, "id" | "createdAt">): Promise<User>;
+  getUserByEmail(email: string): Promise<User | null>;
+  getUserByUsername(username: string): Promise<User | null>;
+  getUserById(id: string): Promise<User | null>;
+  listUsers(): Promise<User[]>;
+  updateUserRole(id: string, role: User["role"]): Promise<User | null>;
+  updateUserPermissions(id: string, permissions: User["permissions"]): Promise<User | null>;
+  validateLogin(credentials: LoginRequest): Promise<LoginResponse>;
+  registerUser(userData: SignupRequest): Promise<SignupResponse>;
+  verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }>;
+  deleteAllUsers(): Promise<number>;
+  registerStaff(staffData: {
+    verifyCode: string;
+    username: string;
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    role: string;
+  }): Promise<Omit<User, "password">>;
+}
 
 export class DatabaseStorage implements IStorage {
   async createUser(userData: Omit<User, "id" | "createdAt">): Promise<User> {
@@ -173,15 +195,15 @@ export class DatabaseStorage implements IStorage {
       division: "",
       district: "",
       mainPoint: "",
-      bloodGroup: "O+",
-      gender: "Men",
+      bloodGroup: "O+" as "O+",
+      gender: "Men" as "Men",
       dateOfBirth: "",
-      idType: "NID",
+      idType: "NID" as "NID",
       idNumber: "",
       password: hashedPassword,
       createdAt: new Date(),
-      role: staffData.role as User["role"],
-      permissions: [],
+      role: "user" as "user",
+      permissions: [] as string[],
     };
     const [insertedUser] = await db.insert(users).values(newUser).returning();
     const { password, ...userWithoutPassword } = insertedUser;
@@ -272,5 +294,11 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return updatedUser || null;
+  }
+
+  async deleteAllUsers(): Promise<number> {
+    const result = await db.delete(users);
+    // If rowCount or changes is not available, just return 0
+    return (result && (result.rowCount || result.changes)) || 0;
   }
 } 
