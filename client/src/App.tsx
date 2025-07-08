@@ -8,6 +8,7 @@ import NotFound from "./pages/not-found";
 import FloatingAIButton from "@/components/FloatingAIButton";
 import Footer from "./components/Footer";
 import CareerPage from "./pages/CareerPage";
+import StaffRegistrationPage from "./pages/StaffRegistrationPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" component={HomePage} />
             <Route path="/signup" component={SignupPage} />
             <Route path="/career" component={CareerPage} />
+            <Route path="/sr" component={StaffRegistrationPage} />
             <Route component={NotFound} />
           </Switch>
           <Toaster />

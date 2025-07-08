@@ -206,6 +206,20 @@ export function createRoutes(storage: IStorage) {
     }
   });
 
+  // Staff code verification endpoint
+  router.post("/api/verify-staff-code", async (req, res) => {
+    try {
+      const { code } = req.body;
+      // Simulate real check: allow '1234', '5678', and '0000' as valid codes
+      if (typeof code === 'string' && (code === '1234' || code === '5678' || code === '0000')) {
+        return res.json({ valid: true });
+      }
+      res.json({ valid: false });
+    } catch (error) {
+      res.status(500).json({ valid: false, message: "Internal server error" });
+    }
+  });
+
   // Protected route example
   router.get("/api/profile", requireAuth, async (req, res) => {
     try {
