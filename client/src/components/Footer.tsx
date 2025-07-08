@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "wouter";
 
 const links = [
   "About",
@@ -30,7 +31,11 @@ export default function Footer() {
       <div className="flex flex-wrap justify-center items-center gap-2 text-xs text-neutral-400">
         {links.map((link, idx) => (
           <React.Fragment key={link}>
-            <a href="#" className="hover:underline">{t(link)}</a>
+            {link === "Careers" ? (
+              <Link href="/career" className="hover:underline">{t(link)}</Link>
+            ) : (
+              <a href="#" className="hover:underline">{t(link)}</a>
+            )}
             {idx < links.length - 1 && <span className="mx-1">|</span>}
           </React.Fragment>
         ))}

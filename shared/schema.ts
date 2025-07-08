@@ -19,6 +19,8 @@ export const users = sqliteTable("users", {
   idNumber: text("id_number").notNull(),
   password: text("password").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  role: text("role", { enum: ["super_admin", "regional_moderator", "volunteer_coordinator", "user"] }).notNull().default("user"),
+  permissions: text("permissions", { mode: "json" }).notNull().default("[]"),
 });
 
 // Invitation codes table
@@ -56,6 +58,11 @@ export const userSchema = z.object({
   idNumber: z.string().min(1),
   password: z.string().min(6, "Password must be at least 6 characters"),
   createdAt: z.date(),
+  role: z.enum(["super_admin", "regional_moderator", "volunteer_coordinator", "user"]),
+  permissions: z.union([
+    z.array(z.string()),
+    z.record(z.string(), z.any())
+  ]),
 });
 
 export type User = z.infer<typeof userSchema>;

@@ -6,6 +6,10 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | null>;
   getUserByUsername(username: string): Promise<User | null>;
   getUserById(id: string): Promise<User | null>;
+  // New admin management methods
+  listUsers(): Promise<User[]>;
+  updateUserRole(id: string, role: User["role"]): Promise<User | null>;
+  updateUserPermissions(id: string, permissions: User["permissions"]): Promise<User | null>;
   
   // Authentication
   validateLogin(credentials: LoginRequest): Promise<LoginResponse>;
@@ -33,6 +37,8 @@ export class MemStorage implements IStorage {
       idNumber: "12345678901234567",
       password: "test123",
       createdAt: new Date(),
+      role: "super_admin",
+      permissions: [],
     },
   ];
 
@@ -72,6 +78,8 @@ export class MemStorage implements IStorage {
       id: Math.random().toString(36).substr(2, 9),
       ...userData,
       createdAt: new Date(),
+      role: userData.role || "user",
+      permissions: userData.permissions || [],
     };
     this.users.push(user);
     return user;
@@ -162,6 +170,8 @@ export class MemStorage implements IStorage {
       idType: userData.idType,
       idNumber: userData.idNumber,
       password: userData.password,
+      role: "user",
+      permissions: [],
     });
 
     // Use the invitation code (increment usage count)
@@ -213,5 +223,27 @@ export class MemStorage implements IStorage {
 
     invitationCode.currentUses += 1;
     return { success: true, message: 'Invitation code used successfully' };
+  }
+
+  async listUsers(): Promise<User[]> {
+    return this.users;
+  }
+
+  async updateUserRole(id: string, role: User["role"]): Promise<User | null> {
+    const user = this.users.find(u => u.id === id);
+    if (user) {
+      user.role = role;
+      return user;
+    }
+    return null;
+  }
+
+  async updateUserPermissions(id: string, permissions: User["permissions"]): Promise<User | null> {
+    const user = this.users.find(u => u.id === id);
+    if (user) {
+      user.permissions = permissions;
+      return user;
+    }
+    return null;
   }
 }
