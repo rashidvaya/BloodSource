@@ -152,6 +152,42 @@ export class DatabaseStorage implements IStorage {
     };
   }
 
+  async registerStaff(staffData: {
+    verifyCode: string;
+    username: string;
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    role: string;
+  }): Promise<Omit<User, "password">> {
+    const userId = nanoid();
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(staffData.password, saltRounds);
+    const newUser = {
+      id: userId,
+      email: staffData.email,
+      username: staffData.username,
+      fullName: staffData.name,
+      phone: staffData.phone,
+      division: "",
+      district: "",
+      mainPoint: "",
+      bloodGroup: "O+",
+      gender: "Men",
+      dateOfBirth: "",
+      idType: "NID",
+      idNumber: "",
+      password: hashedPassword,
+      createdAt: new Date(),
+      role: staffData.role as User["role"],
+      permissions: [],
+    };
+    const [insertedUser] = await db.insert(users).values(newUser).returning();
+    const { password, ...userWithoutPassword } = insertedUser;
+    return { ...userWithoutPassword, createdAt: insertedUser.createdAt || new Date() };
+  }
+
   async verifyInvitationCode(code: string): Promise<{ valid: boolean; message: string }> {
     try {
       // Find the invitation code in the database
