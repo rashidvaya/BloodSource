@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const jobPosts = [
   {
@@ -13,11 +13,66 @@ const jobPosts = [
   }
 ];
 
+// Placeholder team members
+const teamMembers = [
+  {
+    name: "Ayesha Rahman",
+    role: "Lead Developer",
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+    quote: "Building BloodSource has been a journey of passion and purpose."
+  },
+  {
+    name: "Imran Hossain",
+    role: "Community Manager",
+    image: "https://randomuser.me/api/portraits/men/32.jpg",
+    quote: "Our team is dedicated to saving lives, one connection at a time."
+  },
+  {
+    name: "Sara Ahmed",
+    role: "UI/UX Designer",
+    image: "https://randomuser.me/api/portraits/women/65.jpg",
+    quote: "Designing for impact means putting people first."
+  }
+];
+
 const CareerPage: React.FC = () => {
   const [openJob, setOpenJob] = useState<null | number>(null);
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [contactValue, setContactValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [currentMember, setCurrentMember] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+
+  // Automatic sliding effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSlideDirection('left');
+      setCurrentMember((prev) => (prev + 1) % teamMembers.length);
+    }, 3000); // 3 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const nextMember = () => {
+    setSlideDirection('left');
+    setCurrentMember((prev) => (prev + 1) % teamMembers.length);
+  };
+  const prevMember = () => {
+    setSlideDirection('right');
+    setCurrentMember((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+  };
+
+  // Animation state
+  const [animating, setAnimating] = useState(false);
+  useEffect(() => {
+    if (slideDirection) {
+      setAnimating(true);
+      const timeout = setTimeout(() => {
+        setAnimating(false);
+        setSlideDirection(null);
+      }, 400); // match animation duration
+      return () => clearTimeout(timeout);
+    }
+  }, [currentMember]);
 
   const handleApplyClick = () => {
     setShowApplyForm(true);
@@ -31,26 +86,39 @@ const CareerPage: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 p-4 sm:p-8">
-      <h1 className="text-3xl sm:text-5xl font-extrabold text-red-700 mb-2 tracking-tight">Careers at BloodSource</h1>
-      <p className="mb-8 text-base sm:text-xl text-gray-600 font-light">We are always looking for talented people to join our team. Check back soon for open positions!</p>
-      <div className="mt-6 grid gap-4 sm:gap-6 max-w-xl w-full mx-auto grid-cols-1">
+    <div className="flex-1 flex flex-col bg-facebook-gray min-h-screen">
+      <main className="flex-1 flex items-center justify-center px-4 py-8 lg:py-0">
+        <div className="w-full max-w-6xl mx-auto h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center lg:divide-x lg:divide-facebook-border bg-white/80 rounded-xl shadow p-4 sm:p-8 h-full min-h-[520px]">
+            {/* Brand & Job Posts Section */}
+            <div className="text-left lg:pr-8 flex flex-col justify-center h-full lg:col-span-3 overflow-x-auto">
+              <div className="mb-4">
+                <h1 className="whitespace-nowrap text-4xl sm:text-6xl font-bold tracking-tight text-[#d91c1f] mb-2">Careers at BloodSource</h1>
+                <p className="text-facebook-text text-lg sm:text-2xl font-normal leading-8 max-w-lg">
+                  We are always looking for talented people to join our team. Check back soon for open positions!
+                </p>
+              </div>
+              <div className="w-full max-w-xl">
+                <div className="grid gap-4 sm:gap-6 grid-cols-1">
         {jobPosts.map((job, idx) => (
-          <div key={job.title} className="border rounded-lg p-4 sm:p-6 bg-white shadow">
-            <h2 className="text-lg sm:text-xl font-semibold mb-2">{job.title}</h2>
-            <p className="mb-4 text-gray-700 text-sm sm:text-base">{job.short}</p>
+                    <div key={job.title} className="border border-facebook-border rounded-lg p-4 sm:p-6 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer hover:bg-gray-50">
+                      <h2 className="text-lg sm:text-xl font-semibold mb-2 text-facebook-text">{job.title}</h2>
+                      <p className="mb-4 text-facebook-muted text-sm sm:text-base">{job.short}</p>
+                      <div className="flex justify-end mt-4">
             <button
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto"
+                          className="px-4 py-2 bg-[#d91c1f] hover:bg-red-700 text-white rounded w-auto font-semibold transition duration-200 ease-in-out"
               onClick={() => setOpenJob(idx)}
             >
               View More
             </button>
+                      </div>
           </div>
         ))}
       </div>
-      {/* Modal Popup */}
+              </div>
+              {/* Modal Popup (existing code) */}
       {openJob !== null && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 px-2">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 px-2 animate-fade-in">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md sm:max-w-lg p-4 sm:p-6 relative mx-auto max-h-[90vh] overflow-y-auto mx-2">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl"
@@ -214,6 +282,26 @@ const CareerPage: React.FC = () => {
           </div>
         </div>
       )}
+            </div>
+            {/* Team Member Slider Section */}
+            <div className="flex flex-col items-center justify-center h-full w-full lg:pl-8 lg:col-span-2">
+              <div className="w-full max-w-sm bg-white rounded-lg shadow-lg p-0 flex flex-col items-center border border-facebook-border overflow-hidden h-[420px] self-center justify-center">
+                <img
+                  src={teamMembers[currentMember].image}
+                  alt={teamMembers[currentMember].name}
+                  className="w-full h-72 object-cover object-top mb-0 rounded-none shadow-md border border-facebook-border transition duration-300"
+                  style={{ aspectRatio: '3/4' }}
+                />
+                <div className="p-6 w-full flex flex-col items-center text-center">
+                  <h3 className="text-xl font-bold text-facebook-text mb-2">{teamMembers[currentMember].name}</h3>
+                  <p className="text-red-600 font-semibold mb-4">{teamMembers[currentMember].role}</p>
+                  <blockquote className="italic text-facebook-muted mb-0">“{teamMembers[currentMember].quote}”</blockquote>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
