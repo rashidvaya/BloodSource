@@ -79,6 +79,14 @@ const StaffRegistrationPage: React.FC = () => {
     e.preventDefault();
     // Compose the full username
     const fullUsername = form.username + form.extension;
+    // Map frontend role to backend role
+    const roleMap: Record<string, string> = {
+      Admin: "super_admin",
+      Moderator: "regional_moderator",
+      Volunteer: "volunteer_coordinator",
+      Other: "user",
+    };
+    const backendRole = roleMap[form.role] || "user";
     try {
       const res = await fetch("/api/register-staff", {
         method: "POST",
@@ -90,7 +98,7 @@ const StaffRegistrationPage: React.FC = () => {
           email: form.email,
           phone: form.phone,
           password: form.password,
-          role: form.role,
+          role: backendRole,
         }),
       });
       if (res.ok) {

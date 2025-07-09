@@ -2,13 +2,22 @@ import express, { type Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import session from "express-session";
 import SQLiteStore from "connect-sqlite3";
+import cors from "cors";
 import { createRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { DatabaseStorage } from "./dbStorage";
+import usersRouter from "./routes/users";
+import rolesRouter from "./routes/roles";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// CORS configuration
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
 
 // Session configuration
 const SQLiteSession = SQLiteStore(session);
@@ -75,6 +84,8 @@ app.use((req, res, next) => {
   const storage = new DatabaseStorage();
   const routes = createRoutes(storage);
   app.use(routes);
+  app.use(usersRouter);
+  app.use(rolesRouter);
   
   const server = createServer(app);
 
