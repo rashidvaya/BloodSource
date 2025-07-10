@@ -1,7 +1,8 @@
 import { roles, Role } from '../server/models/role';
 import { v4 as uuidv4 } from 'uuid';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default function handler(req, res) {
+export default function handler(req: VercelRequest, res: VercelResponse) {
   const {
     method,
     query: { id },
