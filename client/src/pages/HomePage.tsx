@@ -12,13 +12,15 @@ import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import FloatingAIButton from "@/components/FloatingAIButton";
 import { useAuth } from "@/hooks/use-auth";
 import { loginSchema, type LoginRequest } from "@shared/schema";
+import NewsfeedPage from './NewsfeedPage';
+import AdminDashboardPage from './AdminDashboardPage';
 
 type LoginForm = LoginRequest;
 
 export default function HomePage() {
   const [showPassword, setShowPassword] = useState(false);
   const [, navigate] = useLocation();
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading, user } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -30,8 +32,12 @@ export default function HomePage() {
 
   const onSubmit = async (data: LoginForm) => {
     const result = await login(data);
-    if (result.success) {
-      // User will be redirected automatically by the auth hook
+    if (result.success && user) {
+      if (user.roleId === 'staff') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/newsfeed');
+      }
     }
   };
 
@@ -41,9 +47,12 @@ export default function HomePage() {
   };
 
   // If user is already authenticated, redirect to dashboard or home
-  if (isAuthenticated && !isLoading) {
-    // You can redirect to a dashboard page here
-    // navigate('/dashboard');
+  if (isAuthenticated && !isLoading && user) {
+    if (user.roleId === 'staff') {
+      navigate('/admin-dashboard');
+    } else {
+      navigate('/newsfeed');
+    }
   }
 
   return (

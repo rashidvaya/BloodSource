@@ -9,6 +9,8 @@ import FloatingAIButton from "@/components/FloatingAIButton";
 import Footer from "./components/Footer";
 import CareerPage from "./pages/CareerPage";
 import StaffRegistrationPage from "./pages/StaffRegistrationPage";
+import NewsfeedPage from "./pages/NewsfeedPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Route path="/signup" component={SignupPage} />
             <Route path="/career" component={CareerPage} />
             <Route path="/sr" component={StaffRegistrationPage} />
+            <Route path="/newsfeed" component={NewsfeedPage} />
+            <Route path="/admin-dashboard" component={AdminDashboardPage} />
             <Route component={NotFound} />
           </Switch>
           <Toaster />

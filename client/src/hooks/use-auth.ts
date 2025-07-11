@@ -7,6 +7,7 @@ interface User {
   username: string;
   email: string;
   fullName: string;
+  roleId: string; // Added for role-based redirects
   // Add other user properties as needed
 }
 
