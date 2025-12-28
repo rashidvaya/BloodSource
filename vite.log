@@ -1,0 +1,6 @@
+
+  VITE v7.3.0  ready in 367 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+4:04:26 PM [vite] (client) hmr update /src/pages/SignupPage.tsx, /src/index.css
