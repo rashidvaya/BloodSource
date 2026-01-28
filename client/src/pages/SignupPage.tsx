@@ -963,6 +963,7 @@ export default function SignupPage() {
                                   type="button"
                                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
                                   onClick={() => setShowPassword(!showPassword)}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -997,6 +998,7 @@ export default function SignupPage() {
                                   type="button"
                                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
                                   onClick={() => setShowVerifyPassword(!showVerifyPassword)}
+                                  aria-label={showVerifyPassword ? "Hide confirmation password" : "Show confirmation password"}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                 >
                                   {showVerifyPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
