@@ -498,6 +498,7 @@ export default function SignupPage() {
                                 />
                                 <button
                                   type="button"
+                                  aria-label={verifying ? "Verifying invitation code" : "Verify invitation code"}
                                   className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-facebook-blue text-white px-3 py-1 rounded text-xs font-semibold hover:bg-blue-700 transition"
                                   onClick={() => handleVerifyInvitation(field.value)}
                                   disabled={verifying || !field.value}
@@ -507,7 +508,11 @@ export default function SignupPage() {
                               </div>
                             </FormControl>
                             {invitationStatus && (
-                              <div className={`text-xs mt-1 ${invitationStatus.valid ? 'text-green-600' : 'text-red-600'}`}>
+                              <div
+                                role="status"
+                                aria-live="polite"
+                                className={`text-xs mt-1 ${invitationStatus.valid ? 'text-green-600' : 'text-red-600'}`}
+                              >
                                 {invitationStatus.message}
                               </div>
                             )}
@@ -566,7 +571,11 @@ export default function SignupPage() {
                               </div>
                             </FormControl>
                             {usernameStatus && (
-                              <div className={`text-xs mt-1 ${usernameStatus.valid ? 'text-green-600' : 'text-red-600'}`}>
+                              <div
+                                role="status"
+                                aria-live="polite"
+                                className={`text-xs mt-1 ${usernameStatus.valid ? 'text-green-600' : 'text-red-600'}`}
+                              >
                                 {usernameStatus.message}
                               </div>
                             )}
@@ -961,7 +970,8 @@ export default function SignupPage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                 >
@@ -995,7 +1005,8 @@ export default function SignupPage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  aria-label={showVerifyPassword ? "Hide verify password" : "Show verify password"}
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowVerifyPassword(!showVerifyPassword)}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                 >

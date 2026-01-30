@@ -17,6 +17,7 @@ export default function FloatingAIButton() {
   return (
     <div className="fixed bottom-14 left-6 z-50">
       <Button
+        aria-label="Open AI Assistant"
         onClick={handleAIClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
