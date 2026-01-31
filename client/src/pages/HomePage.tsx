@@ -121,6 +121,7 @@ export default function HomePage() {
                                 />
                                 <button
                                   type="button"
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
                                   onClick={() => setShowPassword(!showPassword)}
                                 >
@@ -261,6 +262,7 @@ export default function HomePage() {
                                 />
                                 <button
                                   type="button"
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
                                 >
