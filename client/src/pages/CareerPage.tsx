@@ -108,6 +108,7 @@ const CareerPage: React.FC = () => {
             <button
                           className="px-4 py-2 bg-[#d91c1f] hover:bg-red-700 text-white rounded w-auto font-semibold transition duration-200 ease-in-out"
               onClick={() => setOpenJob(idx)}
+              aria-label={`View more details about ${job.title} position`}
             >
               View More
             </button>

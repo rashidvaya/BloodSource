@@ -17,7 +17,7 @@ export const PhoneInput: React.FC<PhoneInputProps> = ({ value, onChange, ...prop
       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 flex items-center select-none">
         <span className="mr-1" style={{ display: 'flex', alignItems: 'center' }}>
           {/* Bangladesh flag SVG */}
-          <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg role="img" aria-label="Bangladesh Flag" width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="24" height="16" rx="2" fill="#006A4E"/>
             <circle cx="10" cy="8" r="5" fill="#F42A41"/>
           </svg>
