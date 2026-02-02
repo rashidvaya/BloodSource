@@ -116,13 +116,14 @@ export default function HomePage() {
                                 <Input
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Password"
-                                  className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  className="pl-10 pr-14 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  className="absolute right-1 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -256,13 +257,14 @@ export default function HomePage() {
                                 <Input
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Password"
-                                  className="pl-10 pr-12 py-4 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-base min-h-[44px]"
+                                  className="pl-10 pr-14 py-4 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent text-base min-h-[44px]"
                                   {...field}
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                  className="absolute right-1 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
