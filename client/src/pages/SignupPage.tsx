@@ -5,10 +5,10 @@ import { useLocation } from "wouter";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff, ArrowLeft, Loader2 } from "lucide-react";
 import { SiFacebook, SiGoogle, SiApple } from "react-icons/si";
 import { useAuth } from "@/hooks/use-auth";
 import { PhoneInput } from "../components/PhoneInput";
@@ -481,6 +481,7 @@ export default function SignupPage() {
                         name="invitation"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Invitation code</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input
@@ -502,7 +503,7 @@ export default function SignupPage() {
                                   onClick={() => handleVerifyInvitation(field.value)}
                                   disabled={verifying || !field.value}
                                 >
-                                  {verifying ? "..." : "Verify"}
+                                  {verifying ? <Loader2 className="h-3 w-3 animate-spin" /> : "Verify"}
                                 </button>
                               </div>
                             </FormControl>
@@ -522,6 +523,7 @@ export default function SignupPage() {
                         name="fullName"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Full name</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -547,6 +549,7 @@ export default function SignupPage() {
                         name="username"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Username</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Input
@@ -581,6 +584,7 @@ export default function SignupPage() {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Email address</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -606,6 +610,7 @@ export default function SignupPage() {
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Phone number</FormLabel>
                             <FormControl>
                               <PhoneInput
                                 value={field.value}
@@ -706,6 +711,7 @@ export default function SignupPage() {
                             name="division"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">Division</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
@@ -734,6 +740,7 @@ export default function SignupPage() {
                             name="district"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">District</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
@@ -760,6 +767,7 @@ export default function SignupPage() {
                             name="mainPoint"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">Living Around</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
@@ -786,6 +794,7 @@ export default function SignupPage() {
                             name="bloodGroup"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">Blood Group</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
@@ -814,6 +823,7 @@ export default function SignupPage() {
                             name="gender"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">Gender</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value} defaultValue="">
                                     <SelectTrigger className="w-full">
@@ -853,6 +863,7 @@ export default function SignupPage() {
                               }, [field.value]);
                               return (
                                 <FormItem>
+                                  <FormLabel className="sr-only">Date of Birth</FormLabel>
                                   <FormControl>
                                     <div className="relative">
                                       <Input
@@ -898,6 +909,7 @@ export default function SignupPage() {
                             name="idType"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">ID Type</FormLabel>
                                 <FormControl>
                                   <Select onValueChange={field.onChange} value={field.value}>
                                     <SelectTrigger
@@ -923,6 +935,7 @@ export default function SignupPage() {
                             name="idNumber"
                             render={({ field }) => (
                               <FormItem>
+                                <FormLabel className="sr-only">ID Number</FormLabel>
                                 <FormControl>
                                   <Input
                                     placeholder={watchedIdType === 'Birth Certificate' ? '17 Digit Birth Certificate No' : 'Enter Nid No'}
@@ -946,13 +959,14 @@ export default function SignupPage() {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Password</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
                                 <Input
                                   type={showPassword ? "text" : "password"}
                                   placeholder="Password"
-                                  className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  className="pl-10 pr-14 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                   autoComplete="new-password"
@@ -961,9 +975,10 @@ export default function SignupPage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  className="absolute right-1 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -980,13 +995,14 @@ export default function SignupPage() {
                         name="verify"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Verify password</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
                                 <Input
                                   type={showVerifyPassword ? "text" : "password"}
                                   placeholder="Verify password"
-                                  className="pl-10 pr-12 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
+                                  className="pl-10 pr-14 py-3 bg-facebook-gray border-facebook-border focus:ring-2 focus:ring-facebook-blue focus:border-transparent"
                                   {...field}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
                                   autoComplete="new-password"
@@ -995,9 +1011,10 @@ export default function SignupPage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  className="absolute right-1 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowVerifyPassword(!showVerifyPassword)}
                                   disabled={!invitationStatus?.valid || !usernameStatus?.valid}
+                                  aria-label={showVerifyPassword ? "Hide verification password" : "Show verification password"}
                                 >
                                   {showVerifyPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>

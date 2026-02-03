@@ -1,0 +1,3 @@
+## 2026-02-03 - [Touch Target & Input Padding]
+**Learning:** Increasing the touch target of an absolutely positioned icon button within an input (like a password toggle) to the recommended 44x44px requires increasing the input's horizontal padding (e.g., from `pr-12` to `pr-14`) and adjusting the button's horizontal offset (e.g., from `right-3` to `right-1`). This prevents the larger touch target from visually overlapping with the input text while maintaining accessibility.
+**Action:** Always check and adjust input padding and icon button positioning when increasing touch targets for embedded interactive elements.
