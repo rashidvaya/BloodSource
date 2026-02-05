@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
@@ -89,6 +89,7 @@ export default function HomePage() {
                         name="username"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Username</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -110,6 +111,7 @@ export default function HomePage() {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Password</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -121,8 +123,9 @@ export default function HomePage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted"
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted hover:text-facebook-text focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-sm transition-colors"
                                   onClick={() => setShowPassword(!showPassword)}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -163,7 +166,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Facebook")}
                           className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
                         >
-                          <SiFacebook />
+                          <SiFacebook aria-hidden="true" />
                           Continue with Facebook
                         </Button>
 
@@ -172,7 +175,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Google")}
                           className="w-full bg-white border border-facebook-border hover:bg-gray-50 text-facebook-text font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
                         >
-                          <SiGoogle className="text-red-500" />
+                          <SiGoogle className="text-red-500" aria-hidden="true" />
                           Continue with Google
                         </Button>
 
@@ -181,7 +184,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Apple")}
                           className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2"
                         >
-                          <SiApple />
+                          <SiApple aria-hidden="true" />
                           Continue with Apple
                         </Button>
                       </div>
@@ -229,6 +232,7 @@ export default function HomePage() {
                         name="username"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Username</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -250,6 +254,7 @@ export default function HomePage() {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
+                            <FormLabel className="sr-only">Password</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-facebook-muted w-4 h-4" />
@@ -261,8 +266,9 @@ export default function HomePage() {
                                 />
                                 <button
                                   type="button"
-                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-facebook-muted hover:text-facebook-text focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none rounded-sm transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                                   onClick={() => setShowPassword(!showPassword)}
+                                  aria-label={showPassword ? "Hide password" : "Show password"}
                                 >
                                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -303,7 +309,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Facebook")}
                           className="w-full bg-facebook-blue hover:bg-blue-600 text-white font-medium py-4 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2 min-h-[44px]"
                         >
-                          <SiFacebook />
+                          <SiFacebook aria-hidden="true" />
                           Continue with Facebook
                         </Button>
 
@@ -312,7 +318,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Google")}
                           className="w-full bg-white border border-facebook-border hover:bg-gray-50 text-facebook-text font-medium py-4 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2 min-h-[44px]"
                         >
-                          <SiGoogle className="text-red-500" />
+                          <SiGoogle className="text-red-500" aria-hidden="true" />
                           Continue with Google
                         </Button>
 
@@ -321,7 +327,7 @@ export default function HomePage() {
                           onClick={() => handleSocialLogin("Apple")}
                           className="w-full bg-black hover:bg-gray-800 text-white font-medium py-4 px-4 rounded-md transition duration-200 ease-in-out flex items-center justify-center gap-2 min-h-[44px]"
                         >
-                          <SiApple />
+                          <SiApple aria-hidden="true" />
                           Continue with Apple
                         </Button>
                       </div>
