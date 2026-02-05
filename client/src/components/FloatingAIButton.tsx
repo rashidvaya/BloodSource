@@ -20,6 +20,7 @@ export default function FloatingAIButton() {
         onClick={handleAIClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        aria-label="AI Assistant"
         className={`
           bg-gradient-to-r from-blue-500 to-purple-600 
           hover:from-blue-600 hover:to-purple-700 
